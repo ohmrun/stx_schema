@@ -1,0 +1,6 @@
+-cp src/main/haxe
+-lib stx
+-lib tink_typecrawler
+-D analyzer-optimize
+-main Main
+--interp
