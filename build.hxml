@@ -1,6 +1,17 @@
 -cp src/main/haxe
--lib stx
+
+-lib hscript 
+
+-lib stx_pico
+-lib stx_nano
+-lib stx_om
+-lib stx_bake
+
+-lib fletcher
+
 -lib tink_typecrawler
 -D analyzer-optimize
+-D no-deprecation-warnings
+-D hscriptPos 
 -main Main
 --interp

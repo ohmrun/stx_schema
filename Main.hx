@@ -1,11 +1,10 @@
-import stx.schema.Package;
-using stx.reflect.Lift;
-import Schemas;
+using stx.Schema;
+using stx.Nano;
+using stx.Bake;
 
 class Main {
 	static function main() {
-		var a : Email = "toot";
-		var gb = "";
-		trace(gb);
+		trace(__.bake());
+		stx.schema.Test.main();
 	}
 }
