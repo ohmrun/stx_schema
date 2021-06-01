@@ -32,7 +32,3 @@ typedef SchemaBool                  = stx.schema.types.SchemaBool;
 typedef SchemaInt                   = stx.schema.types.SchemaInt;
 typedef SchemaString                = stx.schema.types.SchemaString;
 typedef SchemaNull                  = stx.schema.types.SchemaNull;
-
-class Registry{
-  //static public function instances : Array<Schema>;
-}
