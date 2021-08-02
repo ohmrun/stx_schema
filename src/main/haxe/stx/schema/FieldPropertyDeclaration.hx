@@ -11,7 +11,7 @@ typedef FieldPropertyDeclarationDef = WithValidationDef & {
     return lift({
       name : name,
       type : type,
-      validation : __.option(validation).defv([])
+      validation : __.option(validation).defv(Cluster.unit())
     });
   }
   public function prj():FieldPropertyDeclarationDef return this;

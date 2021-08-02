@@ -8,7 +8,7 @@ abstract Validation(ValidationSum) from ValidationSum to ValidationSum{
   public function new(self) this = self;
   static public function lift(self:ValidationSum):Validation return new Validation(self);
                   
-  public function lfold(value:Dynamic,schema){
+  public function lfold(value:Dynamic,schema:Schema){
     return switch(this){
       case ValidationExpr(expr) : try{
         Script.interp().execute(expr)(value,schema);

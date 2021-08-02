@@ -1,7 +1,7 @@
 package stx.schema;
 
 typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
-  final fields : Array<Field>;
+  final fields : Cluster<Field>;
 }
 @:forward abstract SchemaRecordDeclaration(SchemaRecordDeclarationDef) from SchemaRecordDeclarationDef to SchemaRecordDeclarationDef{
   public function new(self) this = self;

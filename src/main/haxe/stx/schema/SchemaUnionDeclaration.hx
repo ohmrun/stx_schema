@@ -1,7 +1,7 @@
 package stx.schema;
 
 typedef SchemaUnionDeclarationDef = SchemaDeclarationDef & {
-  final types : Array<SchemaRef>;
+  final types : Cluster<SchemaRef>;
 }
 @:forward abstract SchemaUnionDeclaration(SchemaUnionDeclarationDef) from SchemaUnionDeclarationDef to SchemaUnionDeclarationDef{
   static public var _(default,never) = SchemaUnionDeclarationLift;
@@ -13,7 +13,7 @@ typedef SchemaUnionDeclarationDef = SchemaDeclarationDef & {
       name          : name,
       pack          : pack,
       types         : types,
-      validation    : _.validation.concat(__.option(validation).defv([]))
+      validation    : _.validation.concat(__.option(validation).defv(Cluster.unit()))
     });
   }
 
@@ -24,6 +24,6 @@ typedef SchemaUnionDeclarationDef = SchemaDeclarationDef & {
 class SchemaUnionDeclarationLift{
   static public var validation(get,null) : Validations;
   static public function get_validation(){
-    return [];
+    return Cluster.unit();
   } 
 }

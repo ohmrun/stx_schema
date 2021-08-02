@@ -1,0 +1,3 @@
+[submodule ".haxelib/stx_schema/git"]
+	path = .haxelib/stx_schema/git
+	url = git@github.com:ohmrun/stx_schema.git

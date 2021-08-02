@@ -13,7 +13,7 @@ typedef SchemaVectorDeclarationDef = SchemaDeclarationDef & {
       name          : name,
       pack          : pack,
       type          : type,
-      validation    : _.validation.concat(__.option(validation).defv([]))
+      validation    : _.validation.concat(__.option(validation).defv(Cluster.unit()))
     });
   }
 
@@ -24,6 +24,6 @@ typedef SchemaVectorDeclarationDef = SchemaDeclarationDef & {
 class SchemaVectorDeclarationLift{
   static public var validation(get,null) : Validations;
   static public function get_validation(){
-    return [];
+    return Cluster.unit();
   } 
 }

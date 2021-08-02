@@ -4,8 +4,8 @@ abstract SchemaString(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaD
   static public var _(default,never) = SchemaStringLift;
   public function new() this = {
     name        : "String",
-    pack        : [],
-    validation  : [ValidationFunc(_.validate)]
+    pack        : Cluster.unit(),
+    validation  : Cluster.unit().snoc(ValidationFunc(_.validate))
   }
 
   public function prj():SchemaDeclarationDef return this;
@@ -13,6 +13,12 @@ abstract SchemaString(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaD
   @:to public function toSchemaDeclaration():SchemaDeclaration{
     return SchemaDeclaration.lift(this);
   } 
+  @:to public function toSchema():Schema{
+    return Schema.fromSchemaDeclaration(this);
+  }
+  @:to public function toSchemaRef():SchemaRef{
+    return SchemaRef.fromSchemaSum(Schema.fromSchemaDeclaration(this));
+  }
 }
 class SchemaStringLift{
   static public function validate(value,_){

@@ -1,7 +1,7 @@
 package stx.schema;
 
 typedef SchemaEnumDeclarationDef = SchemaDeclarationDef & {
-  final constructors : Array<String>;
+  final constructors : Cluster<String>;
 }
 @:forward abstract SchemaEnumDeclaration(SchemaEnumDeclarationDef) from SchemaEnumDeclarationDef to SchemaEnumDeclarationDef{
   static public var _(default,never) = SchemaEnumDeclarationLift;
@@ -13,7 +13,7 @@ typedef SchemaEnumDeclarationDef = SchemaDeclarationDef & {
       name          : name,
       pack          : pack,
       constructors  : constructors,
-      validation    : _.validation.concat(__.option(validation).defv([]))
+      validation    : _.validation.concat(__.option(validation).defv(Cluster.unit()))
     });
   }
 
@@ -24,7 +24,7 @@ typedef SchemaEnumDeclarationDef = SchemaDeclarationDef & {
 class SchemaEnumDeclarationLift{
   static public var validation(get,null) : Validations;
   static public function get_validation(){
-    return [ValidationExpr(check_constructor)];
+    return Cluster.lift([ValidationExpr(check_constructor)]);
   } 
   static private var check_constructor = Script.parser().parseString("
     function (self:Dynamic,type:Schema){ 

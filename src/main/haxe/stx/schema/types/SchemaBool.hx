@@ -4,8 +4,8 @@ abstract SchemaBool(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaDec
   static public var _(default,never) = SchemaBoolLift;
   public function new() this = {
     name        : "Bool",
-    pack        : [],
-    validation  : [ValidationFunc(_.validate)]
+    pack        : Cluster.unit(),
+    validation  : Cluster.lift([ValidationFunc(_.validate)])
   }
   public function prj():SchemaDeclarationDef return this;
 

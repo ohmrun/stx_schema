@@ -4,14 +4,17 @@ abstract SchemaInt(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaDecl
   static public var _(default,never) = SchemaIntLift;
   public function new() this = {
     name        : "Int",
-    pack        : [],
-    validation  : [ValidationFunc(_.validate)]
+    pack        : Cluster.unit(),
+    validation  : Cluster.unit().snoc(ValidationFunc(_.validate))
   }
 
   public function prj():SchemaDeclarationDef return this;
   
   @:to public function toSchemaDeclaration():SchemaDeclaration{
     return SchemaDeclaration.lift(this);
+  }
+  @:to public function toSchema():Schema{
+    return Schema.fromSchemaDeclaration(this);
   } 
 }
 class SchemaIntLift{

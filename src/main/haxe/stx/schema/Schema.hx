@@ -17,10 +17,6 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   private var self(get,never):Schema;
   private function get_self():Schema return lift(this);
 
-  // public var fields(get,null):Array<FieldDeclaration>;
-  // private function get_fields():Array<FieldDeclaration>{
-  //   return switch(this);
-  // }
   public var validation(get,never):Validations;
   private function get_validation():Validations{
     return _.fold(
@@ -43,8 +39,8 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.name
     );
   }
-  public var pack(get,never):Array<String>;
-  private function get_pack():Array<String>{
+  public var pack(get,never):Cluster<String>;
+  private function get_pack():Cluster<String>{
     return __.option(_.fold(
       this,
       x -> x.pack,
@@ -52,7 +48,26 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.pack,
       x -> x.pack,
       x -> x.pack
-    )).def(() -> []);
+
+    )).def(() -> Cluster.unit());
+  }
+  static public function String():Schema{
+    return new stx.schema.types.SchemaString();
+  }
+  static public function Int():Schema{
+    return new stx.schema.types.SchemaInt();
+  }
+  static public function Null(self:SchemaRef):Schema{
+    return stx.schema.types.SchemaNull.make(self);
+  }
+  static public function Array(self:SchemaRef):Schema{
+    return stx.schema.types.SchemaArray.make(self);
+  }
+  @:from static public function fromSchemaDeclaration(self:SchemaDeclarationDef):Schema{
+    return lift(SchScalar(self));
+  }
+  @:from static public function fromSchemaGenericDeclaration(self:SchemaGenericDeclaration):Schema{
+    return lift(SchGeneric(self));
   }
 }
 class SchemaLift{

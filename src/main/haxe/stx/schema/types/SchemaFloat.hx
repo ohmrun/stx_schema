@@ -4,7 +4,7 @@ abstract SchemaFloat(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaDe
   static public var _(default,never) = SchemaFloatLift;
   public function new() this = {
     name        : "Float",
-    pack        : [],
+    pack        : Cluster.unit(),
     validation  : [ValidationFunc(_.validate)]
   }
 
