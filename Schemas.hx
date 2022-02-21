@@ -1,4 +1,5 @@
-@:stx.schema typedef User = {
+//@:stx.schema 
+typedef User = {
   var first_name  : String;
   var last_name   : String;
   var email       : Email;

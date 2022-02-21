@@ -11,7 +11,7 @@ package stx.schema;
   private function get_self():Schemata return lift(this);
 
   public function ref(path:String):SchemaRef{
-    var ident = Identifier.lift(path).toIdentDef();
+    var ident = Ident.fromIdentifier(Identifier.lift(path));
     return SchemaRef.lift({
       name    : ident.name,
       pack    : ident.pack,

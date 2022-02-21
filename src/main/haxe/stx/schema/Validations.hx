@@ -8,6 +8,9 @@ abstract Validations(Cluster<Validation>) from Cluster<Validation> to Cluster<Va
   public function prj():Cluster<Validation> return this;
   private var self(get,never):Validations;
   private function get_self():Validations return lift(this);
+  @:from static public function fromArray(self:Array<Validation>){
+    return lift(Cluster.lift(self));
+  }
 }
 class ValidationsLift{
   static public function lfold(self:Validations,value:Dynamic,schema:Schema){
