@@ -21,19 +21,16 @@ class MyRegistry extends stx.schema.Registry{
         Attribute({
           name      : "articles",
           type      : Schema.Array(schemata.ref("Article")),
-          relation  : HAS_MANY,
-          owner     : true
+          relation  : HAS_MANY
         })
       ]  
     });
     var article : Schema = SchRecord({
       name : "Article",
       fields : [
-        Attribute({
+        Property({
           name      : "author",
-          type      : user,
-          relation  : HAS_MANY,
-          owner     : false 
+          type      : Schema.Array(user)
         })
       ]
     }); 

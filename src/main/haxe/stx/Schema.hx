@@ -20,6 +20,8 @@ typedef SchemaUnionDeclarationDef   = stx.schema.SchemaUnionDeclaration.SchemaUn
 typedef Schema                      = stx.schema.Schema;
 typedef SchemaSum                   = stx.schema.Schema.SchemaSum;
 
+typedef SchemaRelationSum           = stx.schema.SchemaRelationSum;
+
 typedef SchemaRef                   = stx.schema.SchemaRef;
 typedef SchemaRefDef                = stx.schema.SchemaRef.SchemaRefDef;
 

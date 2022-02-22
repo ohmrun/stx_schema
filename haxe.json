@@ -1,5 +1,6 @@
 {
   "build" : {
+    "-D" : ["no-deprecation-warnings"],
     "-lib" : [
       "hscript",
       "tink_typecrawler",

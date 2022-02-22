@@ -7,6 +7,9 @@ typedef SchemaRefDef = SchemaIdentDef & {
   public function new(self) this = self;
   static public function lift(self:SchemaRefDef):SchemaRef return new SchemaRef(self);
 
+  static public function pure(self:{name : String, ?pack : Array<String>}){
+    return Schemata.instance.ident(self);
+  }
   static public function make(name:String,get:Void->Schema,?pack:Cluster<String>){
     return lift({
       name  : name,
