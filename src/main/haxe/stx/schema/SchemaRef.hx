@@ -1,8 +1,9 @@
 package stx.schema;
 
 typedef SchemaRefDef = SchemaIdentDef & {
-  public function get():Schema;
-}
+  final ?pop : () -> Schema;
+};
+
 @:forward abstract SchemaRef(SchemaRefDef) from SchemaRefDef to SchemaRefDef{
   public function new(self) this = self;
   static public function lift(self:SchemaRefDef):SchemaRef return new SchemaRef(self);
@@ -10,11 +11,10 @@ typedef SchemaRefDef = SchemaIdentDef & {
   static public function pure(self:{name : String, ?pack : Array<String>}){
     return Schemata.instance.ident(self);
   }
-  static public function make(name:String,get:Void->Schema,?pack:Cluster<String>){
+  static public function make(name:String,?pack:Cluster<String>){
     return lift({
       name  : name,
       pack  : __.option(pack).defv(Cluster.unit()),
-      get   : get 
     });
   }
   @:from static inline public function fromSchemaSum(self:SchemaSum){
@@ -22,14 +22,14 @@ typedef SchemaRefDef = SchemaIdentDef & {
     return lift({
       name  : that.name,
       pack  : that.pack,
-      get   : () -> that
+      pop   : () -> that
     });
   }
   @:from static inline public function fromSchema(self:Schema){
     return lift({
       name  : self.name,
       pack  : self.pack,
-      get   : () -> self
+      pop   : () -> self
     });
   }
   @:from static inline public function fromSchemaDeclaration(self:SchemaDeclarationDef){

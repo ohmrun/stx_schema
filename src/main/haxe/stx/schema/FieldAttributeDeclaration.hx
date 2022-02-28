@@ -2,15 +2,17 @@ package stx.schema;
 
 typedef FieldAttributeDeclarationDef = FieldPropertyDeclarationDef & {
   final relation   : SchemaRelationSum;
+  final inverse    : String;
 }
 @:forward abstract FieldAttributeDeclaration(FieldAttributeDeclarationDef) from FieldAttributeDeclarationDef to FieldAttributeDeclarationDef{
   public function new(self) this = self;
   static public function lift(self:FieldAttributeDeclarationDef):FieldAttributeDeclaration return new FieldAttributeDeclaration(self);
-  static public function make(name,type,relation,?validation){
+  static public function make(name,type,relation,inverse,?validation){
     return lift({
       name        : name,
       type        : type,
       relation    : relation,
+      inverse     : inverse,
       validation  : __.option(validation).defv(Cluster.unit())
     });
   }

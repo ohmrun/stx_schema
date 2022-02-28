@@ -19,7 +19,7 @@ package stx.schema;
     return SchemaRef.lift({
       name    : ident.name,
       pack    : ident.pack,
-      get     : this.get.bind(path)
+      pop     : this.get.bind(path)
     });
   }
   public function ident(self:{ name : String, pack : Array<String> }):SchemaRef{
@@ -27,7 +27,10 @@ package stx.schema;
     return SchemaRef.lift({
       name    : ident.name,
       pack    : ident.pack,
-      get     : this.get.bind(ident.toIdentifier())
+      pop     : this.get.bind(ident.toIdentifier())
     });
+  }
+  public function prop(field : String, path : String ){
+    
   }
 }

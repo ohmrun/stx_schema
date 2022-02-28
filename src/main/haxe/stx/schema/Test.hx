@@ -7,34 +7,36 @@ using stx.Show;
 
 class MyRegistry extends stx.schema.Registry{
   public function apply(schemata:Schemata):Cluster<Schema>{
-    var user : Schema = SchRecord({
-      name    : "User",
-      fields  : [
-        Property({
-          name : "username",
-          type : Schema.String()
-        }),
-        Property({
-          name : "age",
-          type : Schema.Int()
-        }),
-        Attribute({
-          name      : "articles",
-          type      : Schema.Array(schemata.ref("Article")),
-          relation  : HAS_MANY
-        })
-      ]  
-    });
-    var article : Schema = SchRecord({
-      name : "Article",
-      fields : [
-        Property({
-          name      : "author",
-          type      : Schema.Array(user)
-        })
-      ]
-    }); 
-    return Cluster.lift([user,article]);
+    // var user : Schema = SchRecord({
+    //   name    : "User",
+    //   fields  : [
+    //     Property({
+    //       name : "username",
+    //       type : Schema.String()
+    //     }),
+    //     Property({
+    //       name : "age",
+    //       type : Schema.Int()
+    //     }),
+    //     Attribute({
+    //       name      : "articles",
+    //       inverse   : "author",
+    //       type      : Schema.Array(schemata.ref("Article")),
+    //       relation  : HAS_MANY
+    //     })
+    //   ]  
+    // });
+    // var article : Schema = SchRecord({
+    //   name : "Article",
+    //   fields : [
+    //     Property({
+    //       name      : "author",
+    //       type      : Schema.Array(user)
+    //     })
+    //   ]
+    // }); 
+    //user,article
+    return Cluster.lift([]);
   }
 }
 class Test{

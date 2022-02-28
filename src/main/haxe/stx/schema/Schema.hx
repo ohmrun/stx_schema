@@ -6,6 +6,7 @@ enum SchemaSum{
   SchEnum(def:SchemaEnumDeclaration);
   SchGeneric(def:SchemaGenericDeclaration);
   SchUnion(def:SchemaUnionDeclaration);
+  SchType(type:Type);
 }
 @:using(stx.schema.Schema.SchemaLift)
 abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
@@ -25,6 +26,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.validation,
       x -> x.validation,
       x -> x.validation,
+      x -> x.validation,
       x -> x.validation
     );
   }
@@ -32,6 +34,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   private function get_name():String{
     return _.fold(
       this,
+      x -> x.name,
       x -> x.name,
       x -> x.name,
       x -> x.name,
@@ -47,22 +50,11 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.pack,
       x -> x.pack,
       x -> x.pack,
+      x -> x.pack,
       x -> x.pack
 
     )).def(() -> Cluster.unit());
-  }
-  static public function String():Schema{
-    return new stx.schema.types.SchemaString();
-  }
-  static public function Int():Schema{
-    return new stx.schema.types.SchemaInt();
-  }
-  static public function Null(self:SchemaRef):Schema{
-    return stx.schema.types.SchemaNull.make(self);
-  }
-  static public function Array(self:SchemaRef):Schema{
-    return stx.schema.types.SchemaArray.make(self);
-  }
+}
   @:from static public function fromSchemaDeclaration(self:SchemaDeclarationDef):Schema{
     return lift(SchScalar(self));
   }
@@ -71,13 +63,14 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   }
 }
 class SchemaLift{
-  static public inline function fold<Z>(self:SchemaSum,scalar : SchemaDeclaration -> Z, record : SchemaRecordDeclaration  -> Z, enm : SchemaEnumDeclaration -> Z, generic : SchemaGenericDeclaration -> Z, union : SchemaUnionDeclaration -> Z) : Z {
+  static public inline function fold<Z>(self:SchemaSum,scalar : SchemaDeclaration -> Z, record : SchemaRecordDeclaration  -> Z, enm : SchemaEnumDeclaration -> Z, generic : SchemaGenericDeclaration -> Z, union : SchemaUnionDeclaration -> Z, type : Type -> Z) : Z {
     return switch(self){
       case SchScalar(def)   : scalar(def);
       case SchRecord(def)   : record(def);
       case SchEnum(def)     : enm(def);
       case SchGeneric(def)  : generic(def);
       case SchUnion(def)    : union(def); 
+      case SchType(def)     : type(def);
     }
   }
 }

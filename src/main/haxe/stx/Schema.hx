@@ -17,6 +17,12 @@ typedef SchemaGenericDeclarationDef = stx.schema.SchemaGenericDeclaration.Schema
 typedef SchemaUnionDeclaration      = stx.schema.SchemaUnionDeclaration;
 typedef SchemaUnionDeclarationDef   = stx.schema.SchemaUnionDeclaration.SchemaUnionDeclarationDef;
 
+typedef SchemaPropertyRef           = stx.schema.SchemaPropertyRef;
+typedef SchemaPropertyRefDef        = stx.schema.SchemaPropertyRef.SchemaPropertyRefDef;
+
+typedef SchemaAnonDeclaration       = stx.schema.SchemaAnonDeclaration;
+typedef SchemaAnonDeclarationDef    = stx.schema.SchemaAnonDeclaration.SchemaAnonDeclarationDef;
+
 typedef Schema                      = stx.schema.Schema;
 typedef SchemaSum                   = stx.schema.Schema.SchemaSum;
 
@@ -30,8 +36,3 @@ typedef Validation                  = stx.schema.Validation;
 typedef Validations                 = stx.schema.Validations;
 typedef WithValidationDef           = stx.schema.WithValidationDef;
 typedef SchemaIdentDef              = stx.schema.SchemaIdentDef;
-
-typedef SchemaBool                  = stx.schema.types.SchemaBool;
-typedef SchemaInt                   = stx.schema.types.SchemaInt;
-typedef SchemaString                = stx.schema.types.SchemaString;
-typedef SchemaNull                  = stx.schema.types.SchemaNull;
