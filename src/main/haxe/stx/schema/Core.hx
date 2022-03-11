@@ -23,6 +23,15 @@ typedef UnionType                   = stx.schema.core.type.UnionType;
 
 typedef TypeKind                    = stx.schema.core.type.TypeKind;
 
+typedef LinkTypeDef                 = stx.schema.core.type.LinkType.LinkTypeDef;
+typedef LinkType                    = stx.schema.core.type.LinkType;
+
+typedef LazyTypeDef                 = stx.schema.core.type.LazyType.LazyTypeDef;
+typedef LazyType                    = stx.schema.core.type.LazyType;
+
+// typedef LinkTypeDef                 = stx.schema.core.type.LinkType.LinkTypeDef;
+// typedef LinkType                    = stx.schema.core.type.LinkType
+
 // typedef SchemaBool                  = stx.schema.core.type.term.SchemaBool;
 // typedef SchemaInt                   = stx.schema.core.type.term.SchemaInt;
 // typedef SchemaString                = stx.schema.core.type.term.SchemaString;

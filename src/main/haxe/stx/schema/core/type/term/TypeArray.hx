@@ -33,7 +33,7 @@ class TypeArrayLift{
           var fn : Dynamic -> Report<SchemaFailure>   = def.type.validation.lfold.bind(_,type);
           var arr : Cluster<Dynamic>                  = value;
           return arr.lfold(
-            (next:Dynamic,memo:Report<SchemaFailure>) -> memo.merge(fn(next)),
+            (next:Dynamic,memo:Report<SchemaFailure>) -> memo.concat(fn(next)),
             __.report()
           );
         default               : __.report(f -> f.of(E_Schema_WrongType(type)));

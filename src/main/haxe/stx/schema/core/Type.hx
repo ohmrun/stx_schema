@@ -6,6 +6,7 @@ enum TypeDef{
   TRecord(t:RecordType);
   TGeneric(t:GenericType);
   TUnion(t:UnionType);
+  TLink(t:LinkType);
 }
 @:using(stx.schema.core.Type.TypeLift)
 abstract Type(TypeDef) from TypeDef to TypeDef{
@@ -28,6 +29,7 @@ abstract Type(TypeDef) from TypeDef to TypeDef{
       t -> t.validation,
       t -> t.validation,
       t -> t.validation,
+      t -> t.validation,
       t -> t.validation
     );
   }
@@ -39,7 +41,8 @@ abstract Type(TypeDef) from TypeDef to TypeDef{
       t -> null,
       t -> t.name,
       t -> t.name,
-      t -> t.name
+      t -> t.name,
+      t -> null
     );
   }
   public var pack(get,never) : Cluster<String>;
@@ -50,27 +53,35 @@ abstract Type(TypeDef) from TypeDef to TypeDef{
       t -> Cluster.unit(),
       t -> t.pack,
       t -> t.pack,
-      t -> t.pack
+      t -> t.pack,
+      t -> Cluster.unit()
     );
   }
-  // static public function String():Schema{
-  //   return new stx.schema.types.SchemaString();
-  // }
-  // static public function Int():Schema{
-  //   return new stx.schema.types.SchemaInt();
-  // }
-  // static public function Null(self:SchemaRef):Schema{
-  //   return stx.schema.types.SchemaNull.make(self);
-  // }
+  static public function Bool():Type{
+    return new stx.schema.core.type.term.TypeBool().toType();
+  }
+  static public function Float():Type{
+    return new stx.schema.core.type.term.TypeFloat().toType();
+  }
+  static public function Int():Type{
+    return new stx.schema.core.type.term.TypeInt().toType();
+  }
+  static public function String():Type{
+    return new stx.schema.core.type.term.TypeString().toType();
+  }
+  static public function Null(self:Type):Type{
+    return stx.schema.core.type.term.TypeNull.make(self).toType();
+  }
 }
 class TypeLift{
-  static public inline function fold<Z>(self:TypeDef, data:DataType -> Z, anon : AnonType -> Z, record : RecordType -> Z, generic : GenericType -> Z, union : UnionType -> Z) : Z {
+  static public inline function fold<Z>(self:TypeDef, data:DataType -> Z, anon : AnonType -> Z, record : RecordType -> Z, generic : GenericType -> Z, union : UnionType -> Z, link : LinkType -> Z) : Z {
     return switch(self){
       case TData(t)       : data(t); 
       case TAnon(t)       : anon(t);
       case TRecord(t)     : record(t);
       case TGeneric(t)    : generic(t);
       case TUnion(t)      : union(t);
+      case TLink(t)       : link(t);
     }
   }
 }

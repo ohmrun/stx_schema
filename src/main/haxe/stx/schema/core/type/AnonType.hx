@@ -1,7 +1,7 @@
 package stx.schema.core.type;
 
 typedef AnonTypeDef = WithValidationDef & {
-  final fields  : Cell<Ensemble<Type>>;
+  final fields  : Cell<Ensemble<Field>>;
 }
 @:forward abstract AnonType(AnonTypeDef) from AnonTypeDef to AnonTypeDef{
   public function new(self) this = self;

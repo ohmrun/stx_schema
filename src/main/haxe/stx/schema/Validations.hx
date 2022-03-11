@@ -16,7 +16,7 @@ class ValidationsLift{
   static public function lfold(self:Validations,value:Dynamic,type:Type){
     return Cluster._.lfold(
       self,
-      (next:Validation,memo:Report<SchemaFailure>) -> memo.merge(next.lfold(value,type)),
+      (next:Validation,memo:Report<SchemaFailure>) -> memo.concat(next.lfold(value,type)),
       __.report()
     );
   }
