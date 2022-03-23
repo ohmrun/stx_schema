@@ -7,4 +7,4 @@ abstract ClassType(haxe.macro.Type.ClassType) from haxe.macro.Type.ClassType to 
   public function prj():haxe.macro.Type.ClassType return this;
   private var self(get,never):ClassType;
   private function get_self():ClassType return lift(this);
-}
+}``

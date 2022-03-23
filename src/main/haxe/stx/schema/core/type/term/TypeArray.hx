@@ -1,34 +1,16 @@
 package stx.schema.core.type.term;
 
-abstract TypeArray(GenericTypeDef) from GenericTypeDef to GenericTypeDef{
+class TypeArray extends GenericTypeCls{
   static public var _(default,never) = TypeArrayLift;
-  static public function make(type:Type){
-    final ident : Ident = {
-      name        : "Array",
-      pack        : ["std"],
-    }
-    return new TypeArray({
-      name        : ident.name,
-      pack        : ident.pack,
-      toString    : () -> ident.toIdentifier().toString(),
-      type        : type,
-      validation  : Cluster.lift([ValidationFunc(_.validate)]),
-    });
+  static public function make(type){
+    return new TypeArray(type);
   }
-  public function new(self:GenericTypeDef){
-    this = self;
+  public function new(type:Type){
+    super("Array",["std"],type);
   }
-  public function prj():GenericTypeDef return this;
-  
-  @:to public function toType(){
-    return TGeneric(this);
+  override public function get_validation(){
+    return Cluster.pure(ValidationFunc(_.validate));
   }
-  // @:to public function toSchemaDeclaration():SchemaDeclaration{
-  //   return SchemaDeclaration.lift(this);
-  // } 
-  // @:to public function toSchema():Schema{
-  //   return Schema.fromSchemaGenericDeclaration(this);
-  // }
 }
 class TypeArrayLift{
   static public function validate(value,type:Type){

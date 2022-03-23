@@ -4,7 +4,9 @@ package stx.schema;
 abstract Validations(Cluster<Validation>) from Cluster<Validation> to Cluster<Validation>{
   public function new(self) this = self;
   static public function lift(self:Cluster<Validation>):Validations return new Validations(self);
-
+  static public function unit():Validations{
+    return lift(Cluster.unit());
+  }
   public function prj():Cluster<Validation> return this;
   private var self(get,never):Validations;
   private function get_self():Validations return lift(this);

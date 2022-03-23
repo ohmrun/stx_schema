@@ -1,9 +1,13 @@
 package stx.schema.core;
 
-class WithValidation extends Clazz{
-  public function new(validation){
+interface WithValidationApi{
+  public var validation(get,null) : Validations;
+  private function get_validation():Validations;
+}
+abstract class WithValidationCls extends Clazz implements WithValidationApi{
+  public function new(){
     super();
-    this.validation = validation;
   }
-  final validation : Validations;
+  public var validation(get,null) : Validations;
+  abstract private function get_validation():Validations;
 }

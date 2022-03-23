@@ -1,33 +1,12 @@
 package stx.schema.core.type.term;
 
-abstract TypeString(DataTypeDef) from DataTypeDef to DataTypeDef {
+class TypeString extends LeafType{
   static public var _(default,never) = TypeStringLift;
-  public function new() {
-    final ident = Ident.fromObject({
-      name        : "String",
-      pack        : ["std"],
-    });
-    this = {
-      name        : ident.name,
-      pack        : ident.pack,
-      toString    : () -> ident.toIdentifier().toString(),
-      validation  : Cluster.unit().snoc(ValidationFunc(_.validate))
-    }
+  public function new(){
+    super("String",["std"]);
   }
-
-  public function prj():DataTypeDef return this;
-  
-  // @:to public function toSchemaDeclaration():SchemaDeclaration{
-  //   return SchemaDeclaration.lift(this);
-  // } 
-  // @:to public function toSchema():Schema{
-  //   return Schema.fromSchemaDeclaration(this);
-  // }
-  // @:to public function toSchemaRef():SchemaRef{
-  //   return SchemaRef.fromSchemaSum(Schema.fromSchemaDeclaration(this));
-  // }
-  public function toType():Type{
-    return TData(this);
+  override public function get_validation(){
+    return Cluster.pure(ValidationFunc(_.validate));
   }
 }
 class TypeStringLift{

@@ -57,6 +57,28 @@ abstract Type(TypeDef) from TypeDef to TypeDef{
       t -> Cluster.unit()
     );
   }
+  public var debrujin(get,never) : Int;
+  public function get_debrujin(){
+    return _.fold(
+      this,
+      t -> t.debrujin,
+      t -> t.debrujin,
+      t -> t.debrujin,
+      t -> t.debrujin,
+      t -> t.debrujin,
+      t -> t.debrujin
+    );
+  }
+  public function toString():String{
+    return switch(this){
+      case TData(t)       : t.toString(); 
+      case TAnon(t)       : t.toString();
+      case TRecord(t)     : t.toString();
+      case TGeneric(t)    : t.toString();
+      case TUnion(t)      : t.toString();
+      case TLink(t)       : t.toString();
+    }
+  }
   static public function Bool():Type{
     return new stx.schema.core.type.term.TypeBool().toType();
   }

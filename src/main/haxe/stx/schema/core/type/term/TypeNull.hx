@@ -1,34 +1,16 @@
 package stx.schema.core.type.term;
 
-abstract TypeNull(GenericType) from GenericType to GenericType{
+class TypeNull extends GenericTypeCls{
   static public var _(default,never) = TypeNullLift;
-  static public function make(type:Type) {
-    final ident = Ident.fromObject({
-      name        : "Null",
-      pack        : ["std"],
-    });
-    return new TypeNull({
-      name        : ident.name,
-      pack        : ident.pack,
-      toString    : () -> ident.toIdentifier().toString(),
-      type        : type,
-      validation  : Cluster.unit().snoc(ValidationFunc(_.validate))
-    });
+  static public function make(type){
+    return new TypeNull(type);
   }
-  public function new(self){
-    this = self;
+  public function new(type){
+    super("Null",["std"],type);
   }
-  public function prj():GenericType return this;
-  
-  @:to public function toType(){
-    return TGeneric(this);
+  override public function get_validation(){
+    return Cluster.pure(ValidationFunc(_.validate));
   }
-  // @:to public function toSchemaDeclaration():SchemaDeclaration{
-  //   return SchemaDeclaration.lift(this);
-  // } 
-  // @:to public function toSchema():Schema{
-  //   return Schema.fromSchemaGenericDeclaration(this);
-  // }
 }
 class TypeNullLift{
   static public function validate(value,type:Type){

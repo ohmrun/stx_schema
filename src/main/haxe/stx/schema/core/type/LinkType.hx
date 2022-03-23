@@ -1,15 +1,33 @@
 package stx.schema.core.type;
 
-typedef LinkTypeDef = Has_toStringDef & WithValidationDef & {
-  final into      : Type;
-  final relation  : SchemaRelationSum;
-  final from      : String;
+interface LinkTypeApi extends BaseTypeApi{
+  public final into      : Type;
+  public final relation  : SchemaRelationSum;
+  public final from      : String;
 }
-@:forward abstract LinkType(LinkTypeDef) from LinkTypeDef to LinkTypeDef{
-  public function new(self) this = self;
-  static public function lift(self:LinkTypeDef):LinkType return new LinkType(self);
+class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
+  public final into      : Type;
+  public final relation  : SchemaRelationSum;
+  public final from      : String;
 
-  public function prj():LinkTypeDef return this;
+  public function new(into,relation,from){
+    super();
+    this.into       = into;
+    this.relation   = relation;
+    this.from       = from;
+  }
+  public function toType(){
+    return TLink(Ref.pure((this:LinkType)));
+  }
+  public function toString(){
+    return '$relation $into $from';
+  }
+}
+@:forward abstract LinkType(LinkTypeApi) from LinkTypeApi to LinkTypeApi{
+  public function new(self) this = self;
+  static public function lift(self:LinkTypeApi):LinkType return new LinkType(self);
+
+  public function prj():LinkTypeApi return this;
   private var self(get,never):LinkType;
   private function get_self():LinkType return lift(this);
 }

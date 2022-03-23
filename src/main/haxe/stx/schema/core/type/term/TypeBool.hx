@@ -1,27 +1,13 @@
 package stx.schema.core.type.term;
 
-abstract TypeBool(DataTypeDef) from DataTypeDef to DataTypeDef {
+class TypeBool extends LeafType{
   static public var _(default,never) = TypeBoolLift;
   public function new(){
-    final ident  = Ident.fromObject({
-      name        : "Bool",
-      pack        : ["std"],
-    });
-    this = {
-      name        : ident.name,
-      pack        : ident.pack,
-      toString    : () -> ident.toIdentifier().toString(),
-      validation  : Cluster.lift([ValidationFunc(_.validate)])
-    }
+    super("Bool",["std"]);
   }
-  public function prj():DataTypeDef return this;
-
-  // @:to public function toSchemaDeclaration():SchemaDeclaration{
-  //   return SchemaDeclaration.lift(this);
-  // }
-  @:to public function toType():Type{
-    return TData(Ref.pure(this));
-  } 
+  override public function get_validation(){
+    return Cluster.pure(ValidationFunc(_.validate));
+  }
 }
 class TypeBoolLift{
   static public function validate(value,_) {

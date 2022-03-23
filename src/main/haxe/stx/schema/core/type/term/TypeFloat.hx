@@ -1,27 +1,13 @@
 package stx.schema.core.type.term;
 
-abstract TypeFloat(DataTypeDef) from DataTypeDef to DataTypeDef{
+class TypeFloat extends LeafType{
   static public var _(default,never) = TypeFloatLift;
-  public function new() {
-    final ident = Ident.fromObject({
-      name        : "Float",
-      pack        : ["std"],
-    });
-    this = {
-      name        : ident.name,
-      pack        : ident.pack,
-      toString    : () -> ident.toIdentifier().toString(),
-      validation  : [ValidationFunc(_.validate)]
-    }
-  }
 
-  public function prj():DataTypeDef return this;
-  
-  // @:to public function toSchemaDeclaration():SchemaDeclaration{
-  //   return SchemaDeclaration.lift(this);
-  // }  
-  @:to public function toType():Type{
-    return TData(Ref.pure(this));
+  public function new(){
+    super("Float",["std"]);
+  }
+  override public function get_validation(){
+    return Cluster.pure(ValidationFunc(_.validate));
   }
 }
 class TypeFloatLift{
