@@ -16,11 +16,15 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
     this.relation   = relation;
     this.from       = from;
   }
-  public function toType(){
+  public function toType():Type{
     return TLink(Ref.pure((this:LinkType)));
   }
   public function toString(){
     return '$relation $into $from';
+  }
+  public function register(){
+    this.into.register();
+    Context.instance.put(this.toType());
   }
 }
 @:forward abstract LinkType(LinkTypeApi) from LinkTypeApi to LinkTypeApi{

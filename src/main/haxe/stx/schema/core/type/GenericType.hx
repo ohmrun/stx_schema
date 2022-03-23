@@ -15,7 +15,13 @@ abstract class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
     return '#$outer($inner)';
   }
   override public function toType():Type{
-    return TGeneric(Ref.pure((this:GenericType)));
+    return Type.make(TGeneric(Ref.pure((this:GenericType))));
+  }
+  public function register(){
+    Context.instance.put(Type.Into(this.ident(),this.debrujin));
+    this.type.register();
+
+    Context.instance.put(this.toType());
   }
 }
 @:forward abstract GenericType(GenericTypeApi) from GenericTypeApi to GenericTypeApi{

@@ -17,7 +17,7 @@ class TypeNullLift{
     return if(value == null){
       __.report();
     }else{
-      switch(type){
+      switch(type.data){
         case TGeneric(def)    : def.pop().type.validation.lfold(value,type);
         default               : __.report(f -> f.of(E_Schema_WrongType(type)));
       }

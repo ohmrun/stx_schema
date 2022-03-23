@@ -17,7 +17,7 @@ class TypeArrayLift{
     return if(value == null){
       __.report();
     }else{
-      switch(type){
+      switch(type.data){
         case TGeneric(def)  :
           var fn : Dynamic -> Report<SchemaFailure>   = def.pop().type.validation.lfold.bind(_,type);
           var arr : Cluster<Dynamic>                  = value;

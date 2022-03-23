@@ -6,11 +6,17 @@ interface BaseTypeApi extends Has_toStringApi{
 
   public var validation(get,null)       : Validations;
   private function get_validation():Validations;
+
+  public var status : TypeStatus; 
+  public function register():Void;
 }
 abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
   public function new(){
     super();
+    this.status = TYPE_UNTOUCHED;
   }
+  public var status : TypeStatus;
+  
   public var validation(get,null) : Validations;
   private function get_validation():Validations{
     return Cluster.unit();
@@ -26,4 +32,5 @@ abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
     }
   }
   abstract function toType():Type;
+  abstract public function register():Void;
 }

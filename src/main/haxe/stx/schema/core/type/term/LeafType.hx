@@ -3,6 +3,7 @@ package stx.schema.core.type.term;
 abstract class LeafType extends DataTypeCls{
   public function new(name,pack){
     super(name,pack);
+    this.status = TYPE_COMPLETED;
   }
   public function toString(){
     return this.ident().toIdentifier().toString();
@@ -22,5 +23,8 @@ abstract class LeafType extends DataTypeCls{
     }else{
       return this.debrujin;
     } 
+  }
+  public function register(){
+    Context.instance.put(this.toType());
   }
 }

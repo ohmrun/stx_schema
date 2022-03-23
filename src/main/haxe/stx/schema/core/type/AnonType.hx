@@ -23,7 +23,14 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     return Cluster.unit();
   }
   public function toType(){
-    return TAnon(Ref.pure((this:AnonType)));
+    return Type.make(TAnon(Ref.pure((this:AnonType))));
+  }
+  public function register(){
+
+    for(field in this.fields.pop()){
+      field.type.register();
+    }
+    Context.instance.put(this.toType());
   }
 }
 @:forward abstract AnonType(AnonTypeApi) from AnonTypeApi to AnonTypeApi{

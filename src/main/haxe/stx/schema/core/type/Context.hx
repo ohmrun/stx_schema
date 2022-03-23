@@ -15,6 +15,19 @@ class Context extends Clazz{
     this.register = new StringMap();
     this.index    = 0; 
   }
+  public function defer(ident:Ident):Ref<Type>{
+    return Ref.make(
+      () -> get(ident).defv(new stx.schema.core.type.term.MonoType().toType())
+    );
+  }
+  public function is_recursive(ident:Ident):Bool{
+    return this.get(ident).map(
+      obj -> switch(obj.data){
+        case TData(t) : std.Type.getClass(t.pop()) == stx.schema.core.type.term.IntoType;
+        default       : false;
+      }
+    ).defv(false);
+  }
   public function put(type:Type){
     this.register.set(type.toString(),type);
   }

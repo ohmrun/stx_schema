@@ -1,5 +1,7 @@
 package stx.schema;
 
+typedef TypeStatus                  = stx.schema.core.type.TypeStatus;
+
 typedef BaseTypeApi                 = stx.schema.core.type.BaseType.BaseTypeApi;
 typedef BaseTypeCls                 = stx.schema.core.type.BaseType.BaseTypeCls;
 typedef Context                     = stx.schema.core.type.Context;
@@ -7,7 +9,7 @@ typedef Context                     = stx.schema.core.type.Context;
 typedef Field                       = stx.schema.core.Field.FieldSum;
 typedef FieldSum                    = stx.schema.core.Field;
 
-typedef TypeDef                     = stx.schema.core.Type.TypeDef;
+typedef TypeSum                     = stx.schema.core.Type.TypeSum;
 typedef Type                        = stx.schema.core.Type;
 
 typedef DataTypeApi                 = stx.schema.core.type.DataType.DataTypeApi;

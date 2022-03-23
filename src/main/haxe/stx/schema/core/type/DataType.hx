@@ -6,7 +6,6 @@ interface DataTypeApi extends BaseTypeApi{
 
   public function ident():Ident;
 }
-
 abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
   public final name : String;
   public final pack : Way;
@@ -19,7 +18,7 @@ abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
     return Ident.make(name,pack);
   }
   public function toType(){
-    return TData(Ref.pure((this:DataType)));
+    return Type.make(TData(Ref.pure((this:DataType))));
   }
 }
 @:forward abstract DataType(DataTypeApi) from DataTypeApi to DataTypeApi{

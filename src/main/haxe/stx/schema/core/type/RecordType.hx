@@ -1,10 +1,10 @@
 package stx.schema.core.type;
 
 interface RecordTypeApi extends DataTypeApi{
-  public final fields  : Cell<Ensemble<Field>>;
+  public final fields  : Cell<Ensemble<stx.schema.core.type.Field>>;
 }
 class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
-  public final fields  : Cell<Ensemble<Field>>;
+  public final fields  : Cell<Ensemble<stx.schema.core.type.Field>>;
   public function new(name,pack,fields){
     super(name,pack);
     this.fields   = fields;
@@ -14,6 +14,14 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
   }
   public function toString(){
     return this.ident().toIdentifier().toString();
+  }
+  public function register(){
+    Context.instance.put(Type.Into(this.ident(),this.debrujin));
+    
+    for(field in fields.pop()){
+      field.type.register();
+    }
+    Context.instance.put(this.toType());
   }
 }
 @:forward abstract RecordType(RecordTypeApi) from RecordTypeApi to RecordTypeApi{

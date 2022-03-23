@@ -9,6 +9,13 @@ abstract class UnionTypeCls extends DataTypeCls{
     super(name,pack);
     this.types = types;
   }
+  public function register(){
+    Context.instance.put(Type.Into(this.ident(),this.debrujin));
+    for(type in types){
+      type.register();
+    }
+    Context.instance.put(this.toType());
+  }
 }
 @:forward abstract UnionType(UnionTypeApi) from UnionTypeApi to UnionTypeApi{
   public function new(self) this = self;
