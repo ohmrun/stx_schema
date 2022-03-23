@@ -2,10 +2,17 @@ package stx.schema.core.type.term;
 
 abstract TypeString(DataTypeDef) from DataTypeDef to DataTypeDef {
   static public var _(default,never) = TypeStringLift;
-  public function new() this = {
-    name        : "String",
-    pack        : Cluster.pure("std"),
-    validation  : Cluster.unit().snoc(ValidationFunc(_.validate))
+  public function new() {
+    final ident = Ident.fromObject({
+      name        : "String",
+      pack        : ["std"],
+    });
+    this = {
+      name        : ident.name,
+      pack        : ident.pack,
+      toString    : () -> ident.toIdentifier().toString(),
+      validation  : Cluster.unit().snoc(ValidationFunc(_.validate))
+    }
   }
 
   public function prj():DataTypeDef return this;

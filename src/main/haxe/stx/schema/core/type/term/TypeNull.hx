@@ -2,12 +2,19 @@ package stx.schema.core.type.term;
 
 abstract TypeNull(GenericType) from GenericType to GenericType{
   static public var _(default,never) = TypeNullLift;
-  static public function make(type:Type) return new TypeNull({
-    name        : "Null",
-    pack        : Cluster.pure("std"),
-    type        : type,
-    validation  : Cluster.unit().snoc(ValidationFunc(_.validate))
-  });
+  static public function make(type:Type) {
+    final ident = Ident.fromObject({
+      name        : "Null",
+      pack        : ["std"],
+    });
+    return new TypeNull({
+      name        : ident.name,
+      pack        : ident.pack,
+      toString    : () -> ident.toIdentifier().toString(),
+      type        : type,
+      validation  : Cluster.unit().snoc(ValidationFunc(_.validate))
+    });
+  }
   public function new(self){
     this = self;
   }
@@ -29,7 +36,7 @@ class TypeNullLift{
       __.report();
     }else{
       switch(type){
-        case TGeneric(def)    : def.type.validation.lfold(value,type);
+        case TGeneric(def)    : def.pop().type.validation.lfold(value,type);
         default               : __.report(f -> f.of(E_Schema_WrongType(type)));
       }
     }

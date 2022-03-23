@@ -1,6 +1,6 @@
 package stx.schema;
 
-typedef SchemaRefDef = SchemaIdentDef & {
+typedef SchemaRefDef = stx.schema.SchemaIdentDef & {
   final ?pop : () -> Schema;
 };
 

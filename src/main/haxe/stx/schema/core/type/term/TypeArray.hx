@@ -2,12 +2,19 @@ package stx.schema.core.type.term;
 
 abstract TypeArray(GenericTypeDef) from GenericTypeDef to GenericTypeDef{
   static public var _(default,never) = TypeArrayLift;
-  static public function make(type:Type) return new TypeArray({
-    name        : "Array",
-    pack        : Cluster.pure("std"),
-    type        : type,
-    validation  : Cluster.lift([ValidationFunc(_.validate)]),
-  });
+  static public function make(type:Type){
+    final ident : Ident = {
+      name        : "Array",
+      pack        : ["std"],
+    }
+    return new TypeArray({
+      name        : ident.name,
+      pack        : ident.pack,
+      toString    : () -> ident.toIdentifier().toString(),
+      type        : type,
+      validation  : Cluster.lift([ValidationFunc(_.validate)]),
+    });
+  }
   public function new(self:GenericTypeDef){
     this = self;
   }
@@ -30,7 +37,7 @@ class TypeArrayLift{
     }else{
       switch(type){
         case TGeneric(def)  :
-          var fn : Dynamic -> Report<SchemaFailure>   = def.type.validation.lfold.bind(_,type);
+          var fn : Dynamic -> Report<SchemaFailure>   = def.pop().type.validation.lfold.bind(_,type);
           var arr : Cluster<Dynamic>                  = value;
           return arr.lfold(
             (next:Dynamic,memo:Report<SchemaFailure>) -> memo.concat(fn(next)),

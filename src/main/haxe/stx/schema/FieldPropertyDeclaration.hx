@@ -1,7 +1,7 @@
 package stx.schema;
 
-typedef FieldPropertyDeclarationDef = WithValidationDef & {
-  final name        : String;
+typedef FieldPropertyDeclarationDef = stx.schema.WithValidationDef & {
+  final name        : std.String;
   final type        : SchemaRef;
 }
 @:forward abstract FieldPropertyDeclaration(FieldPropertyDeclarationDef) from FieldPropertyDeclarationDef to FieldPropertyDeclarationDef{

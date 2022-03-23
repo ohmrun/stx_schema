@@ -9,4 +9,6 @@ enum SchemaFailure{
   E_Schema_Dynamic(e:Dynamic);
   E_Schema_WrongSchemaType(type:Schema);
   E_Schema_WrongType(type:stx.schema.core.Type);
+  E_Schema_UnexpectedGeneric;
+  E_Schema_UnexpectedType;
 }

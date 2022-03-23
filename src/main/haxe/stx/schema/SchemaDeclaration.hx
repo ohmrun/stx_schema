@@ -1,6 +1,6 @@
 package stx.schema;
 
-typedef SchemaDeclarationDef = WithValidationDef & SchemaIdentDef;
+typedef SchemaDeclarationDef = stx.schema.WithValidationDef & stx.schema.SchemaIdentDef;
 
 @:forward abstract SchemaDeclaration(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaDeclarationDef{
   public function new(self) this = self;

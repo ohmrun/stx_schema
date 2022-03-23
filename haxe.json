@@ -4,13 +4,17 @@
     "-lib" : [
       "hscript",
       "tink_typecrawler",
-      "stx_pico","stx_nano","stx_om","stx_bake","stx_show","fletcher"
+      "stx_pico","stx_nano","stx_om","stx_bake","stx_show","fletcher","stx_makro"
     ],
     "-cp"  : "src/main/haxe",
     "unit" : {
       "--macro" : [
         "include('stx.schema',true)"
       ]
+    },
+    "type_to_schema" : {
+      "-main" : "stx.schema.makro.TypeToSchema",
+      "--interp" : true
     }
   }
 }

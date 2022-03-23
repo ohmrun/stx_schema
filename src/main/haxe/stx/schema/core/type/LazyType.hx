@@ -1,6 +1,6 @@
 package stx.schema.core.type;
 
-typedef LazyTypeDef = DataTypeDef & {
+typedef LazyTypeDef = WithValidationDef & {
   final type : Cell<Type>;
 }
 abstract LazyType(LazyTypeDef) from LazyTypeDef to LazyTypeDef{

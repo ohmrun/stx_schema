@@ -1,7 +1,7 @@
 package stx.schema.core.type;
 
-typedef DataTypeDef = IdentDef & WithValidationDef & {
-
+typedef DataTypeDef = Has_toStringDef & IdentDef & WithValidationDef & {
+  
 }
 @:forward abstract DataType(DataTypeDef) from DataTypeDef to DataTypeDef{
   public function new(self) this = self;

@@ -29,6 +29,10 @@ typedef LinkType                    = stx.schema.core.type.LinkType;
 typedef LazyTypeDef                 = stx.schema.core.type.LazyType.LazyTypeDef;
 typedef LazyType                    = stx.schema.core.type.LazyType;
 
+typedef Has_toStringDef             = stx.schema.core.type.Has_toStringDef;
+
+typedef Ref<T:Has_toStringDef>      = stx.schema.core.Ref<T>;
+typedef RefDef<T:Has_toStringDef>   = stx.schema.core.Ref.RefDef<T>;
 // typedef LinkTypeDef                 = stx.schema.core.type.LinkType.LinkTypeDef;
 // typedef LinkType                    = stx.schema.core.type.LinkType
 

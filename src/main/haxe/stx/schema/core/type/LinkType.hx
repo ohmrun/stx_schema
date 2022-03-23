@@ -1,7 +1,7 @@
 package stx.schema.core.type;
 
-typedef LinkTypeDef = WithValidationDef & {
-  final into      : Type,
+typedef LinkTypeDef = Has_toStringDef & WithValidationDef & {
+  final into      : Type;
   final relation  : SchemaRelationSum;
   final from      : String;
 }

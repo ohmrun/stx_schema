@@ -2,10 +2,17 @@ package stx.schema.core.type.term;
 
 abstract TypeBool(DataTypeDef) from DataTypeDef to DataTypeDef {
   static public var _(default,never) = TypeBoolLift;
-  public function new() this = {
-    name        : "Bool",
-    pack        : Cluster.pure("std"),
-    validation  : Cluster.lift([ValidationFunc(_.validate)])
+  public function new(){
+    final ident  = Ident.fromObject({
+      name        : "Bool",
+      pack        : ["std"],
+    });
+    this = {
+      name        : ident.name,
+      pack        : ident.pack,
+      toString    : () -> ident.toIdentifier().toString(),
+      validation  : Cluster.lift([ValidationFunc(_.validate)])
+    }
   }
   public function prj():DataTypeDef return this;
 
@@ -13,7 +20,7 @@ abstract TypeBool(DataTypeDef) from DataTypeDef to DataTypeDef {
   //   return SchemaDeclaration.lift(this);
   // }
   @:to public function toType():Type{
-    return TData(this);
+    return TData(Ref.pure(this));
   } 
 }
 class TypeBoolLift{

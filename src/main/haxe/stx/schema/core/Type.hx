@@ -1,12 +1,12 @@
 package stx.schema.core;
 
 enum TypeDef{
-  TData(t:DataType);
-  TAnon(t:AnonType);
-  TRecord(t:RecordType);
-  TGeneric(t:GenericType);
-  TUnion(t:UnionType);
-  TLink(t:LinkType);
+  TData(t:Ref<DataType>);
+  TAnon(t:Ref<AnonType>);
+  TRecord(t:Ref<RecordType>);
+  TGeneric(t:Ref<GenericType>);
+  TUnion(t:Ref<UnionType>);
+  TLink(t:Ref<LinkType>);
 }
 @:using(stx.schema.core.Type.TypeLift)
 abstract Type(TypeDef) from TypeDef to TypeDef{
@@ -76,12 +76,12 @@ abstract Type(TypeDef) from TypeDef to TypeDef{
 class TypeLift{
   static public inline function fold<Z>(self:TypeDef, data:DataType -> Z, anon : AnonType -> Z, record : RecordType -> Z, generic : GenericType -> Z, union : UnionType -> Z, link : LinkType -> Z) : Z {
     return switch(self){
-      case TData(t)       : data(t); 
-      case TAnon(t)       : anon(t);
-      case TRecord(t)     : record(t);
-      case TGeneric(t)    : generic(t);
-      case TUnion(t)      : union(t);
-      case TLink(t)       : link(t);
+      case TData(t)       : data(t.pop()); 
+      case TAnon(t)       : anon(t.pop());
+      case TRecord(t)     : record(t.pop());
+      case TGeneric(t)    : generic(t.pop());
+      case TUnion(t)      : union(t.pop());
+      case TLink(t)       : link(t.pop());
     }
   }
 }

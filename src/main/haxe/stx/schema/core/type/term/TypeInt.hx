@@ -2,12 +2,18 @@ package stx.schema.core.type.term;
 
 abstract TypeInt(DataTypeDef) from DataTypeDef to DataTypeDef{
   static public var _(default,never) = TypeIntLift;
-  public function new() this = {
-    name        : "Int",
-    pack        : Cluster.pure("std"),
-    validation  : Cluster.unit().snoc(ValidationFunc(_.validate))
+  public function new(){ 
+    final ident  = Ident.fromObject({
+      name        : "Int",
+      pack        : ["std"],
+    });
+    this = {
+      name        : ident.name,
+      pack        : ident.pack,
+      toString    : () -> ident.toIdentifier().toString(),
+      validation  : Cluster.unit().snoc(ValidationFunc(_.validate))
+    }
   }
-
   public function prj():DataTypeDef return this;
   
   // @:to public function toSchemaDeclaration():SchemaDeclaration{
@@ -17,7 +23,7 @@ abstract TypeInt(DataTypeDef) from DataTypeDef to DataTypeDef{
   //   return Schema.fromSchemaDeclaration(this);
   // } 
   public function toType():Type{
-    return TData(this);
+    return TData(Ref.pure(this));
   }
 }
 class TypeIntLift{
