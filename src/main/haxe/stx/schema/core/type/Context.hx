@@ -15,10 +15,8 @@ class Context extends Clazz{
     this.register = new StringMap();
     this.index    = 0; 
   }
-  public function defer(ident:Ident):Ref<Type>{
-    return Ref.make(
-      () -> get(ident).defv(new stx.schema.core.type.term.MonoType().toType())
-    );
+  public function defer(ident:Ident):Type{
+    return get(ident).defv(stx.schema.core.type.term.IntoType.pure(ident).toType());
   }
   public function is_recursive(ident:Ident):Bool{
     return this.get(ident).map(

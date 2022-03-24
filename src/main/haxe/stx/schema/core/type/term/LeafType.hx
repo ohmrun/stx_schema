@@ -1,8 +1,8 @@
 package stx.schema.core.type.term;
 
 abstract class LeafType extends DataTypeCls{
-  public function new(name,pack){
-    super(name,pack);
+  public function new(name,?pack){
+    super(name,pack == null ? [] : pack);
     this.status = TYPE_COMPLETED;
   }
   public function toString(){

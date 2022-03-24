@@ -26,7 +26,6 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     return Type.make(TAnon(Ref.pure((this:AnonType))));
   }
   public function register(){
-
     for(field in this.fields.pop()){
       field.type.register();
     }

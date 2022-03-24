@@ -1,6 +1,9 @@
 package stx.schema.core.type.term;
 
 class IntoType extends DataTypeCls{
+  static public function pure(ident:Ident){
+    return make(ident,Context.instance.next());
+  }
   static public function make(ident:Ident,debrujin:Int){
     return new IntoType(ident.name,ident.pack,debrujin);
   }
