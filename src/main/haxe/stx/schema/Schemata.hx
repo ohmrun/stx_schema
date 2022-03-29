@@ -8,7 +8,7 @@ class SchemataCls{
     this.register = __.option(register).def(
       () -> {
         final map = new StringMap();
-        final put = (schema:Schema){
+        final put = (schema:Schema)->{
           map.set(schema.identity().toString(),schema);
         }
         put(new stx.schema.term.SchemaBool());
