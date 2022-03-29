@@ -13,15 +13,25 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
     return Cluster.unit();
   }
   public function toString(){
-    return this.ident().toIdentifier().toString();
+    return this.identity().toString();
   }
-  public function register(){
-    Context.instance.put(Type.Into(this.ident(),this.debrujin));
+  public function register(state:Context){
+    var next : RecordType     = null;
+    var type                  = Ref.make(
+      () -> next
+    );
+    state.put(TRecord(type));
+    final fs = (this.fields.pop().toIterKV().toIter()).lfold(
+      (next:KV<String,stx.schema.core.type.Field>,memo:Ensemble<stx.schema.core.type.Field>) -> {
+        final id    = next.val.type.identity();
+        final type  = state.get(id).fudge(f -> f.of(E_Schema_IdentityUnresolved(id)));
+        return memo.set(next.key,stx.schema.core.type.Field.make(type));
+      },
+      Ensemble.unit()
+    );
     
-    for(field in fields.pop()){
-      field.type.register();
-    }
-    Context.instance.put(this.toType());
+    next = new RecordTypeCls(this.name,this.pack,fs);
+    return next.toType();
   }
 }
 @:forward abstract RecordType(RecordTypeApi) from RecordTypeApi to RecordTypeApi{
@@ -31,4 +41,8 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
   public function prj():RecordTypeApi return this;
   private var self(get,never):RecordType;
   private function get_self():RecordType return lift(this);
+
+  @:noUsing static public function make(name,pack,fields){ 
+    return lift(new RecordTypeCls(name,pack,fields));
+  }
 }

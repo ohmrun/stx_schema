@@ -19,9 +19,9 @@ typedef FieldDef = Has_toStringDef & {
   @:from static public function fromType(self:Type){
     return lift({ type : self , toString : () -> self.toString() });
   }
-  @:from static public function fromString(self:String){
-  return lift({ type : Context.instance.defer(Ident.fromIdentifier(Identifier.lift(self))), toString : () -> self });
-  }
+  // @:from static public function fromString(self:String){
+  //   return lift({ type : Context.instance.defer(Ident.fromIdentifier(Identifier.lift(self))), toString : () -> self });
+  // }
   public function toString():String{
     return this.type.toString();
   }

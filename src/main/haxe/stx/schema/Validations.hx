@@ -13,6 +13,9 @@ abstract Validations(Cluster<Validation>) from Cluster<Validation> to Cluster<Va
   @:from static public function fromArray(self:Array<Validation>){
     return lift(Cluster.lift(self));
   }
+  @:from static public function fromValidationSum(self:ValidationSum){
+    return lift(Cluster.pure(self));
+  }
 }
 class ValidationsLift{
   static public function lfold(self:Validations,value:Dynamic,type:Type){

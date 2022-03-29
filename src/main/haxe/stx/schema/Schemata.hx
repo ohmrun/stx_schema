@@ -1,36 +1,56 @@
 package stx.schema;
 
-@:forward abstract Schemata(haxe.ds.StringMap<Schema>) from haxe.ds.StringMap<Schema> to haxe.ds.StringMap<Schema> {
-  static public var instance(get,null) : Schemata;
-  static public inline function get_instance(){
-    return instance == null ? instance = new Schemata(new haxe.ds.StringMap()) : instance;
+class SchemataCls{
+  public final register  : StringMap<Schema>;
+  public final context   : Context; 
+
+  public function new(?register,?context){
+    this.register = __.option(register).def(
+      () -> {
+        final map = new StringMap();
+        final put = (schema:Schema){
+          map.set(schema.identity().toString(),schema);
+        }
+        put(new stx.schema.term.SchemaBool());
+        out(new stx.schema.term.SchemaFloat());
+        out(new stx.schema.term.SchemaInt());
+        out(new stx.schema.term.SchemaString());
+      }
+    );
+    this.context  = __.option(context).defv(@:privateAccess new Context());
   }
+  public function get(key:Identity):Option<Schema>{
+    return __.option(this.register.get(key.toString()));
+  }
+  public function put(data:Schema){
+    this.register.set(data.identity().toString(),data);
+  }
+  public function type(){
+    for(type in this.register){
+      __.log().debug(_ -> _.thunk(() -> type.toString()));
+      type.resolve(this);
+    }
+    trace("HERE");
+    return this;
+  }
+  public function toString(){
+    return Iter.lift(register).map(x -> x.toString()).toArray().join(",");
+  }
+}
+@:forward abstract Schemata(SchemataCls) from SchemataCls to SchemataCls {
   public function new(self) this = self;
-  static public function lift(self:haxe.ds.StringMap<Schema>):Schemata return new Schemata(self);
-  static public function unit(){
-    return lift(new haxe.ds.StringMap());
+  static public function make(schemas:Cluster<Schema>){
+    var self = unit();
+    for(schema in schemas){
+      self.put(schema);
+    }
+    return self;
   }
-  public function prj():haxe.ds.StringMap<Schema> return this;
+  static public function lift(self:SchemataCls):Schemata return new Schemata(self);
+  static public function unit(){
+    return lift(new SchemataCls());
+  }
+  public function prj():SchemataCls return this;
   private var self(get,never):Schemata;
   private function get_self():Schemata return lift(this);
-
-  public function ref(path:String):SchemaRef{
-    var ident = Ident.fromIdentifier(Identifier.lift(path));
-    return SchemaRef.lift({
-      name    : ident.name,
-      pack    : ident.pack,
-      pop     : this.get.bind(path)
-    });
-  }
-  public function ident(self:{ name : String, pack : Array<String> }):SchemaRef{
-    var ident : Ident = self;
-    return SchemaRef.lift({
-      name    : ident.name,
-      pack    : ident.pack,
-      pop     : this.get.bind(ident.toIdentifier())
-    });
-  }
-  public function prop(field : String, path : String ){
-    
-  }
 }

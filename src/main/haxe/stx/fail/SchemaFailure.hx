@@ -11,4 +11,5 @@ enum SchemaFailure{
   E_Schema_WrongType(type:stx.schema.core.Type);
   E_Schema_UnexpectedGeneric;
   E_Schema_UnexpectedType;
+  E_Schema_IdentityUnresolved(identity:stx.schema.core.Identity);
 }

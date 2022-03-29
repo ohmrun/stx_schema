@@ -8,18 +8,31 @@ typedef SchemaEnumDeclarationDef = SchemaDeclarationDef & {
   public function new(self) this = self;
   static public function lift(self:SchemaEnumDeclarationDef):SchemaEnumDeclaration return new SchemaEnumDeclaration(self);
 
-  static public function make(name,pack,constructors,?validation){
+  static public function make(ident:Ident,constructors,?validation){
     return lift({
-      name          : name,
-      pack          : pack,
+      id            : Identity.fromIdent(ident),
       constructors  : constructors,
       validation    : _.validation.concat(__.option(validation).defv(Cluster.unit()))
     });
   }
-
+  static public function make0(name,pack,constructors,?validation){
+    return make(Ident.make(name,pack),constructors,validation);
+  }
+  public function resolve(state:Schemata):Schema{
+    state.put(this);
+    return SchEnum(this);
+  }
+  public function identity(){
+    return this.id;  
+  }
   public function prj():SchemaEnumDeclarationDef return this;
   private var self(get,never):SchemaEnumDeclaration;
   private function get_self():SchemaEnumDeclaration return lift(this);
+
+  public function toString(){
+    final thiz = identity().toString();
+    return '$thiz(${this.constructors.join(",")})';
+  }
 } 
 class SchemaEnumDeclarationLift{
   static public var validation(get,null) : Validations;

@@ -4,7 +4,7 @@
     "-lib" : [
       "hscript",
       "tink_typecrawler",
-      "stx_pico","stx_nano","stx_om","stx_bake","stx_show","fletcher","stx_makro"
+      "stx_pico","stx_show","stx_nano","stx_om","stx_bake","stx_show","fletcher","stx_makro","stx_coroutine"
     ],
     "-cp"  : "src/main/haxe",
     "unit" : {
@@ -15,6 +15,22 @@
     "type_to_schema" : {
       "-main" : "stx.schema.makro.TypeToSchema",
       "--interp" : true
+    },
+    "test" : {
+      "-main" : "stx.schema.Test",
+      "interp" : {
+        "--interp" : true
+      },
+      "node" : {
+        "--macro" : ["allowPackage('sys')"],
+        "-lib" : ["hxnodejs"],
+        "--js" : ".stx/build/test/node/main.js"
+      }
     }
+  },
+  "run" : {
+    "test.node:run" : [
+      ["node",".stx/build/test/node/main.js"]
+    ]
   }
 }

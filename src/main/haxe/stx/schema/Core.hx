@@ -4,10 +4,10 @@ typedef TypeStatus                  = stx.schema.core.type.TypeStatus;
 
 typedef BaseTypeApi                 = stx.schema.core.type.BaseType.BaseTypeApi;
 typedef BaseTypeCls                 = stx.schema.core.type.BaseType.BaseTypeCls;
-typedef Context                     = stx.schema.core.type.Context;
 
-typedef Field                       = stx.schema.core.Field.FieldSum;
-typedef FieldSum                    = stx.schema.core.Field;
+
+typedef FieldDef                    = stx.schema.core.type.Field.FieldDef;
+typedef Field                       = stx.schema.core.type.Field;
 
 typedef TypeSum                     = stx.schema.core.Type.TypeSum;
 typedef Type                        = stx.schema.core.Type;
@@ -38,8 +38,9 @@ typedef LinkTypeCls                 = stx.schema.core.type.LinkType.LinkTypeCls;
 typedef LinkTypeApi                 = stx.schema.core.type.LinkType.LinkTypeApi;
 typedef LinkType                    = stx.schema.core.type.LinkType;
 
-typedef LazyTypeDef                 = stx.schema.core.type.LazyType.LazyTypeDef;
-typedef LazyType                    = stx.schema.core.type.LazyType;
+typedef EnumTypeApi                 = stx.schema.core.type.EnumType.EnumTypeApi;
+typedef EnumTypeCls                 = stx.schema.core.type.EnumType.EnumTypeCls;
+typedef EnumType                    = stx.schema.core.type.EnumType;
 
 typedef Has_toStringDef             = stx.schema.core.type.Has_toStringDef;
 typedef Has_toStringApi             = stx.schema.core.type.Has_toString.Has_toStringApi;
@@ -50,6 +51,11 @@ typedef RefDef<T:Has_toStringDef>   = stx.schema.core.Ref.RefDef<T>;
 
 typedef WithValidationCls           = stx.schema.core.WithValidation.WithValidationCls;
 typedef WithValidationApi           = stx.schema.core.WithValidation.WithValidationApi;
+
+typedef Identity                    = stx.schema.core.Identity;
+typedef Context                     = stx.schema.core.Context;
+
+
 // typedef LinkTypeDef                 = stx.schema.core.type.LinkType.LinkTypeDef;
 // typedef LinkType                    = stx.schema.core.type.LinkType
 

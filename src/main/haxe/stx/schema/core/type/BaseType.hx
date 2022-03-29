@@ -8,7 +8,11 @@ interface BaseTypeApi extends Has_toStringApi{
   private function get_validation():Validations;
 
   public var status : TypeStatus; 
-  public function register():Void;
+
+  public function identity():Identity;
+
+  public function toType():Type;
+  public function register(state:Context):Type;
 }
 abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
   public function new(){
@@ -23,14 +27,9 @@ abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
   }
   public var debrujin(get,null)   : Null<Int>;
   private function get_debrujin():Null<Int>{
-    return if(this.debrujin == null){
-      this.debrujin = Context.instance.next();
-      Context.instance.put(this.toType());
-      this.debrujin;
-    }else{
-      this.debrujin;
-    }
+    return 1;
   }
-  abstract function toType():Type;
-  abstract public function register():Void;
+  abstract public function toType():Type;
+  abstract public function identity():Identity;
+  abstract public function register(state:Context):Type;
 }

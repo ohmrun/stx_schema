@@ -3,8 +3,6 @@ package stx.schema.core.type;
 interface DataTypeApi extends BaseTypeApi{
   public final name : String;
   public final pack : Way;
-
-  public function ident():Ident;
 }
 abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
   public final name : String;
@@ -14,8 +12,8 @@ abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
     this.name = name;
     this.pack = Way.lift(pack);
   }
-  public function ident(){
-    return Ident.make(name,pack);
+  public function identity(){
+    return Identity.fromIdent(Ident.make(name,pack));
   }
   public function toType(){
     return Type.make(TData(Ref.pure((this:DataType))));
