@@ -9,6 +9,7 @@ enum TypeSum{
   TUnion(t:Ref<UnionType>);
   TLink(t:Ref<LinkType>);
   TEnum(t:Ref<EnumType>);
+  TLazy(f:Ref<LazyType>);
   TMono;
 }
 @:using(stx.schema.core.Type.TypeLift)
@@ -26,6 +27,7 @@ class TypeCls{
       case TUnion(t)      : t.toString();
       case TLink(t)       : t.toString();
       case TEnum(t)       : t.toString();
+      case TLazy(t)       : t.toString();
       case TMono          : "MONO";
     }
   }
@@ -40,7 +42,8 @@ class TypeCls{
       t   -> t.validation,
       t   -> t.validation,
       t   -> t.validation,
-      ()  -> null
+      t   -> t.validation,
+      ()  -> Validations.unit()
     );
   }
   public var name(get,never) : String;
@@ -53,6 +56,7 @@ class TypeCls{
       t   -> t.name,
       t   -> t.name,
       t   -> null,
+      t   -> t.name,
       t   -> t.name,
       ()  -> null
     );
@@ -68,6 +72,7 @@ class TypeCls{
       t   -> t.pack,
       t   -> Cluster.unit(),
       t   -> t.pack,
+      t   -> t.pack,
       ()  -> Cluster.unit()
     );
   }
@@ -75,6 +80,7 @@ class TypeCls{
   public function get_debrujin(){
     return Type._.fold(
       data,
+      t   -> t.debrujin,
       t   -> t.debrujin,
       t   -> t.debrujin,
       t   -> t.debrujin,
@@ -94,7 +100,10 @@ class TypeCls{
       case TUnion(t)      : t.pop().register(state);
       case TLink(t)       : t.pop().register(state);
       case TEnum(t)       : t.pop().register(state);
-      case TMono          : new TypeCls(TMono);
+      case TLazy(t)       : t.pop().register(state);
+      case TMono          :
+        trace("PPPPPL"); 
+        new TypeCls(TMono);
     }
   }
   public function identity():Identity{
@@ -106,7 +115,10 @@ class TypeCls{
       case TUnion(t)      : t.pop().identity();
       case TLink(t)       : t.pop().identity();
       case TEnum(t)       : t.pop().identity();
-      case TMono          : Identity.fromIdent(Ident.make('TMono'));
+      case TLazy(t)       : t.pop().identity();
+      case TMono          :
+        //throw 'abstract identity'; 
+        Identity.fromIdent(Ident.make('TMono'));
     }
   }
   public function is_anon(){
@@ -174,7 +186,7 @@ class TypeCls{
   }
 }
 class TypeLift{
-  static public inline function fold<Z>(self:TypeSum, data:DataType -> Z, anon : AnonType -> Z, record : RecordType -> Z, generic : GenericType -> Z, union : UnionType -> Z, link : LinkType -> Z, _enum : EnumType -> Z, mono : Void -> Z) : Z {
+  static public inline function fold<Z>(self:TypeSum, data:DataType -> Z, anon : AnonType -> Z, record : RecordType -> Z, generic : GenericType -> Z, union : UnionType -> Z, link : LinkType -> Z, _enum : EnumType -> Z, lazy : LazyType -> Z, mono : Void -> Z) : Z {
     return switch(self){
       case TData(t)       : data(t.pop()); 
       case TAnon(t)       : anon(t.pop());
@@ -183,6 +195,7 @@ class TypeLift{
       case TUnion(t)      : union(t.pop());
       case TLink(t)       : link(t.pop());
       case TEnum(t)       : _enum(t.pop());
+      case TLazy(t)       : lazy(t.pop());
       case TMono          : mono();
     }
   }
@@ -204,4 +217,8 @@ class TypeLift{
   static public function UnionType(name,pack,lhs,rhs){
     return stx.schema.core.type.UnionType.make(name,pack,lhs,rhs);
   }
+  // static public function reduce<Z>(self:Type,pure:Type->Z,plus:Z->Z->Z,zero:Void->Z):Z{
+    
+  //   return throw UNIMPLEMENTED;
+  // }
 }

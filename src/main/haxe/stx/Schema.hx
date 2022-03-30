@@ -59,3 +59,5 @@ typedef ProcurementPropertyDeclaration            = stx.schema.ProcurementProper
 
 typedef Schemata                                  = stx.schema.Schemata;
 typedef SchemataCls                               = stx.schema.Schemata.SchemataCls;
+typedef ValidationComplyApi                       = ComplyApi<Dynamic,stx.schema.core.Type,Report<SchemaFailure>>;
+typedef ValidationComplyCls                       = ComplyCls<Dynamic,stx.schema.core.Type,Report<SchemaFailure>>;

@@ -6,14 +6,11 @@ class TypeBool extends LeafType{
     super("Bool",["std"]);
   }
   override public function get_validation(){
-    return Cluster.pure(ValidationFunc(_.validate));
+    return Cluster.pure(ValidationType(_.validate()));
   }
 }
 class TypeBoolLift{
-  static public function validate(value,_) {
-    return switch(std.Type.typeof(value)){
-      case TBool      : __.report();
-      case x          : __.report(f -> f.of(E_Schema_HaxeTypeError(ValueType.TBool,x)));
-    }
+  static public function validate(){
+    return new stx.schema.validation.term.Bool();
   }
 }

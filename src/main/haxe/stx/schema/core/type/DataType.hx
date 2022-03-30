@@ -7,8 +7,8 @@ interface DataTypeApi extends BaseTypeApi{
 abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
   public final name : String;
   public final pack : Way;
-  public function new(name:String,pack:Array<String>){
-    super();
+  public function new(name:String,pack:Array<String>,?validation){
+    super(validation);
     this.name = name;
     this.pack = Way.lift(pack);
   }
@@ -17,6 +17,13 @@ abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
   }
   public function toType(){
     return Type.make(TData(Ref.pure((this:DataType))));
+  }
+  public function toHaxeTypePath():haxe.macro.Expr.TypePath{
+    final type_path : haxe.macro.Expr.TypePath = {
+      pack : this.pack.toArray(),
+      name : this.name
+    };
+    return type_path;
   }
 }
 @:forward abstract DataType(DataTypeApi) from DataTypeApi to DataTypeApi{

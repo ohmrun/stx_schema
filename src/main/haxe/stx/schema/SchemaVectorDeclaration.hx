@@ -10,8 +10,7 @@ typedef SchemaVectorDeclarationDef = SchemaDeclarationDef & {
 
   static public function make(name,pack,type,?validation){
     return lift({
-      name          : name,
-      pack          : pack,
+      id            : Identity.fromIdent(Ident.make(name,pack)),
       type          : type,
       validation    : _.validation.concat(__.option(validation).defv(Cluster.unit()))
     });

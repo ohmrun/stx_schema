@@ -8,8 +8,8 @@ interface AnonTypeApi extends BaseTypeApi{
 class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   public final uuid    : String;
   public final fields  : Cell<Ensemble<Field>>;
-  public function new(fields,?uuid){
-    super();
+  public function new(fields,?uuid,?validation){
+    super(validation);
     this.uuid     = __.option(uuid).def(__.uuid.bind('xxxxx'));
     this.fields   = fields;
     this.debrujin = 1;//Context.instance.next(); 
@@ -36,7 +36,7 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     final fs = (this.fields.pop().toIterKV().toIter()).lfold(
       (next:KV<String,Field>,memo:Ensemble<Field>) -> {
         final id    = next.val.type.identity();
-        final type  = state.get(id).fudge(f -> f.of(E_Schema_IdentityUnresolved(id)));
+        final type  = state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)));
         return memo.set(next.key,Field.make(type));
       },
       Ensemble.unit()

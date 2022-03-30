@@ -5,8 +5,8 @@ interface GenericTypeApi extends DataTypeApi{
 }
 class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
   public final type : Type;
-  public function new(name,pack,type){
-    super(name,pack);
+  public function new(name,pack,type,?validation){
+    super(name,pack,validation);
     this.type = type;
   }
   public function toString(){
@@ -30,7 +30,7 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
             () -> __.option(this.type.register(state)),
             () -> __.option(null)
           )
-        ).fudge(f -> f.of(E_Schema_IdentityUnresolved(this.identity())));
+        ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity())));
 
     next = new GenericTypeCls(this.name,this.pack,tI);
     return next.toType();
@@ -52,7 +52,7 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
   private var self(get,never):GenericType;
   private function get_self():GenericType return lift(this);
 
-  @:noUsing static public function make(name,pack,inner){ 
-    return lift(new GenericTypeCls(name,pack,inner));
+  @:noUsing static public function make(name,pack,inner,?validation){ 
+    return lift(new GenericTypeCls(name,pack,inner,validation));
   }
 }

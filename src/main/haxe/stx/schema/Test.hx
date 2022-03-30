@@ -12,9 +12,23 @@ class Test{
     final log = __.log().global;
           log.includes.push("**/*");
 
+    
+    #if boot
+      boot();
+    #else
+      __.test(
+        [ new SchemaTest() ],
+        [SchemaTest]    
+      );
+    #end
+  }  
+  private static macro function boot(){
+    final log = __.log().global;
+    //log.includes.push("**/*");
     __.test(
       [ new SchemaTest() ],
       [SchemaTest]    
     );
-  }  
+    return macro {};
+  }
 }

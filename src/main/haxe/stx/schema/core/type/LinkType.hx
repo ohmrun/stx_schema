@@ -10,11 +10,12 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   public final relation  : SchemaRelationSum;
   public final inverse   : String;
 
-  public function new(into,relation,inverse){
-    super();
+  public function new(into,relation,inverse,?validation){
+    super(validation);
     this.into       = into;
     this.relation   = relation;
     this.inverse    = inverse;
+    this.validation = validation;
   }
   public function toType():Type{
     return TLink(Ref.pure((this:LinkType)));
@@ -22,25 +23,26 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   public function toString(){
     return '$relation $into $inverse';
   }
-  public function register(state:Context){
+  public function register(state:Context):Type{
     var next : LinkType     = null;
     var t                   = Ref.make(
-      () -> next
+      function():LinkType{
+        final inner = state.get(this.into.identity()).def(() -> this.into.register(state));
+        var tI              = 
+          state
+            .get(this.into.identity())
+            .fold(
+              ok -> __.option(ok),
+              () -> this.into.is_anon().if_else(//TODO: this shouldn't be a thing
+                () -> __.option(state.get(this.into.identity()).def(() ->this.into.register(state))),
+                () -> __.option(null)
+              )
+            ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity())));
+        return new LinkTypeCls(tI,relation,inverse);
+      }
     );
-    state.put(TLink(t));
-    var tI              = 
-      state
-        .get(this.into.identity())
-        .fold(
-          ok -> __.option(ok),
-          () -> this.into.is_anon().if_else(//TODO: this shouldn't be a thing
-            () -> __.option(this.into.register(state)),
-            () -> __.option(null)
-          )
-        ).fudge(f -> f.of(E_Schema_IdentityUnresolved(this.identity())));
-
-    next = new LinkTypeCls(tI,relation,inverse);
-    return next.toType();
+    
+    return TLink(t);
   }
   public function identity(){
     final ident = Ident.make('Link',['std']);
@@ -59,7 +61,7 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   private var self(get,never):LinkType;
   private function get_self():LinkType return lift(this);
 
-  @:noUsing static public function make(into,relation,inverse){ 
-    return lift(new LinkTypeCls(into,relation,inverse));
+  @:noUsing static public function make(into,relation,inverse,?validation){ 
+    return lift(new LinkTypeCls(into,relation,inverse,validation));
   }
 }

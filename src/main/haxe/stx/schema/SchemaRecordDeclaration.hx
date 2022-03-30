@@ -33,7 +33,7 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
     final fieldsI = this.fields.map(
       (field:Procurement) -> {
         __.log().debug(_ -> _.thunk( () -> field));
-        final ref = __.tracer()(state.get(field.type.identity())).fold(
+        final ref = state.get(field.type.identity()).fold(
           x   -> SchemaRef.fromSchema(x),
           ()  -> __.tracer()(field.type.resolve(state))
         );

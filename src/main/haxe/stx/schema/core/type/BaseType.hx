@@ -15,15 +15,16 @@ interface BaseTypeApi extends Has_toStringApi{
   public function register(state:Context):Type;
 }
 abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
-  public function new(){
+  public function new(validation){
     super();
-    this.status = TYPE_UNTOUCHED;
+    this.status     = TYPE_UNTOUCHED;
+    this.validation = validation;
   }
   public var status : TypeStatus;
   
   public var validation(get,null) : Validations;
   private function get_validation():Validations{
-    return Cluster.unit();
+    return validation;
   }
   public var debrujin(get,null)   : Null<Int>;
   private function get_debrujin():Null<Int>{

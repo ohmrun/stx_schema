@@ -7,8 +7,8 @@ interface UnionTypeApi extends DataTypeApi{
 class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
   public final lhs : Type;
   public final rhs : Type;
-  public function new(name,pack,lhs,rhs){
-    super(name,pack);
+  public function new(name,pack,lhs,rhs,?validation){
+    super(name,pack,validation);
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -26,8 +26,8 @@ class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
     );
     state.put(TUnion(t));
 
-    final l   = state.get(lhs.identity()).fudge(f -> f.of(E_Schema_IdentityUnresolved(lhs.identity())));
-    final r   = state.get(rhs.identity()).fudge(f -> f.of(E_Schema_IdentityUnresolved(rhs.identity())));
+    final l   = state.get(lhs.identity()).fudge(__.fault().of(E_Schema_IdentityUnresolved(lhs.identity())));
+    final r   = state.get(rhs.identity()).fudge(__.fault().of(E_Schema_IdentityUnresolved(rhs.identity())));
   
     next = new UnionTypeCls(this.name,this.pack,l,r);
     return TUnion(next);
@@ -44,7 +44,7 @@ class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
   private var self(get,never):UnionType;
   private function get_self():UnionType return lift(this);
 
-  @:noUsing static public function make(name,pack,lhs,rhs){ 
-    return lift(new UnionTypeCls(name,pack,lhs,rhs));
+  @:noUsing static public function make(name,pack,lhs,rhs,?validation){ 
+    return lift(new UnionTypeCls(name,pack,lhs,rhs,validation));
   }
 }

@@ -1,0 +1,23 @@
+package stx.schema;
+
+typedef SchemaAnonDeclarationDef = {
+  final fields : Procurements;
+}
+abstract SchemaAnonDeclaration(SchemaAnonDeclarationDef) from SchemaAnonDeclarationDef to SchemaAnonDeclarationDef{
+  public function new(self) this = self;
+  static public function lift(self:SchemaAnonDeclarationDef):SchemaAnonDeclaration return new SchemaAnonDeclaration(self);
+
+  public function prj():SchemaAnonDeclarationDef return this;
+  private var self(get,never):SchemaAnonDeclaration;
+  private function get_self():SchemaAnonDeclaration return lift(this);
+
+  public function resolve(state:Schemata):Schema{
+    final fieldsI = this.fields.map(
+      field -> state.get(field.identity()).fold(
+        ok -> field.with_type(ok),
+        () -> field.with_type(field.type.resolve(state))
+      )
+    );
+    return SchAnon(lift({ fields : fieldsI }));
+  }
+}

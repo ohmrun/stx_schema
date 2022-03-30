@@ -25,6 +25,10 @@
         "--macro" : ["allowPackage('sys')"],
         "-lib" : ["hxnodejs"],
         "--js" : ".stx/build/test/node/main.js"
+      },
+      "makro" : {
+        "-D" : ["boot"],
+        "--interp" : true
       }
     }
   },

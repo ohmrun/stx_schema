@@ -1,0 +1,84 @@
+package stx.schema.test;
+
+import stx.schema.Core;
+
+class SchemaTest extends TestCase{
+  public function _test_property_declaration(){
+    final _       = __.schema();
+    trace("OK");
+    final thing   = _.record({
+      name : "thing",
+      fields : {
+        properties : [
+          "name" => Schema.String()
+        ] 
+      }
+    });    
+    trace("OK2");
+    trace(thing);
+  }
+  public function types(){
+    final _       = __.schema();
+    final user    = _.record({
+      name   : "User",
+      fields : {
+        properties : [
+          "username" => Schema.String(),
+          "age"      => Schema.Int()
+        ],
+        attributes : [
+          "article" => {
+            inverse   : "author",
+            type      : __.way().into("Article"),
+            relation  : HAS_MANY
+          }
+        ]
+      }
+    });
+    final article   = _.record({
+      name    : "Article",
+      fields  : {
+        "properties" : [
+          "title" => Schema.String()
+        ],
+        "attributes" : [
+          "user" => {
+            inverse   : "article",
+            type      : __.way().into("User"),
+            relation  : HAS_MANY
+          }
+        ]
+      }
+    });
+    return [user,article];
+  }
+  public function test_this(){
+    var types = Schemata.make(types());
+        types.type();
+    var context  = types.context;
+    var register = @:privateAccess context.register;
+    for(type in register){
+      trace(type);
+    }
+    var user = context.get(Identity.fromIdent(Ident.make('User')));
+    switch(user){
+      case Some({data : TRecord(rec)}) :
+        final fields = rec.pop().fields;
+        for(field in fields.pop()){
+          trace(field.type);
+          trace(Type.enumConstructor(field.type.data));
+        } 
+      default : 
+    }
+  }
+  public function test(){
+    is_true(true);
+  }
+  #if macro
+  public function test_make_htypes(){
+    var types = Schemata.make(types());
+        types.type();
+    trace(types);
+  }
+  #end
+}

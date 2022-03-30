@@ -24,13 +24,14 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
     final fs = (this.fields.pop().toIterKV().toIter()).lfold(
       (next:KV<String,stx.schema.core.type.Field>,memo:Ensemble<stx.schema.core.type.Field>) -> {
         final id    = next.val.type.identity();
-        final type  = state.get(id).fudge(f -> f.of(E_Schema_IdentityUnresolved(id)));
+        final type  = state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)));
         return memo.set(next.key,stx.schema.core.type.Field.make(type));
       },
       Ensemble.unit()
     );
     
     next = new RecordTypeCls(this.name,this.pack,fs);
+   
     return next.toType();
   }
 }

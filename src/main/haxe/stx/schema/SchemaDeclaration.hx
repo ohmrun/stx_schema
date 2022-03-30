@@ -8,6 +8,7 @@ typedef SchemaDeclarationDef = stx.schema.WithValidationDef & {
   public function new(self) this = self;
   static public function lift(self:SchemaDeclarationDef):SchemaDeclaration return new SchemaDeclaration(self);
 
+
   static public function make(name,pack,lhs,rhs,?validation){
     return lift({
       id          : Identity.make(Ident.make(name,pack),lhs,rhs),

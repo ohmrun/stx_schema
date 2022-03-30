@@ -1,7 +1,7 @@
 package stx.schema;
 
 typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
-  final ?pop : () -> Schema;
+  var ?pop : () -> Schema;
 };
 
 @:forward abstract SchemaRef(SchemaRefDef) from SchemaRefDef to SchemaRefDef{
@@ -22,11 +22,33 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
        () -> {
           return make(
             identity(),
-            () -> state.get(identity()).fudge(f -> E_Schema_IdentityUnresolved(identity()))
+            () -> state.get(identity()).fudge(__.fault().of(E_Schema_IdentityUnresolved(identity())))
           );
        }
      ) 
    );
+  }
+  public function register(state:Context):Type{
+    __.log().debug('register ref: ${identity()}');
+    return state.get(identity()).def(
+      () -> {
+        __.log().debug(_ -> _.pure(this.pop));
+        return __.option(this.pop).fold(
+          ok -> {
+            __.log().debug('pulling');
+            final schema = ok();
+            __.log().debug('$schema');
+            schema.register(state);
+          },
+          () -> {
+            trace(identity());
+            final val = LazyType.make(identity(),state).toType();
+            state.put(val);
+            return val;
+          }
+        );
+      }
+    );
   }
   static public function make(identity:Identity,?pop){
     return lift({
@@ -37,7 +59,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
       pop   : pop
     });
   }
-  static public function make0(name:String,?pack:Cluster<String>,lhs:Option<Identity>,rhs:Option<Identity>,?pop){
+  static public function make0(name:String,pack:Cluster<String>,lhs:Option<Identity>,rhs:Option<Identity>,?pop){
     return make(Identity.make(Ident.make(name,pack),lhs,rhs),pop);
   }
   @:from static inline public function fromSchemaSum(self:SchemaSum){

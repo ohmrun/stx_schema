@@ -2,7 +2,7 @@ package stx.schema;
 
 enum ValidationSum{
   ValidationExpr(expr:hscript.Expr);
-  ValidationFunc(fn:Dynamic->Type->Report<SchemaFailure>);
+  ValidationType(type:ComplyApi<Dynamic,Type,Report<SchemaFailure>>);
 }
 abstract Validation(ValidationSum) from ValidationSum to ValidationSum{
   public function new(self) this = self;
@@ -15,14 +15,14 @@ abstract Validation(ValidationSum) from ValidationSum to ValidationSum{
       }catch(e:Dynamic){
         __.report(f -> f.of(E_Schema_ValidationError(this,E_Schema_Dynamic(e))));
       }
-      case ValidationFunc(fn)   : fn(value,type);
+      case ValidationType(fn)   : fn.comply(value,type);
     }
   }
   @:from static public function fromValidationExpr(self:hscript.Expr){
     return lift(ValidationExpr(self));
   }
-  @:from static public function fromValidationFun(self:Dynamic->Type->Report<SchemaFailure>){
-    return lift(ValidationFunc(self));
+  @:from static public function fromValidationType(self:ComplyApi<Dynamic,Type,Report<SchemaFailure>>){
+    return lift(ValidationType(self));
   }
   public function prj():ValidationSum return this;
   private var self(get,never):Validation;
