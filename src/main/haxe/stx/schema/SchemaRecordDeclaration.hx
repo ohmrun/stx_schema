@@ -5,6 +5,7 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
 }
 @:forward abstract SchemaRecordDeclaration(SchemaRecordDeclarationDef) from SchemaRecordDeclarationDef to SchemaRecordDeclarationDef{
   public function new(self) this = self;
+  static public var _(default,never) = SchemaRecordDeclarationLift;
   static public function lift(self:SchemaRecordDeclarationDef):SchemaRecordDeclaration return new SchemaRecordDeclaration(self);
 
   static public function make(ident,fields,?validation){
@@ -35,7 +36,7 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
         __.log().debug(_ -> _.thunk( () -> field));
         final ref = state.get(field.type.identity()).fold(
           x   -> SchemaRef.fromSchema(x),
-          ()  -> __.tracer()(field.type.resolve(state))
+          ()  -> field.type.resolve(state)
         );
         __.log().debug(_ -> _.thunk( () -> ref));
         return field.with_type(ref);
@@ -51,5 +52,10 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
       procurement -> procurement.toString()      
     ).prj().join(",");
     return '$thiz($rest)';
+  }
+}
+class SchemaRecordDeclarationLift{
+  static public inline function to_constructor(self:SchemaRecordDeclaration){
+    return throw UNIMPLEMENTED;
   }
 }

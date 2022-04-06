@@ -4,12 +4,7 @@ class Context extends Clazz{
   static public function make(){
     return new Context();
   }
-  // static public var instance(get,null) : Context;
-  // static public function get_instance(){
-  //   return instance == null ? instance = new Context() : instance;
-  // }
   final register : StringMap<Type>;
-//  final trigger  : SignalTrigger<Type>;
   
   private var index    : Int;
   

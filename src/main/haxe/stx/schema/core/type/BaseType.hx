@@ -10,10 +10,13 @@ interface BaseTypeApi extends Has_toStringApi{
   public var status : TypeStatus; 
 
   public function identity():Identity;
-
+  
   public function toType():Type;
   public function register(state:Context):Type;
+
+  public function toHaxeTypePath():haxe.macro.Expr.TypePath;
 }
+@:using(stx.schema.core.type.BaseType.BaseTypeLift)
 abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
   public function new(validation){
     super();
@@ -33,4 +36,16 @@ abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
   abstract public function toType():Type;
   abstract public function identity():Identity;
   abstract public function register(state:Context):Type;
+
+  public function toHaxeTypePath():haxe.macro.Expr.TypePath{
+    final munged                               = this.identity().toIdent_munged();
+    final type_path : haxe.macro.Expr.TypePath = {
+      pack : munged.pack.toArray(),
+      name : munged.name
+    };
+    return type_path;
+  }
+}
+class BaseTypeLift{
+   
 }

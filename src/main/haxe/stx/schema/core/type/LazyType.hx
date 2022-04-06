@@ -1,10 +1,11 @@
 package stx.schema.core.type;
 
+@:using(stx.schema.core.type.LazyType.LazyTypeLift)
 class LazyType extends BaseTypeCls{
   public var type(get,null) :Null<Type>;
   public function get_type(){
-    throw "here";
-    trace('lazy: ${ctx.get(this.id)}');
+    //throw "here";
+    __.log().trace('lazy: ${ctx.get(this.id)}');
     return ctx.get(this.id).defv(null);
   }
   private final id  : Identity;
@@ -44,4 +45,14 @@ class LazyType extends BaseTypeCls{
   static public function make(id,context){
     return new LazyType(id,context);
   }
+}
+class LazyTypeLift{
+  #if macro
+  
+  static public function toComplexType(self:LazyType,state:MacroContext):Res<HComplexType,SchemaFailure>{
+    return __.option(self.type)
+             .resolve(f -> f.of(E_Schema_LazyTypeEmpty))
+             .flat_map(x -> x.toComplexType(state));
+  }
+  #end
 }

@@ -24,5 +24,8 @@ class SchemaVectorDeclarationLift{
   static public var validation(get,null) : Validations;
   static public function get_validation(){
     return Cluster.unit();
+  }
+  static public inline function to_constructor(self:SchemaVectorDeclaration){
+    return throw UNIMPLEMENTED;
   } 
 }

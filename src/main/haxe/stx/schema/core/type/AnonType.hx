@@ -3,11 +3,11 @@ package stx.schema.core.type;
 import stx.schema.core.type.Field;
 
 interface AnonTypeApi extends BaseTypeApi{
-  public final fields  : Cell<Ensemble<Field>>;
+  public final fields  : Cell<Cluster<Field>>;
 }
 class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   public final uuid    : String;
-  public final fields  : Cell<Ensemble<Field>>;
+  public final fields  : Cell<Cluster<Field>>;
   public function new(fields,?uuid,?validation){
     super(validation);
     this.uuid     = __.option(uuid).def(__.uuid.bind('xxxxx'));
@@ -16,8 +16,8 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   }
   public function toString(){
     final arr = [];
-    for(k => v in fields.pop()){
-      arr.push('${k} => ${v.toString()}');
+    for(field in fields.pop()){
+      arr.push('${field.name} => ${field.type.toString()}');
     }
     return arr.join(",");
   }
@@ -33,22 +33,23 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
       () -> next
     );
     state.put(TAnon(type));
-    final fs = (this.fields.pop().toIterKV().toIter()).lfold(
-      (next:KV<String,Field>,memo:Ensemble<Field>) -> {
-        final id    = next.val.type.identity();
+    final fs = (this.fields.pop().toIter()).lfold(
+      (next:Field,memo:Cluster<Field>) -> {
+        final id    = next.type.identity();
         final type  = state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)));
-        return memo.set(next.key,Field.make(type));
+        return memo.snoc(Field.make(next.name,type));
       },
-      Ensemble.unit()
+      Cluster.unit()
     );
     
-    next = new AnonTypeCls(fs,this.uuid);
+    next = new AnonTypeCls(Cell.pure(fs),this.uuid);
     return next.toType();
   }
   public function identity():Identity{
     return Ident.make(uuid);
   }
 }
+@:using(stx.schema.core.type.AnonType.AnonTypeLift)
 @:forward abstract AnonType(AnonTypeApi) from AnonTypeApi to AnonTypeApi{
   public function new(self) this = self;
   static public function lift(self:AnonTypeApi):AnonType return new AnonType(self);
@@ -60,4 +61,28 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   @:noUsing static public function make(fields){ 
     return lift(new AnonTypeCls(fields));
   }
+}
+class AnonTypeLift{
+  #if macro
+  static public function main(self:AnonType,state:MacroContext){
+    return throw UNIMPLEMENTED;
+  }
+  static public function leaf(self:AnonType,state:MacroContext){
+    return throw UNIMPLEMENTED;
+  }
+  static public function toComplexType(self:AnonType,state:MacroContext){
+    return Res.bind_fold(
+      self.fields.pop(),
+      (next:Field,memo:Cluster<HField>) -> 
+        next.type.toComplexType(state).map(
+          ct -> HField.make(
+            next.name,
+            HFieldType.FVar(ct),
+            state.pos
+          ) 
+        ).map(memo.snoc),
+        Cluster.unit()
+    ).map(HComplexType.TAnonymous);
+  }
+  #end
 }

@@ -59,4 +59,7 @@ class SchemaEnumDeclarationLift{
       }
     }
   ");
+  static public inline function to_constructor(self:SchemaEnumDeclaration){
+    return throw UNIMPLEMENTED;
+  }
 }

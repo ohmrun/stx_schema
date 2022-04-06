@@ -16,4 +16,9 @@ class TypeNullLift{
   static public function validate(){
     return new stx.schema.validation.term.Null();
   }
+  #if macro
+  static public function toComplexType(self:RecordType,state:MacroContext):HComplexType{
+    return HTypePath.make(self.name,self.pack);
+  }
+  #end
 }

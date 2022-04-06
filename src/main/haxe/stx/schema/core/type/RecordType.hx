@@ -1,10 +1,10 @@
 package stx.schema.core.type;
 
 interface RecordTypeApi extends DataTypeApi{
-  public final fields  : Cell<Ensemble<stx.schema.core.type.Field>>;
+  public final fields  : Cell<Cluster<stx.schema.core.type.Field>>;
 }
 class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
-  public final fields  : Cell<Ensemble<stx.schema.core.type.Field>>;
+  public final fields  : Cell<Cluster<stx.schema.core.type.Field>>;
   public function new(name,pack,fields){
     super(name,pack);
     this.fields   = fields;
@@ -21,13 +21,13 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
       () -> next
     );
     state.put(TRecord(type));
-    final fs = (this.fields.pop().toIterKV().toIter()).lfold(
-      (next:KV<String,stx.schema.core.type.Field>,memo:Ensemble<stx.schema.core.type.Field>) -> {
-        final id    = next.val.type.identity();
+    final fs = (this.fields.pop().toIter()).lfold(
+      (next:stx.schema.core.type.Field,memo:Cluster<stx.schema.core.type.Field>) -> {
+        final id    = next.type.identity();
         final type  = state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)));
-        return memo.set(next.key,stx.schema.core.type.Field.make(type));
+        return memo.snoc(stx.schema.core.type.Field.make(next.name,type));
       },
-      Ensemble.unit()
+      Cluster.unit()
     );
     
     next = new RecordTypeCls(this.name,this.pack,fs);
@@ -35,6 +35,7 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
     return next.toType();
   }
 }
+@:using(stx.schema.core.type.RecordType.RecordTypeLift)
 @:forward abstract RecordType(RecordTypeApi) from RecordTypeApi to RecordTypeApi{
   public function new(self) this = self;
   static public function lift(self:RecordTypeApi):RecordType return new RecordType(self);
@@ -46,4 +47,17 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
   @:noUsing static public function make(name,pack,fields){ 
     return lift(new RecordTypeCls(name,pack,fields));
   }
+}
+class RecordTypeLift{
+  #if macro
+  static public function main(self:RecordType,state:MacroContext):Void{
+    return throw UNIMPLEMENTED;
+  }
+  static public function leaf(self:RecordType,state:MacroContext):Void{
+    return throw UNIMPLEMENTED;
+  }
+  static public function toComplexType(self:RecordType,state:MacroContext):Res<HComplexType,SchemaFailure>{
+    return __.accept(HTypePath.make(self.name,self.pack).toComplexType());
+  }
+  #end
 }

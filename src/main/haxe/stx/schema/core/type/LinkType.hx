@@ -53,6 +53,7 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
     );
   }
 }
+@:using(stx.schema.core.type.LinkType.LinkTypeLift)
 @:forward abstract LinkType(LinkTypeApi) from LinkTypeApi to LinkTypeApi{
   public function new(self) this = self;
   static public function lift(self:LinkTypeApi):LinkType return new LinkType(self);
@@ -64,4 +65,26 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   @:noUsing static public function make(into,relation,inverse,?validation){ 
     return lift(new LinkTypeCls(into,relation,inverse,validation));
   }
+}
+class LinkTypeLift{
+  #if macro
+  static public function leaf(self:LinkType,state:MacroContext){
+    return throw UNIMPLEMENTED;
+  }
+  static public function main(self:LinkType,state:MacroContext){
+    return throw UNIMPLEMENTED;
+  }
+  static public function lookup(self:LinkType):Res<Type,SchemaFailure>{
+    return self.into.fields.search(
+      kv -> self.inverse == kv.name
+    ).resolve(
+      f -> f.of(E_Schema_InverseNotFound(self))
+    ).map(x -> x.type);
+  }
+  static public function toComplexType(self:LinkType,state:MacroContext){
+    return lookup(self).flat_map(
+      type -> type.toComplexType(state)
+    );
+  }
+  #end
 }

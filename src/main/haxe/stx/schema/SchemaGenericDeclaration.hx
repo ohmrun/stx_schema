@@ -50,4 +50,7 @@ class SchemaGenericDeclarationLift{
   static public function get_validation(){
     return Cluster.unit();
   } 
+  static public inline function to_constructor(self:SchemaGenericDeclaration){
+    return throw UNIMPLEMENTED;
+  }
 }

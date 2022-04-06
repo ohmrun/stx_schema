@@ -56,20 +56,9 @@ class SchemaTest extends TestCase{
     var types = Schemata.make(types());
         types.type();
     var context  = types.context;
-    var register = @:privateAccess context.register;
-    for(type in register){
-      trace(type);
-    }
-    var user = context.get(Identity.fromIdent(Ident.make('User')));
-    switch(user){
-      case Some({data : TRecord(rec)}) :
-        final fields = rec.pop().fields;
-        for(field in fields.pop()){
-          trace(field.type);
-          trace(Type.enumConstructor(field.type.data));
-        } 
-      default : 
-    }
+    var register = @:privateAccess context.register;  
+    var context  = new stx.schema.core.MacroContext(context,haxe.macro.Context.currentPos());
+    stx.schema.view.Main.apply(context);
   }
   public function test(){
     is_true(true);

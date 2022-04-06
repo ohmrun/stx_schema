@@ -20,6 +20,7 @@ class EnumTypeCls extends DataTypeCls implements EnumTypeApi{
     return this.identity().toString();
   } 
 }
+@:using(stx.schema.core.type.EnumType.EnumTypeLift)
 @:forward abstract EnumType(EnumTypeApi) from EnumTypeApi to EnumTypeApi{
   public function new(self) this = self;
   static public function lift(self:EnumTypeApi):EnumType return new EnumType(self);
@@ -30,4 +31,17 @@ class EnumTypeCls extends DataTypeCls implements EnumTypeApi{
   static public function make(name,pack,constructors,?validation){
     return lift(new EnumTypeCls(name,pack,constructors,validation));
   }
+}
+class EnumTypeLift{
+  #if macro
+  static public function leaf(self:EnumType,state:MacroContext){
+    return throw UNIMPLEMENTED;
+  }
+  static public function main(self:EnumType,state:MacroContext){
+    return throw UNIMPLEMENTED;
+  }
+  static public function toComplexType(self:EnumType,state:MacroContext){
+    return __.accept(HTypePath.make(self.name,self.pack).toComplexType());
+  }  
+  #end
 }

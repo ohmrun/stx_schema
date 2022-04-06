@@ -33,4 +33,18 @@ typedef IdentityDef = IdentDef & {
   @:from static public function fromIdent(self:Ident){
     return make(self,None,None);
   }
+  public function toIdent_munged():Ident{
+    return switch([this.lhs,this.rhs]){
+      case [Some(l),Some(r)] : 
+        final ls = l.toIdent_munged().toString_underscored();
+        final rs = r.toIdent_munged().toString_underscored();
+        Ident.make('${this.name}WithBoth${ls}And${rs}',this.pack);
+      case [Some(t),None]    :
+        Ident.make('${this.name}With${t}',this.pack);
+      case [None,Some(t)]    :
+        Ident.make('${this.name}With${t}',this.pack);
+      case [None,None]  : 
+        Ident.make(this.name,this.pack);
+    }
+  }
 }

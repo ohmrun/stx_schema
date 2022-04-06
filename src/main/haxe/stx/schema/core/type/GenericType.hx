@@ -44,7 +44,9 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
     );
   }
 }
+@:using(stx.schema.core.type.GenericType.GenericTypeLift)
 @:forward abstract GenericType(GenericTypeApi) from GenericTypeApi to GenericTypeApi{
+  static public var _(default,never) = GenericTypeLift;
   public function new(self) this = self;
   static public function lift(self:GenericTypeApi):GenericType return new GenericType(self);
 
@@ -55,4 +57,20 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
   @:noUsing static public function make(name,pack,inner,?validation){ 
     return lift(new GenericTypeCls(name,pack,inner,validation));
   }
+}
+class GenericTypeLift{
+  #if macro
+  static public function main(self:GenericType,state:MacroContext){
+    return throw UNIMPLEMENTED;
+  }
+  static public function leaf(self:GenericType,state:MacroContext){
+    return throw UNIMPLEMENTED;
+  }
+  static public function toComplexType(self:GenericType,state:MacroContext):Res<HComplexType,SchemaFailure>{
+    return 
+      self.type.toComplexType(state)
+          .map(x -> x.toTypeParam())
+          .map(t -> HTypePath.make(self.name,self.pack,[t]).toComplexType());
+  }
+  #end
 }

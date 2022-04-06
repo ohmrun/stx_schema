@@ -102,7 +102,7 @@ class TypeCls{
       case TEnum(t)       : t.pop().register(state);
       case TLazy(t)       : t.pop().register(state);
       case TMono          :
-        trace("PPPPPL"); 
+        __.log().trace("PPPPPL"); 
         new TypeCls(TMono);
     }
   }
@@ -125,6 +125,15 @@ class TypeCls{
     return switch(data){
       case TAnon(_) : true;
       default : false;
+    }
+  }
+  public var fields(get,never):Cluster<Field>;
+
+  public function get_fields(){
+    return switch(this.data){
+      case TAnon(t)     : __.option(t.pop().fields.pop()).defv(Cluster.unit());
+      case TRecord(t)   : __.option(t.pop().fields.pop()).defv(Cluster.unit());
+      default           : Cluster.unit();
     }
   }
 }
@@ -221,4 +230,58 @@ class TypeLift{
     
   //   return throw UNIMPLEMENTED;
   // }
+  #if macro
+    static public function main(type:Type,state:MacroContext):Void{
+      switch(type.data){
+        case TData(t)     :
+        case TRecord(t)   : t.pop().main(state);
+        case TGeneric(t)  : t.pop().main(state);
+        case TUnion(t)    : t.pop().main(state);
+        case TLink(t)     : t.pop().main(state);
+        case TEnum(t)     : t.pop().main(state);
+        case TLazy(f)     : main(f.pop().type,state);
+        case TAnon(t)     : t.pop().main(state);
+        case TMono        : 
+      }   
+    }
+    static public function leaf(type:Type,state:MacroContext):Void{
+      switch(type.data){
+        case TData(t)     :
+        case TRecord(t)   : t.pop().leaf(state);
+        case TGeneric(t)  : t.pop().leaf(state);
+        case TUnion(t)    : t.pop().leaf(state);
+        case TLink(t)     : t.pop().leaf(state);
+        case TEnum(t)     : t.pop().leaf(state);
+        case TLazy(f)     : leaf(f.pop().type,state);
+        case TAnon(t)     : t.pop().leaf(state);
+        case TMono        : 
+      }   
+    }
+    static public function toComplexType(self:Type,state:MacroContext):Res<HComplexType,SchemaFailure>{
+      return switch(self.data){
+        case TData(t)     : t.pop().toComplexType(state);
+        case TAnon(t)     : t.pop().toComplexType(state);
+        case TRecord(t)   : t.pop().toComplexType(state);
+        case TGeneric(t)  : t.pop().toComplexType(state);
+        case TUnion(t)    : t.pop().toComplexType(state);
+        case TLink(t)     : t.pop().toComplexType(state);
+        case TEnum(t)     : t.pop().toComplexType(state);
+        case TLazy(f)     : f.pop().toComplexType(state);
+        case TMono        : __.accept(HTypePath.make('Unknown',[]).toComplexType());
+      }
+    }
+  #end
 }
+/**
+  switch(self){
+    case TData(t)     :
+    case TAnon(t)     :
+    case TRecord(t)   :
+    case TGeneric(t)  :
+    case TUnion(t)    :
+    case TLink(t)     :
+    case TEnum(t)     :
+    case TLazy(f)     :
+    case TMono        :
+  }
+**/

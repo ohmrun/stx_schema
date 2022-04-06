@@ -6,6 +6,7 @@ class SchemaModuleCtr{
   } 
 }
 typedef SchemaFailure                             = stx.fail.SchemaFailure;
+typedef SchemaFailureSum                          = stx.fail.SchemaFailure.SchemaFailureSum;
 
 typedef SchemaDeclaration                         = stx.schema.SchemaDeclaration;
 typedef SchemaDeclarationDef                      = stx.schema.SchemaDeclaration.SchemaDeclarationDef;

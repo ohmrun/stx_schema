@@ -32,16 +32,16 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
     __.log().debug('register ref: ${identity()}');
     return state.get(identity()).def(
       () -> {
-        __.log().debug(_ -> _.pure(this.pop));
+        __.log().trace(_ -> _.pure(this.pop));
         return __.option(this.pop).fold(
           ok -> {
-            __.log().debug('pulling');
+            __.log().trace('pulling');
             final schema = ok();
             __.log().debug('$schema');
             schema.register(state);
           },
           () -> {
-            trace(identity());
+            __.log().trace(_ -> _.pure(identity()));
             final val = LazyType.make(identity(),state).toType();
             state.put(val);
             return val;

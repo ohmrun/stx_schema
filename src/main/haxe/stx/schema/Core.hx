@@ -32,7 +32,6 @@ typedef UnionTypeCls                = stx.schema.core.type.UnionType.UnionTypeCl
 typedef UnionTypeApi                = stx.schema.core.type.UnionType.UnionTypeApi;
 typedef UnionType                   = stx.schema.core.type.UnionType;
 
-typedef TypeKind                    = stx.schema.core.type.TypeKind;
 
 typedef LinkTypeCls                 = stx.schema.core.type.LinkType.LinkTypeCls;
 typedef LinkTypeApi                 = stx.schema.core.type.LinkType.LinkTypeApi;
@@ -145,7 +144,7 @@ class LiftSchemaGenericDeclaration_register{
             return next;
           },
           () -> {
-            trace("HERERERER");
+            __.log().trace("HERERERER");
             return GenericType.make(self.id.name,self.id.pack,TMono,self.validation);
           }
         );
@@ -165,7 +164,7 @@ class LiftSchemaRecordDeclaration_register{
     var type                  = TRecord(Ref.make(fn));
 
     final fs = self.fields.lfold(
-      function (next:Procurement,memo:Ensemble<stx.schema.core.type.Field>):Ensemble<stx.schema.core.type.Field> {
+      function (next:Procurement,memo:Cluster<stx.schema.core.type.Field>):Cluster<stx.schema.core.type.Field> {
         final id    = next.type.identity();
         __.log().debug('$id');
         final type : Type = switch(next){
@@ -178,9 +177,9 @@ class LiftSchemaRecordDeclaration_register{
             link.toType().register(state);
         }
         __.log().debug(_ -> _.pure(type));
-        return memo.set(next.name,stx.schema.core.type.Field.make(type));
+        return memo.snoc(stx.schema.core.type.Field.make(next.name,type));
       },
-      Ensemble.unit()
+      Cluster.unit()
     );
     
     next = new RecordTypeCls(self.id.name,self.id.pack,fs);

@@ -32,14 +32,14 @@ class SchemataCls{
       __.log().debug(_ -> _.thunk(() -> type.toString()));
       type.resolve(this);
     }
-    trace(context);
+    __.log().trace(_ -> _.pure(context));
     for(schema in this.schemas){
       __.log().debug(schema.identity().toString());
       try{
         schema.register(this.context);
       }catch(e:haxe.Exception){
-        trace(e.message);
-        trace(e.stack);
+        __.log().error(e.message);
+        __.log().error(_ -> _.pure(e.stack));
         throw(e);
       }      
     }

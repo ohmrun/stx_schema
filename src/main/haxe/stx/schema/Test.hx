@@ -1,5 +1,8 @@
 package stx.schema;
 
+#if macro
+  import stx.schema.view.Leaf;
+#end
 import stx.schema.test.*;
 
 using stx.Log;

@@ -4,7 +4,9 @@ typedef SchemaDeclarationDef = stx.schema.WithValidationDef & {
   final id : stx.schema.core.Identity;
 }
 
+@:using(stx.schema.SchemaDeclaration.SchemaDeclarationLift)
 @:forward abstract SchemaDeclaration(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaDeclarationDef{
+  static public var _(default,never) = SchemaDeclarationLift;
   public function new(self) this = self;
   static public function lift(self:SchemaDeclarationDef):SchemaDeclaration return new SchemaDeclaration(self);
 
@@ -31,5 +33,10 @@ typedef SchemaDeclarationDef = stx.schema.WithValidationDef & {
   }
   public function toString(){
     return identity().toString();
+  }
+}
+class SchemaDeclarationLift{
+  static public inline function to_constructor(self:SchemaDeclaration):GExpr{
+    return throw UNIMPLEMENTED;
   }
 }
