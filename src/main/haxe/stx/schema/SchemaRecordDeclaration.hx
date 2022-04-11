@@ -55,7 +55,7 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
   }
 }
 class SchemaRecordDeclarationLift{
-  static public inline function to_constructor(self:SchemaRecordDeclaration){
+  static public inline function to_self_constructor(self:SchemaRecordDeclaration){
     return throw UNIMPLEMENTED;
   }
 }

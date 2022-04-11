@@ -125,35 +125,27 @@ class SchemaLift{
       case SchType(def)     : type(def);
     }
   }
-  static public inline function to_constructor(self:SchemaSum):GExpr{
+  static public inline function to_self_constructor(self:SchemaSum):GExpr{
     var v = self.value();
 
-    return __.g().New(
-      tpath -> tpath.string('stx.schema.Schema'),
+    return __.g().expr().New(
+      _ -> 'stx.schema.Schema',
       args  -> [
         args.Call(
           func -> func.Field(
-            expr -> expr.Path('SchemaSum',['stx','schema','Schema']),
+            expr -> expr.FieldPath('SchemaSum',['stx','schema','Schema']),
             v.ctr()
           ),
           args -> [
             switch(v.ctr()){
-              case "SchScalar"  : 
-                SchemaDeclaration._.to_constructor(v.params()[0]);
-              case "SchRecord"  :
-                SchemaRecordDeclaration._.to_constructor(v.params()[0]);
-              case "SchEnum"    :
-                SchemaEnumDeclaration._.to_constructor(v.params()[0]);
-              case "SchGeneric" :
-                SchemaGenericDeclaration._.to_constructor(v.params()[0]);
-              case "SchUnion"   :
-                SchemaUnionDeclaration._.to_constructor(v.params()[0]);
-              case "SchLazy"    :
-                to_constructor(v.params()[0]());
-              case "SchType"    :
-                throw E_Schema_SchemaTypeNotSupportedHere;
-              case x            :  
-                throw E_Makro_EnumConstructorNotFound(v,x);
+              case "SchScalar"  : SchemaDeclaration._.to_self_constructor(v.params()[0]);
+              case "SchRecord"  : SchemaRecordDeclaration._.to_self_constructor(v.params()[0]);
+              case "SchEnum"    : SchemaEnumDeclaration._.to_self_constructor(v.params()[0]);
+              case "SchGeneric" : SchemaGenericDeclaration._.to_self_constructor(v.params()[0]);
+              case "SchUnion"   : SchemaUnionDeclaration._.to_self_constructor(v.params()[0]);
+              case "SchLazy"    : to_self_constructor(v.params()[0]());
+              case "SchType"    : throw E_Schema_SchemaTypeNotSupportedHere;
+              case x            : throw E_Makro_EnumConstructorNotFound(v,x);
             }
           ] 
         )

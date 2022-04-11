@@ -61,7 +61,7 @@ class SchemaUnionDeclarationLift{
   static public function get_validation(){
     return Cluster.unit();
   }
-  static public inline function to_constructor(self:SchemaUnionDeclaration){
+  static public inline function to_self_constructor(self:SchemaUnionDeclaration){
     return throw UNIMPLEMENTED;
   }
 }

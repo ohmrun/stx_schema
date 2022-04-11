@@ -36,7 +36,7 @@ typedef SchemaDeclarationDef = stx.schema.WithValidationDef & {
   }
 }
 class SchemaDeclarationLift{
-  static public inline function to_constructor(self:SchemaDeclaration):GExpr{
+  static public inline function to_self_constructor(self:SchemaDeclaration):GExpr{
     return throw UNIMPLEMENTED;
   }
 }

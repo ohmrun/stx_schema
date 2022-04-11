@@ -29,8 +29,11 @@ class Test{
     final log = __.log().global;
     //log.includes.push("**/*");
     __.test(
-      [ new SchemaTest() ],
-      [SchemaTest]    
+      [
+        // new SchemaTest() ,
+        new SchemaEnumDeclarationTest(),
+      ],
+      []    
     );
     return macro {};
   }

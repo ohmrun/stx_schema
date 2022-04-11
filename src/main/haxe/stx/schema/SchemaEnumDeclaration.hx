@@ -3,6 +3,7 @@ package stx.schema;
 typedef SchemaEnumDeclarationDef = SchemaDeclarationDef & {
   final constructors : Cluster<String>;
 }
+@:using(stx.schema.SchemaEnumDeclaration.SchemaEnumDeclarationLift)
 @:forward abstract SchemaEnumDeclaration(SchemaEnumDeclarationDef) from SchemaEnumDeclarationDef to SchemaEnumDeclarationDef{
   static public var _(default,never) = SchemaEnumDeclarationLift;
   public function new(self) this = self;
@@ -59,7 +60,51 @@ class SchemaEnumDeclarationLift{
       }
     }
   ");
-  static public inline function to_constructor(self:SchemaEnumDeclaration){
-    return throw UNIMPLEMENTED;
+  /**
+    Creates a GTypeDeclaration that declares it's own structure.
+  **/
+  static public inline function to_self_constructor(self:SchemaEnumDeclaration){
+    return __.g().expr().Call(
+      e -> e.Field(
+        e.FieldPath('SchemaEnumDeclaration',["stx.schema"]),
+        'make'
+      ),
+      exs -> [
+        exs.Call(
+          exs.Field(
+            exs.FieldPath('Ident',['stx','nano']),
+            'make'
+          ),
+          [
+            exs.Const(
+              c -> c.String(self.id.name)
+            ),
+            exs.ArrayDecl(
+              __.option(self.id.pack).defv(Way.unit()).prj().map(
+                str -> exs.Const( c -> c.String(str))
+              )
+            )
+          ]          
+        ),
+        exs.ArrayDecl(
+          self.constructors.map(
+            str -> exs.Const(
+              c -> c.Ident(str)
+            )
+          )
+        )    
+      ]
+    );
   }
+  // static public inline function toGTypeDefinition(){
+  //   return stx.g.EnumAbstract.make(
+  //     name          : self.name,
+  //     pack          : self.pack,
+  //     constructors  : self.constructors.map(
+  //       ctr -> __.g().const(
+  //         const -> { name : ctr, data : const.String(ctr) }
+  //       )
+  //     )
+  //   );
+  // }
 }
