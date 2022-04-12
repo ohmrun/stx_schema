@@ -15,7 +15,7 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
   public function toString(){
     return this.identity().toString();
   }
-  public function register(state:Context){
+  public function register(state:TypeContext){
     var next : RecordType     = null;
     var type                  = Ref.make(
       () -> next
@@ -49,15 +49,13 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
   }
 }
 class RecordTypeLift{
-  #if macro
-  static public function main(self:RecordType,state:MacroContext):Void{
+  static public function main(self:RecordType,state:GTypeContext):Void{
     return throw UNIMPLEMENTED;
   }
-  static public function leaf(self:RecordType,state:MacroContext):Void{
+  static public function leaf(self:RecordType,state:GTypeContext):Void{
     return throw UNIMPLEMENTED;
   }
-  static public function toComplexType(self:RecordType,state:MacroContext):Res<HComplexType,SchemaFailure>{
-    return __.accept(HTypePath.make(self.name,self.pack).toComplexType());
+  static public function toComplexType(self:RecordType,state:GTypeContext):Res<GComplexType,SchemaFailure>{
+    return __.accept(__.g().type_path().Make(self.name,self.pack).toComplexType());
   }
-  #end
 }

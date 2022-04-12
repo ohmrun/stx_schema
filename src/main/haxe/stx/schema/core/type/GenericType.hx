@@ -15,7 +15,7 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
   override public function toType():Type{
     return Type.make(TGeneric(Ref.pure((this:GenericType))));
   }
-  public function register(state:Context):Type{
+  public function register(state:TypeContext):Type{
     var next : GenericType     = null;
     var t               = Ref.make(
       () -> next
@@ -59,18 +59,16 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
   }
 }
 class GenericTypeLift{
-  #if macro
-  static public function main(self:GenericType,state:MacroContext){
+  static public function main(self:GenericType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function leaf(self:GenericType,state:MacroContext){
+  static public function leaf(self:GenericType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function toComplexType(self:GenericType,state:MacroContext):Res<HComplexType,SchemaFailure>{
+  static public function toComplexType(self:GenericType,state:GTypeContext):Res<GComplexType,SchemaFailure>{
     return 
       self.type.toComplexType(state)
           .map(x -> x.toTypeParam())
-          .map(t -> HTypePath.make(self.name,self.pack,[t]).toComplexType());
+          .map(t -> __.g().type_path().Make(self.name,self.pack,[t]).toComplexType());
   }
-  #end
 }

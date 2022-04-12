@@ -52,7 +52,7 @@ typedef WithValidationCls           = stx.schema.core.WithValidation.WithValidat
 typedef WithValidationApi           = stx.schema.core.WithValidation.WithValidationApi;
 
 typedef Identity                    = stx.schema.core.Identity;
-typedef Context                     = stx.schema.core.Context;
+typedef TypeContext               = stx.schema.core.TypeContext;
 typedef LeafType                    = stx.schema.core.type.LeafType;
 typedef LazyType                    = stx.schema.core.type.LazyType;
 
@@ -65,7 +65,7 @@ typedef LazyType                    = stx.schema.core.type.LazyType;
 // typedef SchemaNull                  = stx.schema.core.type.term.SchemaNull;
 
 class LiftSchema_register{
-  static public function register(self:Schema,state:Context){
+  static public function register(self:Schema,state:TypeContext){
     return switch(self){
       case SchScalar(def)   :
         __.log().debug('register scalar'); 
@@ -94,7 +94,7 @@ class LiftSchema_register{
   }
 }
 class LiftSchemaDeclaration{
-  static public function register(self:SchemaDeclaration,state:Context){
+  static public function register(self:SchemaDeclaration,state:TypeContext){
     return state.get(self.identity()).fold(
       ok -> ok,
       () -> {
@@ -106,7 +106,7 @@ class LiftSchemaDeclaration{
   }
 }
 class LiftSchemaUnionDeclaration{
-  static public function register(self:SchemaUnionDeclaration,state:Context):Type{
+  static public function register(self:SchemaUnionDeclaration,state:TypeContext):Type{
     final lhs   = self.lhs.register(state);
     final rhs   = self.rhs.register(state);
     final type  = UnionType.make(self.id.name,self.id.pack,lhs,rhs,self.validation).toType();
@@ -115,14 +115,14 @@ class LiftSchemaUnionDeclaration{
   }
 }
 class LiftSchemaEnumDeclaration_register{
-  static public function register(self:SchemaEnumDeclaration,state:Context):Type{
+  static public function register(self:SchemaEnumDeclaration,state:TypeContext):Type{
     final type = EnumType.make(self.id.name,self.id.pack,self.constructors).toType();
     state.put(type);
     return type;
   }
 }
 class LiftSchemaGenericDeclaration_register{
-  static public function register(self:SchemaGenericDeclaration,state:Context):Type{
+  static public function register(self:SchemaGenericDeclaration,state:TypeContext):Type{
     var next : GenericType    = null;
     final fn = function(){
       __.log().debug(self.identity().toString());
@@ -155,7 +155,7 @@ class LiftSchemaGenericDeclaration_register{
   }
 }
 class LiftSchemaRecordDeclaration_register{
-  static public function register(self:SchemaRecordDeclaration,state:Context):Type{
+  static public function register(self:SchemaRecordDeclaration,state:TypeContext):Type{
     var next : RecordType     = null;
     var fn                    = function(){
       //__.log().debug(self.identity().toString());

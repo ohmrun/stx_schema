@@ -9,7 +9,8 @@ class LazyType extends BaseTypeCls{
     return ctx.get(this.id).defv(null);
   }
   private final id  : Identity;
-  private final ctx : Context;
+  private final ctx : TypeContext;
+  
   public function new(id,ctx,?validations){
     super(validations);
     this.id   = id;
@@ -32,7 +33,7 @@ class LazyType extends BaseTypeCls{
   override function get_validation():Validations{
     return get_type_option().map((x:Type) -> x.validation).defv([].imm());
   }
-  public function register(state:Context){
+  public function register(state:TypeContext){
     //state.put(this.toType());
     return this.toType();
   }
@@ -46,13 +47,10 @@ class LazyType extends BaseTypeCls{
     return new LazyType(id,context);
   }
 }
-class LazyTypeLift{
-  #if macro
-  
-  static public function toComplexType(self:LazyType,state:MacroContext):Res<HComplexType,SchemaFailure>{
+class LazyTypeLift{  
+  static public function toComplexType(self:LazyType,state:GTypeContext):Res<GComplexType,SchemaFailure>{
     return __.option(self.type)
              .resolve(f -> f.of(E_Schema_LazyTypeEmpty))
              .flat_map(x -> x.toComplexType(state));
   }
-  #end
 }

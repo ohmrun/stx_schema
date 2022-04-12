@@ -19,7 +19,7 @@ typedef SchemaEnumDeclarationDef = SchemaDeclarationDef & {
   static public function make0(name,pack,constructors,?validation){
     return make(Ident.make(name,pack),constructors,validation);
   }
-  public function resolve(state:Schemata):Schema{
+  public function resolve(state:TyperContext):Schema{
     state.put(this);
     return SchEnum(this);
   }
@@ -61,34 +61,27 @@ class SchemaEnumDeclarationLift{
     }
   ");
   /**
-    Creates a GTypeDeclaration that declares it's own structure.
+    Creates a GTypeDeclaration that declares the structure of self:SchemaEnumDeclaration.
   **/
   static public inline function to_self_constructor(self:SchemaEnumDeclaration){
+    final e = __.g().expr();
     return __.g().expr().Call(
-      e -> e.Field(
-        e.FieldPath('SchemaEnumDeclaration',["stx.schema"]),
-        'make'
-      ),
-      exs -> [
-        exs.Call(
-          exs.Field(
-            exs.FieldPath('Ident',['stx','nano']),
-            'make'
-          ),
+      e.Path("stx.schema.SchemaEnumDeclaration.make"),
+      [
+        e.Call(
+          e.Path('stx.nano.Ident.make'),
           [
-            exs.Const(
-              c -> c.String(self.id.name)
-            ),
-            exs.ArrayDecl(
+            e.Const(c -> c.String(self.id.name)),
+            e.ArrayDecl(
               __.option(self.id.pack).defv(Way.unit()).prj().map(
-                str -> exs.Const( c -> c.String(str))
+                str -> e.Const( c -> c.String(str))
               )
             )
           ]          
         ),
-        exs.ArrayDecl(
+        e.ArrayDecl(
           self.constructors.map(
-            str -> exs.Const(
+            str -> e.Const(
               c -> c.Ident(str)
             )
           )

@@ -27,7 +27,7 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   public function toType(){
     return Type.make(TAnon(Ref.pure((this:AnonType))));
   }
-  public function register(state:Context):Type{
+  public function register(state:TypeContext):Type{
     var next : AnonType     = null;
     var type                = Ref.make(
       () -> next
@@ -63,26 +63,24 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   }
 }
 class AnonTypeLift{
-  #if macro
-  static public function main(self:AnonType,state:MacroContext){
+
+  static public function main(self:AnonType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function leaf(self:AnonType,state:MacroContext){
+  static public function leaf(self:AnonType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function toComplexType(self:AnonType,state:MacroContext){
+  static public function toComplexType(self:AnonType,state:GTypeContext){
     return Res.bind_fold(
       self.fields.pop(),
-      (next:Field,memo:Cluster<HField>) -> 
+      (next:Field,memo:Cluster<GField>) -> 
         next.type.toComplexType(state).map(
-          ct -> HField.make(
+          ct -> __.g().field().Make(
             next.name,
-            HFieldType.FVar(ct),
-            state.pos
+            ctype -> ctype.Var(ct)
           ) 
         ).map(memo.snoc),
         Cluster.unit()
-    ).map(HComplexType.TAnonymous);
+    ).map(x -> __.g().ctype().Anonymous(x));
   }
-  #end
 }

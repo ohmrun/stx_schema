@@ -4,7 +4,9 @@ typedef IdentityDef = IdentDef & {
   final lhs   : Option<Identity>;
   final rhs   : Option<Identity>;
 }
+@:using(stx.schema.core.Identity.IdentityLift)
 @:forward abstract Identity(IdentityDef) from IdentityDef to IdentityDef{
+  static public var _(default,never) = IdentityLift;
   public function new(self) this = self;
   static public function lift(self:IdentityDef):Identity return new Identity(self);
 
@@ -46,5 +48,28 @@ typedef IdentityDef = IdentDef & {
       case [None,None]  : 
         Ident.make(this.name,this.pack);
     }
+  }
+}
+class IdentityLift{
+  static public function to_self_constructor(self:Identity):GExpr{
+    final e = __.g().expr();
+    return e.Call(
+      e.Path('stx.schema.core.Identity.make'),
+      [
+        e.Call(
+          e.Path('stx.schema.core.Ident.make'),
+          [
+            e.Const(c -> c.String(self.name) ),
+            e.ArrayDecl(
+              __.option(self.pack).defv([]).prj().map(
+                string -> e.Const(c -> c.String(string))
+              )
+            )
+          ]
+        ),
+        self.lhs.map(to_self_constructor).def(() -> e.Path('stx.pico.Option.None')),
+        self.rhs.map(to_self_constructor).def(() -> e.Path('stx.pico.Option.None'))
+      ]
+    );
   }
 }

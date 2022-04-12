@@ -18,7 +18,7 @@ abstract SchemaArray(SchemaGenericDeclarationDef) from SchemaGenericDeclarationD
   @:to public function toSchemaGenericDeclaration(){
     return SchemaGenericDeclaration.lift(this);
   }
-  public function resolve(state:Schemata):Schema{  
+  public function resolve(state:TyperContext):Schema{  
     final result =  SchGeneric(state.get(this.type.identity()).fold(
       x  -> SchemaArray.make(x),
       () -> {

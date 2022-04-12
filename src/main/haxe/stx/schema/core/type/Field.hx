@@ -27,32 +27,27 @@ typedef FieldDef = Has_toStringDef & {
   }
 }
 class FieldLift{
-  #if macro
-  static public function fetchHField(self:Field,state:MacroContext){
+  static public function fetchGField(self:Field,state:GTypeContext){
     return self.type.toComplexType(state).map(
-      ct -> HField.make(
+      ct -> __.g().field().Make(
         self.name,
-        HFieldType.FVar(ct),
-        state.pos
+        ftype -> ftype.Var(ct)
       )
     );
   }
-  static public function fetchHField_shim(self:Field,state:MacroContext):Res<Cluster<HField>,SchemaFailure>{
+  static public function fetchGField_shim(self:Field,state:GTypeContext):Res<Cluster<GField>,SchemaFailure>{
     return self.type.toComplexType(state).map(
       ct -> {
-        final field = HField.make(
+        final field = __.g().field().Make(
           self.name,
-          HFieldType.FProp(PAccFn,PAccNever,ct),
-          state.pos
+          ftype -> ftype.Prop(acc -> acc.Fn(),acc -> acc.Never(),ct)
         );
-        final getter = HField.make(
+        final getter = __.g().field().Make(
           'get${self.name}',
-          HFieldType.FFun(HFunction.make([HFunctionArg.make('x',ct)].imm())),
-          state.pos
+          ftype -> ftype.Fun(f -> f.Make(arg -> [arg.Make('x',ct)].imm()))
         );
         return [field,getter];
       }
     );  
   }
-  #end
 }

@@ -66,7 +66,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.identity()
     );
   }
-  public function resolve(state:Schemata):Schema{
+  public function resolve(state:TyperContext):Schema{
     return _.fold(
       this,
       x -> x.resolve(state),

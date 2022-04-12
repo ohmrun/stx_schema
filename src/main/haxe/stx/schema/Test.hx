@@ -20,8 +20,11 @@ class Test{
       boot();
     #else
       __.test(
-        [ new SchemaTest() ],
-        [SchemaTest]    
+        [ 
+          //new SchemaTest(),
+          new TableTypeTest(), 
+        ],
+        []    
       );
     #end
   }  

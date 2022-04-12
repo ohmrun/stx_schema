@@ -9,7 +9,7 @@ class EnumTypeCls extends DataTypeCls implements EnumTypeApi{
     super(name,pack,validation);
     this.constructors = constructors;
   }
-  public function register(state:Context){
+  public function register(state:TypeContext){
     state.put(this.toType());
     return this.toType();
   }
@@ -33,15 +33,13 @@ class EnumTypeCls extends DataTypeCls implements EnumTypeApi{
   }
 }
 class EnumTypeLift{
-  #if macro
-  static public function leaf(self:EnumType,state:MacroContext){
+  static public function leaf(self:EnumType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function main(self:EnumType,state:MacroContext){
+  static public function main(self:EnumType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function toComplexType(self:EnumType,state:MacroContext){
-    return __.accept(HTypePath.make(self.name,self.pack).toComplexType());
+  static public function toComplexType(self:EnumType,state:GTypeContext){
+    return __.accept(__.g().type_path().Make(self.name,self.pack).toComplexType());
   }  
-  #end
 }

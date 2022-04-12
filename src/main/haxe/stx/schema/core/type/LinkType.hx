@@ -23,7 +23,7 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   public function toString(){
     return '$relation $into $inverse';
   }
-  public function register(state:Context):Type{
+  public function register(state:TypeContext):Type{
     var next : LinkType     = null;
     var t                   = Ref.make(
       function():LinkType{
@@ -67,11 +67,11 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   }
 }
 class LinkTypeLift{
-  #if macro
-  static public function leaf(self:LinkType,state:MacroContext){
+  
+  static public function leaf(self:LinkType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function main(self:LinkType,state:MacroContext){
+  static public function main(self:LinkType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
   static public function lookup(self:LinkType):Res<Type,SchemaFailure>{
@@ -81,10 +81,9 @@ class LinkTypeLift{
       f -> f.of(E_Schema_InverseNotFound(self))
     ).map(x -> x.type);
   }
-  static public function toComplexType(self:LinkType,state:MacroContext){
+  static public function toComplexType(self:LinkType,state:GTypeContext){
     return lookup(self).flat_map(
       type -> type.toComplexType(state)
     );
   }
-  #end
 }

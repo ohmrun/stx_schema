@@ -35,15 +35,13 @@ abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
   private function get_self():DataType return lift(this);
 }
 class DataTypeLift{
-  #if macro
-  static public function main(self:DataType,state:MacroContext){
+  static public function main(self:DataType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function leaf(self:AnonType,state:MacroContext){
+  static public function leaf(self:AnonType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function toComplexType(self:DataType,state:MacroContext):Res<HComplexType,SchemaFailure>{
-    return __.accept(HTypePath.make(self.name,self.pack).toComplexType());
+  static public function toComplexType(self:DataType,state:GTypeContext):Res<GComplexType,SchemaFailure>{
+    return __.accept(__.g().type_path().Make(self.name,self.pack).toComplexType());
   }
-  #end
 }

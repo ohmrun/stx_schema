@@ -29,7 +29,7 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
   public function identity(){
     return this.id;
   }
-  public function resolve(state:Schemata):Schema{
+  public function resolve(state:TyperContext):Schema{
     __.log().debug('resolve record');
     final fieldsI = this.fields.map(
       (field:Procurement) -> {
@@ -55,7 +55,20 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
   }
 }
 class SchemaRecordDeclarationLift{
-  static public inline function to_self_constructor(self:SchemaRecordDeclaration){
-    return throw UNIMPLEMENTED;
+  static public function to_self_constructor(self:SchemaRecordDeclaration){
+    final e = __.g().expr();
+    return e.Call(
+      e.Path('stx.schema.SchemaRecordDeclaration.make'),
+      [
+        e.Call(
+          e.Path('stx.Ident.make'),
+          [
+            e.Const(c -> c.String(self.id.name)),
+            e.ArrayDecl(__.option(self.id.pack).defv([]).prj().map(str -> e.Const(c -> c.String(str))))
+          ]
+        ),
+        self.fields.to_self_constructor()
+      ]
+    );
   }
 }

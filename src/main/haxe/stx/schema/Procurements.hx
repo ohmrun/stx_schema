@@ -6,6 +6,7 @@ typedef ProcurementsDef = Cluster<Procurement>;
 
 @:using(stx.schema.Procurements.ProcurementsLift)
 @:forward(lfold,map) abstract Procurements(ProcurementsDef) from ProcurementsDef to ProcurementsDef{
+  static public var _(default,never) = ProcurementsLift;
   public function new(self) this = self;
   static public function lift(self:ProcurementsDef):Procurements return new Procurements(self);
 
@@ -40,5 +41,10 @@ typedef ProcurementsDef = Cluster<Procurement>;
   }
 }
 class ProcurementsLift{
-   
+  static public function to_self_constructor(self:Procurements){
+    final e = __.g().expr();
+    return e.ArrayDecl(
+      self.map( p -> p.to_self_constructor() )
+    );
+  }
 }

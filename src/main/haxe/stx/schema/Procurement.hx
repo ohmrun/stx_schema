@@ -55,4 +55,22 @@ class ProcurementLift{
   static public function with_type(self:Procurement,type:SchemaRef){
     return fold(self,t -> Property(t.with_type(type)),t -> Attribute(t.with_type(type)));
   }
+  static public function to_self_constructor(self:Procurement){
+    final e     = __.g().expr();
+    final head  = 'stx.schema.Procurement.ProcurementSum'; 
+    return e.Call(
+      e.Path(
+        switch(self){
+          case Property(_)   : '${head}.Property';
+          case Attribute(_)  : '${head}.Attribute';
+        }
+      ),
+      [
+        switch(self){
+          case Property(property)     : property.to_self_constructor();
+          case Attribute(attribute)   : attribute.to_self_constructor(); 
+        }
+      ]
+    );
+  }
 }

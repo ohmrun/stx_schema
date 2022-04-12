@@ -25,7 +25,7 @@ typedef SchemaGenericDeclarationDef = SchemaDeclarationDef & {
       None
     );
   }
-  public function resolve(state:Schemata){
+  public function resolve(state:TyperContext){
     final typeI   = state.get(this.type.identity()).map(SchemaRef.fromSchema).def(
       () -> this.type.resolve(state)
     );
@@ -50,7 +50,21 @@ class SchemaGenericDeclarationLift{
   static public function get_validation(){
     return Cluster.unit();
   } 
-  static public inline function to_self_constructor(self:SchemaGenericDeclaration){
-    return throw UNIMPLEMENTED;
+  static public function to_self_constructor(self:SchemaGenericDeclaration){
+    final e = __.g().expr();
+    return e.Call(
+      e.Path('stx.schema.SchemaGenericDeclaration.make'),
+      [
+        e.Const( c -> c.String(self.id.name)),
+        e.ArrayDecl(
+          __.option(self.id.pack).defv([]).prj().map(
+            str -> e.Const(
+              c -> c.String(str)
+            )
+          )
+        ),
+        SchemaRef._.to_self_constructor(self.type)
+      ]
+    );
   }
 }

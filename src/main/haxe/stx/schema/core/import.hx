@@ -1,5 +1,3 @@
-import stx.schema.core.Context;
-
 #if macro
   using tink.MacroApi;
   using stx.makro.Expr;

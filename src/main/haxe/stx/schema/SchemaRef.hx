@@ -1,14 +1,17 @@
 package stx.schema;
 
 typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
+  //used for turning schemas into types
   var ?pop : () -> Schema;
 };
 
+@:using(stx.schema.SchemaRef.SchemaRefLift)
 @:forward abstract SchemaRef(SchemaRefDef) from SchemaRefDef to SchemaRefDef{
+  static public var _(default,never) = SchemaRefLift;
   public function new(self) this = self;
   static public function lift(self:SchemaRefDef):SchemaRef return new SchemaRef(self);
 
-  public function resolve(state:Schemata):SchemaRef{
+  public function resolve(state:TyperContext):SchemaRef{
     __.log().debug('resolve ref');
    return state.get(Identity.lift(this)).fold(
      x  -> fromSchema(x),
@@ -28,7 +31,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
      ) 
    );
   }
-  public function register(state:Context):Type{
+  public function register(state:TypeContext):Type{
     __.log().debug('register ref: ${identity()}');
     return state.get(identity()).def(
       () -> {
@@ -100,5 +103,21 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
 
   public function toString(){
     return __.show({ name : this.name, pack : this.pack, lhs : this.lhs.map(x -> x.toString()).defv(null), rhs : this.rhs.map(x -> x.toString()).defv(null) });
+  }
+}
+class SchemaRefLift{
+  static public function to_self_constructor(self:SchemaRef):GExpr{
+    final e = __.g().expr();
+    return e.Call(
+      e.Path('stx.schema.SchemaRef.make'),
+      [
+        Identity._.to_self_constructor({
+          name  : self.name,
+          pack  : self.pack,
+          lhs   : self.lhs,
+          rhs   : self.rhs  
+        })
+      ]
+    );
   }
 }

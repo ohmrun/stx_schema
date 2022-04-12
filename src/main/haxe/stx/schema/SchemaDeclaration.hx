@@ -27,7 +27,7 @@ typedef SchemaDeclarationDef = stx.schema.WithValidationDef & {
   public function identity(){
     return this.id;
   }
-  public function resolve(state:Schemata):Schema{
+  public function resolve(state:TyperContext):Schema{
     state.put(this);
     return SchScalar(this); 
   }

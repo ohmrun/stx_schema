@@ -2,7 +2,7 @@ package stx.schema;
 
 abstract class Registry extends Clazz{
   public function reply(){
-    return apply(Schemata.unit());
+    return apply(TyperContext.unit());
   }
-  abstract public function apply(map:Schemata):Cluster<Schema>;
+  abstract public function apply(map:TyperContext):Cluster<Schema>;
 }

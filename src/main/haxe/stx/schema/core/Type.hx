@@ -91,7 +91,7 @@ class TypeCls{
       ()  -> -1
     );
   }
-  public function register(state:Context):Type{
+  public function register(state:TypeContext):Type{
     return switch(data){
       case TData(t)       : t.pop().register(state); 
       case TAnon(t)       : t.pop().register(state);
@@ -226,51 +226,45 @@ class TypeLift{
   static public function UnionType(name,pack,lhs,rhs){
     return stx.schema.core.type.UnionType.make(name,pack,lhs,rhs);
   }
-  // static public function reduce<Z>(self:Type,pure:Type->Z,plus:Z->Z->Z,zero:Void->Z):Z{
-    
-  //   return throw UNIMPLEMENTED;
-  // }
-  #if macro
-    static public function main(type:Type,state:MacroContext):Void{
-      switch(type.data){
-        case TData(t)     :
-        case TRecord(t)   : t.pop().main(state);
-        case TGeneric(t)  : t.pop().main(state);
-        case TUnion(t)    : t.pop().main(state);
-        case TLink(t)     : t.pop().main(state);
-        case TEnum(t)     : t.pop().main(state);
-        case TLazy(f)     : main(f.pop().type,state);
-        case TAnon(t)     : t.pop().main(state);
-        case TMono        : 
-      }   
+  static public function main(type:Type,state:GTypeContext):Void{
+    switch(type.data){
+      case TData(t)     :
+      case TRecord(t)   : t.pop().main(state);
+      case TGeneric(t)  : t.pop().main(state);
+      case TUnion(t)    : t.pop().main(state);
+      case TLink(t)     : t.pop().main(state);
+      case TEnum(t)     : t.pop().main(state);
+      case TLazy(f)     : main(f.pop().type,state);
+      case TAnon(t)     : t.pop().main(state);
+      case TMono        : 
+    }   
+  }
+  static public function leaf(type:Type,state:GTypeContext):Void{
+    switch(type.data){
+      case TData(t)     :
+      case TRecord(t)   : t.pop().leaf(state);
+      case TGeneric(t)  : t.pop().leaf(state);
+      case TUnion(t)    : t.pop().leaf(state);
+      case TLink(t)     : t.pop().leaf(state);
+      case TEnum(t)     : t.pop().leaf(state);
+      case TLazy(f)     : leaf(f.pop().type,state);
+      case TAnon(t)     : t.pop().leaf(state);
+      case TMono        : 
+    }   
+  }
+  static public function toComplexType(self:Type,state:GTypeContext):Res<GComplexType,SchemaFailure>{
+    return switch(self.data){
+      case TData(t)     : t.pop().toComplexType(state);
+      case TAnon(t)     : t.pop().toComplexType(state);
+      case TRecord(t)   : t.pop().toComplexType(state);
+      case TGeneric(t)  : t.pop().toComplexType(state);
+      case TUnion(t)    : t.pop().toComplexType(state);
+      case TLink(t)     : t.pop().toComplexType(state);
+      case TEnum(t)     : t.pop().toComplexType(state);
+      case TLazy(f)     : f.pop().toComplexType(state);
+      case TMono        : __.accept(__.g().type_path().Make('Unknown',[]).toComplexType());
     }
-    static public function leaf(type:Type,state:MacroContext):Void{
-      switch(type.data){
-        case TData(t)     :
-        case TRecord(t)   : t.pop().leaf(state);
-        case TGeneric(t)  : t.pop().leaf(state);
-        case TUnion(t)    : t.pop().leaf(state);
-        case TLink(t)     : t.pop().leaf(state);
-        case TEnum(t)     : t.pop().leaf(state);
-        case TLazy(f)     : leaf(f.pop().type,state);
-        case TAnon(t)     : t.pop().leaf(state);
-        case TMono        : 
-      }   
-    }
-    static public function toComplexType(self:Type,state:MacroContext):Res<HComplexType,SchemaFailure>{
-      return switch(self.data){
-        case TData(t)     : t.pop().toComplexType(state);
-        case TAnon(t)     : t.pop().toComplexType(state);
-        case TRecord(t)   : t.pop().toComplexType(state);
-        case TGeneric(t)  : t.pop().toComplexType(state);
-        case TUnion(t)    : t.pop().toComplexType(state);
-        case TLink(t)     : t.pop().toComplexType(state);
-        case TEnum(t)     : t.pop().toComplexType(state);
-        case TLazy(f)     : f.pop().toComplexType(state);
-        case TMono        : __.accept(HTypePath.make('Unknown',[]).toComplexType());
-      }
-    }
-  #end
+  }
 }
 /**
   switch(self){

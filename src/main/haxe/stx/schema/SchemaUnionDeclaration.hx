@@ -35,7 +35,7 @@ typedef SchemaUnionDeclarationDef = SchemaDeclarationDef & {
       Some(Identity.lift(this.rhs))
     );
   }
-  public function resolve(state:Schemata){
+  public function resolve(state:TyperContext){
     var l = state.get(this.lhs.identity()).fold(
       x   -> SchemaRef.fromSchema(x),
       ()  -> this.lhs.resolve(state)
@@ -62,6 +62,8 @@ class SchemaUnionDeclarationLift{
     return Cluster.unit();
   }
   static public inline function to_self_constructor(self:SchemaUnionDeclaration){
+    final e = __.g().expr();
+    return 
     return throw UNIMPLEMENTED;
   }
 }

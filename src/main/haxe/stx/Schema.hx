@@ -20,8 +20,8 @@ typedef SchemaGenericDeclarationDef               = stx.schema.SchemaGenericDecl
 typedef SchemaUnionDeclaration                    = stx.schema.SchemaUnionDeclaration;
 typedef SchemaUnionDeclarationDef                 = stx.schema.SchemaUnionDeclaration.SchemaUnionDeclarationDef;
 
-typedef SchemaPropertyRef                         = stx.schema.SchemaPropertyRef;
-typedef SchemaPropertyRefDef                      = stx.schema.SchemaPropertyRef.SchemaPropertyRefDef;
+// typedef SchemaPropertyRef                         = stx.schema.SchemaPropertyRef;
+// typedef SchemaPropertyRefDef                      = stx.schema.SchemaPropertyRef.SchemaPropertyRefDef;
 
 // typedef SchemaAnonDeclaration                     = stx.schema.SchemaAnonDeclaration;
 // typedef SchemaAnonDeclarationDef                  = stx.schema.SchemaAnonDeclaration.SchemaAnonDeclarationDef;
@@ -58,7 +58,7 @@ typedef ProcurementAttributeDeclaration           = stx.schema.ProcurementAttrib
 typedef ProcurementPropertyDeclarationDef         = stx.schema.ProcurementPropertyDeclaration.ProcurementPropertyDeclarationDef;
 typedef ProcurementPropertyDeclaration            = stx.schema.ProcurementPropertyDeclaration; 
 
-typedef Schemata                                  = stx.schema.Schemata;
-typedef SchemataCls                               = stx.schema.Schemata.SchemataCls;
+typedef TyperContext                                  = stx.schema.TyperContext;
+typedef TyperContextCls                               = stx.schema.TyperContext.TyperContextCls;
 typedef ValidationComplyApi                       = ComplyApi<Dynamic,stx.schema.core.Type,Report<SchemaFailure>>;
 typedef ValidationComplyCls                       = ComplyCls<Dynamic,stx.schema.core.Type,Report<SchemaFailure>>;

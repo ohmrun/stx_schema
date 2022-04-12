@@ -53,19 +53,19 @@ class SchemaTest extends TestCase{
     return [user,article];
   }
   public function test_this(){
-    var types = Schemata.make(types());
+    var types = TyperContext.make(types());
         types.type();
     var context  = types.context;
     var register = @:privateAccess context.register;  
-    var context  = new stx.schema.core.MacroContext(context,haxe.macro.Context.currentPos());
+    var context  = new stx.schema.core.GTypeContext(context,haxe.macro.Context.currentPos());
     stx.schema.view.Main.apply(context);
   }
   public function test(){
     is_true(true);
   }
   #if macro
-  public function test_make_htypes(){
-    var types = Schemata.make(types());
+  public function test_make_gtypes(){
+    var types = TyperContext.make(types());
         types.type();
     trace(types);
   }
