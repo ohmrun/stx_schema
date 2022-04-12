@@ -41,7 +41,4 @@ class DataTypeLift{
   static public function leaf(self:AnonType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function toComplexType(self:DataType,state:GTypeContext):Res<GComplexType,SchemaFailure>{
-    return __.accept(__.g().type_path().Make(self.name,self.pack).toComplexType());
-  }
 }

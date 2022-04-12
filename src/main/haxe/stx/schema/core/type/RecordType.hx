@@ -55,7 +55,70 @@ class RecordTypeLift{
   static public function leaf(self:RecordType,state:GTypeContext):Void{
     return throw UNIMPLEMENTED;
   }
-  static public function toComplexType(self:RecordType,state:GTypeContext):Res<GComplexType,SchemaFailure>{
-    return __.accept(__.g().type_path().Make(self.name,self.pack).toComplexType());
+  static public function getLeafTypeDefinition(self:RecordType){
+    final g = __.g();
+
+    return g.type().Make(
+      '${self.name}Leaf',
+      self.pack,
+      tkind -> tkind.Structure(),
+      fields -> self.fields.pop().map(
+        field -> 
+          fields.Make(
+            field.name,
+            kind -> field.type.is_link().if_else(
+              () -> switch(field.type){
+                case TLink(t)       :
+                  final type = g.pop();
+                  switch(type.relation){
+                    case HAS_MANY   : 
+                      __.g()
+                        .ctype()
+                        .Path(
+                          p -> p.Make(
+                            'Array',['std'],null,
+                            tparam -> tparam.ComplexType(
+                              ctype ->  
+                            )
+                          )
+                        )
+                    default         : __.g().ctype().fromString('stx.schema.ID');   
+                  }
+                default             : throw 'e_undefined';
+              } 
+              () -> kind.Var(
+                t -> field.type.getLeafComplexType()
+              )
+            ),
+            acc -> [acc.Public(),acc.Final()]
+          )
+      )
+    );
+  }
+  static public function getMainTypeDefinition(self:RecordType){
+    final g = __.g();
+    return g.type().Make(
+      '${self.name}Main',
+      self.pack,
+      tkind -> tkind.Structure(),
+      fields -> self.fields.pop().map(
+        field -> 
+          fields.Make(
+            field.name,
+            kind -> field.type.is_link().if_else(
+              () -> switch(field.type){
+                case TLink(t) : switch(t.relation){
+                  case HAS_MANY : 
+                }
+                default       : throw 'e_undefined';
+              },
+              () -> kind.Var(
+                t -> field.type.getMainComplexType()
+              )
+            )
+            acc -> [acc.Public(),acc.Final()]
+          )
+      )
+    );
   }
 }

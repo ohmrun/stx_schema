@@ -121,12 +121,6 @@ class TypeCls{
         Identity.fromIdent(Ident.make('TMono'));
     }
   }
-  public function is_anon(){
-    return switch(data){
-      case TAnon(_) : true;
-      default : false;
-    }
-  }
   public var fields(get,never):Cluster<Field>;
 
   public function get_fields(){
@@ -208,6 +202,38 @@ class TypeLift{
       case TMono          : mono();
     }
   }
+  static public function get_link():Option<LinkType>{
+    return switch(this.data){
+      case TLink(t) : Some(t.pop());
+      default       : None;
+    }
+  }
+  static public function is_terminal(self:Type){
+    return switch(self.data){
+      case TData(_) : true;
+      case TAnon(_) : true;
+      case TLazy(f) : is_terminal(f.pop().type);
+      default       : false;
+    }
+  }
+  static public function is_anon(self:Type){
+    return switch(self.data){
+      case TAnon(_) : true;
+      default : false;
+    }
+  }
+  static public function is_link(self:Type){
+    return switch(self.data){
+      case TLink(_) : true;
+      default : false;
+    }
+  }
+  static public function get_inverse(self:Type):Option<Type>{
+    return switch(self.data){
+      case TLink(t) : Some(t.pop().lookup());
+      default       : None;
+    }
+  }
   static public function LeafType(name,pack){
     return stx.schema.core.type.LeafType.make(name,pack);
   }
@@ -239,8 +265,8 @@ class TypeLift{
       case TMono        : 
     }   
   }
-  static public function leaf(type:Type,state:GTypeContext):Void{
-    switch(type.data){
+  static public function leaf(self:Type,state:GTypeContext):Void{
+    switch(self.data){
       case TData(t)     :
       case TRecord(t)   : t.pop().leaf(state);
       case TGeneric(t)  : t.pop().leaf(state);
@@ -252,18 +278,41 @@ class TypeLift{
       case TMono        : 
     }   
   }
-  static public function toComplexType(self:Type,state:GTypeContext):Res<GComplexType,SchemaFailure>{
+  static public function getTypePath(self:Type){
     return switch(self.data){
-      case TData(t)     : t.pop().toComplexType(state);
-      case TAnon(t)     : t.pop().toComplexType(state);
-      case TRecord(t)   : t.pop().toComplexType(state);
-      case TGeneric(t)  : t.pop().toComplexType(state);
-      case TUnion(t)    : t.pop().toComplexType(state);
-      case TLink(t)     : t.pop().toComplexType(state);
-      case TEnum(t)     : t.pop().toComplexType(state);
-      case TLazy(f)     : f.pop().toComplexType(state);
-      case TMono        : __.accept(__.g().type_path().Make('Unknown',[]).toComplexType());
+      case TData(t)     : Some(t.pop().toTypePath());
+      case TRecord(t)   : Some(t.pop().toTypePath());
+      case TGeneric(t)  : Some(t.pop().toTypePath());
+      case TUnion(t)    : Some(t.pop().toTypePath());
+      case TLink(t)     : None;
+      case TEnum(t)     : Some(t.pop().toTypePath());
+      case TLazy(f)     : getTypePath(f.pop().type);
+      case TAnon(t)     : None;
+      case TMono        : None;
     }
+  }
+  static public function getFieldComplexTypesWane(self:Type){
+    return self.fields.map(
+      (field) -> __.g().field().Make(
+        field.name,
+        ftype -> ftype.Var(
+          field.type.get_link().fold(
+            link -> switch(link.relation){
+              case HAS_MANY : __.g().type().Path(
+                'Array',['std'],null,
+                 __.g().type().Anonymous(link.getFieldComplexTypesWane(link.type))
+              );
+              default : __.g().type().fromString('stx.schema.ID');
+            },
+            () -> return switch(getTypePath(field.type)){
+              case Some(tpath) : tpath.toComplexType();
+              default          : throw E_Schema_AttemptingToDefineUnsupportedType(field.type);
+            }
+          )
+        ),
+        acc -> [acc.Public(),acc.Final()]
+      )
+    );
   }
 }
 /**

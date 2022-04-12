@@ -17,7 +17,7 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
   }
   public function register(state:TypeContext):Type{
     var next : GenericType     = null;
-    var t               = Ref.make(
+   Failure var t               = Ref.make(
       () -> next
     );
     state.put(TGeneric(t));
@@ -64,11 +64,5 @@ class GenericTypeLift{
   }
   static public function leaf(self:GenericType,state:GTypeContext){
     return throw UNIMPLEMENTED;
-  }
-  static public function toComplexType(self:GenericType,state:GTypeContext):Res<GComplexType,SchemaFailure>{
-    return 
-      self.type.toComplexType(state)
-          .map(x -> x.toTypeParam())
-          .map(t -> __.g().type_path().Make(self.name,self.pack,[t]).toComplexType());
   }
 }

@@ -39,7 +39,24 @@ class EnumTypeLift{
   static public function main(self:EnumType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function toComplexType(self:EnumType,state:GTypeContext){
-    return __.accept(__.g().type_path().Make(self.name,self.pack).toComplexType());
-  }  
+  static public function getTypeDefinition(self:EnumType){
+    return __.g().type().Make(
+      self.name,
+      self.pack,
+      ttype -> ttype.Abstract(
+        ct -> ct.fromString('std.String'),
+        ct -> [ct.fromString('std.String')],
+        ct -> [ct.fromString('std.String')]
+      ),
+      fld -> self.constructors.map(
+        str -> fld.Make(
+          str,
+          ftype -> ftype.Var(null,e -> e.Const(c -> c.String(str))),
+          acc   -> []
+        )
+      ),
+      [],
+      meta -> [meta.Make(':enum')]
+    );
+  }
 }

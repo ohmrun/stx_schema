@@ -74,16 +74,33 @@ class LinkTypeLift{
   static public function main(self:LinkType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function lookup(self:LinkType):Res<Type,SchemaFailure>{
+  static public function lookup(self:LinkType,?pos:Pos):Type{
+    trace(pos);
     return self.into.fields.search(
-      kv -> self.inverse == kv.name
+      kv -> {
+        __.log().debug('${self.inverse} ${kv.name}');
+        return self.inverse == kv.name;
+      }
     ).resolve(
       f -> f.of(E_Schema_InverseNotFound(self))
-    ).map(x -> x.type);
-  }
-  static public function toComplexType(self:LinkType,state:GTypeContext){
-    return lookup(self).flat_map(
-      type -> type.toComplexType(state)
+    ).fold(
+      x -> x.type,
+      e -> {
+        __.crack(e);
+        return null;
+      }
     );
+  }
+  static public function getLeafComplexType(self:LinkType):GComplexType{
+    return switch(this.relation){
+      case HAS_MANY : new TypeArray(new TypeID()).getLeafComplexType(); 
+      default       : __.g().ctype().fromString('stx.schema.ID');
+    }
+  }
+  static public function getMainComplexType(self:LinkType):GComplexType{
+    return switch(this.relation){
+      case HAS_MANY : new TypeArray(self.into).getLeafComplexType(); 
+      default       : self.into.getLeafComplexType();
+    }
   }
 }

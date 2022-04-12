@@ -48,9 +48,5 @@ class LazyType extends BaseTypeCls{
   }
 }
 class LazyTypeLift{  
-  static public function toComplexType(self:LazyType,state:GTypeContext):Res<GComplexType,SchemaFailure>{
-    return __.option(self.type)
-             .resolve(f -> f.of(E_Schema_LazyTypeEmpty))
-             .flat_map(x -> x.toComplexType(state));
-  }
+
 }

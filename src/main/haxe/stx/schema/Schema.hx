@@ -71,7 +71,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       this,
       x -> x.resolve(state),
       x -> x.resolve(state),
-      x -> x.resolve(state),
+      x -> SchemaEnumDeclaration._.resolve(x,state),
       x -> x.resolve(state),
       x -> x.resolve(state),
       x -> SchType(x)

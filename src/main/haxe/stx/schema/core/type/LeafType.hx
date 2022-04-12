@@ -15,4 +15,4 @@ class LeafType extends DataTypeCls{
     state.put(this.toType());
     return this.toType();
   }
-}
+} 

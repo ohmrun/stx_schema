@@ -13,15 +13,11 @@ typedef SchemaEnumDeclarationDef = SchemaDeclarationDef & {
     return lift({
       id            : Identity.fromIdent(ident),
       constructors  : constructors,
-      validation    : _.validation.concat(__.option(validation).defv(Cluster.unit()))
+    validation    : _.validation.concat(__.option(validation).defv(Cluster.unit()))
     });
   }
-  static public function make0(name,pack,constructors,?validation){
+  static public function make0(name:String,pack,constructors,?validation){
     return make(Ident.make(name,pack),constructors,validation);
-  }
-  public function resolve(state:TyperContext):Schema{
-    state.put(this);
-    return SchEnum(this);
   }
   public function identity(){
     return this.id;  
@@ -36,6 +32,10 @@ typedef SchemaEnumDeclarationDef = SchemaDeclarationDef & {
   }
 } 
 class SchemaEnumDeclarationLift{
+  static public function resolve(self:SchemaEnumDeclaration,state:TyperContext):Schema{
+    state.put(SchEnum(self));
+    return SchEnum(self);
+  }
   static public var validation(get,null) : Validations;
   static public function get_validation(){
     return Cluster.lift([ValidationExpr(check_constructor)]);

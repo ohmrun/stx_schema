@@ -52,9 +52,12 @@ typedef WithValidationCls           = stx.schema.core.WithValidation.WithValidat
 typedef WithValidationApi           = stx.schema.core.WithValidation.WithValidationApi;
 
 typedef Identity                    = stx.schema.core.Identity;
-typedef TypeContext               = stx.schema.core.TypeContext;
+
 typedef LeafType                    = stx.schema.core.type.LeafType;
 typedef LazyType                    = stx.schema.core.type.LazyType;
+
+typedef GTypeContext                = stx.schema.core.GTypeContext;
+typedef TypeContext                 = stx.schema.core.TypeContext;
 
 // typedef LinkTypeDef                 = stx.schema.core.type.LinkType.LinkTypeDef;
 // typedef LinkType                    = stx.schema.core.type.LinkType

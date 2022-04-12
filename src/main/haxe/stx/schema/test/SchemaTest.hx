@@ -42,7 +42,7 @@ class SchemaTest extends TestCase{
           "title" => Schema.String()
         ],
         "attributes" : [
-          "user" => {
+          "author" => {
             inverse   : "article",
             type      : __.way().into("User"),
             relation  : HAS_MANY

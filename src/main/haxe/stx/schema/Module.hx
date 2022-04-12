@@ -7,8 +7,8 @@ class Module extends Clazz{
   public function record(self:{ name : String, ?pack : Cluster<String>, fields : Procurements, ?validation : Validations }){
     return SchRecord(SchemaRecordDeclaration.make0(self.name,self.pack,self.fields,self.validation));
   }
-  public function enumeration(name,pack,consructors,procurements,?validation){
-    return SchEnum(SchemaEnumDeclaration.make0(name,pack,procurements,validation));
+  public function enumeration(name,pack,constructors,?validation){
+    return SchEnum(SchemaEnumDeclaration.make0(name,pack,constructors,validation));
   }
   public function generic(name,pack,type,?validation){
     return SchGeneric(SchemaGenericDeclaration.make(name,pack,type,validation));

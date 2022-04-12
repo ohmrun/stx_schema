@@ -68,19 +68,9 @@ class AnonTypeLift{
     return throw UNIMPLEMENTED;
   }
   static public function leaf(self:AnonType,state:GTypeContext){
+    for(field in self.fields.pop()){
+      
+    }    
     return throw UNIMPLEMENTED;
-  }
-  static public function toComplexType(self:AnonType,state:GTypeContext){
-    return Res.bind_fold(
-      self.fields.pop(),
-      (next:Field,memo:Cluster<GField>) -> 
-        next.type.toComplexType(state).map(
-          ct -> __.g().field().Make(
-            next.name,
-            ctype -> ctype.Var(ct)
-          ) 
-        ).map(memo.snoc),
-        Cluster.unit()
-    ).map(x -> __.g().ctype().Anonymous(x));
   }
 }
