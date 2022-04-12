@@ -91,16 +91,16 @@ class LinkTypeLift{
       }
     );
   }
-  static public function getLeafComplexType(self:LinkType):GComplexType{
-    return switch(this.relation){
-      case HAS_MANY : new TypeArray(new TypeID()).getLeafComplexType(); 
-      default       : __.g().ctype().fromString('stx.schema.ID');
-    }
-  }
-  static public function getMainComplexType(self:LinkType):GComplexType{
-    return switch(this.relation){
-      case HAS_MANY : new TypeArray(self.into).getLeafComplexType(); 
-      default       : self.into.getLeafComplexType();
-    }
-  }
+  // static public function getLeafComplexType(self:LinkType):GComplexType{
+  //   return switch(self.relation){
+  //     case HAS_MANY : new TypeArray(new TypeID()).getLeafComplexType(); 
+  //     default       : __.g().ctype().fromString('stx.schema.ID');
+  //   }
+  // }
+  // static public function getMainComplexType(self:LinkType):GComplexType{
+  //   return switch(self.relation){
+  //     case HAS_MANY : new TypeArray(self.into).getLeafComplexType(); 
+  //     default       : self.into.getLeafComplexType();
+  //   }
+  // }
 }

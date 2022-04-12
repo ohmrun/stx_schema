@@ -202,8 +202,8 @@ class TypeLift{
       case TMono          : mono();
     }
   }
-  static public function get_link():Option<LinkType>{
-    return switch(this.data){
+  static public function get_link(self:Type):Option<LinkType>{
+    return switch(self.data){
       case TLink(t) : Some(t.pop());
       default       : None;
     }
@@ -298,11 +298,14 @@ class TypeLift{
         ftype -> ftype.Var(
           field.type.get_link().fold(
             link -> switch(link.relation){
-              case HAS_MANY : __.g().type().Path(
-                'Array',['std'],null,
-                 __.g().type().Anonymous(link.getFieldComplexTypesWane(link.type))
+              case HAS_MANY : __.g().ctype().Path(
+                path -> path.Make(
+                  'Cluster',['stx'], null,
+                  //[__.g().ctype().Anonymous(link.into.getFieldComplexTypesWane()).toTypeParam()]
+                  [__.g().ctype().fromString('stx.schema.ID').toTypeParam()]
+                )
               );
-              default : __.g().type().fromString('stx.schema.ID');
+              default : __.g().ctype().fromString('stx.schema.ID');
             },
             () -> return switch(getTypePath(field.type)){
               case Some(tpath) : tpath.toComplexType();

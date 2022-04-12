@@ -55,46 +55,46 @@ class RecordTypeLift{
   static public function leaf(self:RecordType,state:GTypeContext):Void{
     return throw UNIMPLEMENTED;
   }
-  static public function getLeafTypeDefinition(self:RecordType){
-    final g = __.g();
+  // static public function getLeafTypeDefinition(self:RecordType){
+  //   final g = __.g();
 
-    return g.type().Make(
-      '${self.name}Leaf',
-      self.pack,
-      tkind -> tkind.Structure(),
-      fields -> self.fields.pop().map(
-        field -> 
-          fields.Make(
-            field.name,
-            kind -> field.type.is_link().if_else(
-              () -> switch(field.type){
-                case TLink(t)       :
-                  final type = g.pop();
-                  switch(type.relation){
-                    case HAS_MANY   : 
-                      __.g()
-                        .ctype()
-                        .Path(
-                          p -> p.Make(
-                            'Array',['std'],null,
-                            tparam -> tparam.ComplexType(
-                              ctype ->  
-                            )
-                          )
-                        )
-                    default         : __.g().ctype().fromString('stx.schema.ID');   
-                  }
-                default             : throw 'e_undefined';
-              } 
-              () -> kind.Var(
-                t -> field.type.getLeafComplexType()
-              )
-            ),
-            acc -> [acc.Public(),acc.Final()]
-          )
-      )
-    );
-  }
+  //   return g.type().Make(
+  //     '${self.name}Leaf',
+  //     self.pack,
+  //     tkind -> tkind.Structure(),
+  //     fields -> self.fields.pop().map(
+  //       field -> 
+  //         fields.Make(
+  //           field.name,
+  //           kind -> field.type.is_link().if_else(
+  //             () -> switch(field.type.data){
+  //               case TLink(t)       :
+  //                 final type = t.pop();
+  //                 switch(type.relation){
+  //                   case HAS_MANY   : 
+  //                     __.g()
+  //                       .ctype()
+  //                       .Path(
+  //                         p -> p.Make(
+  //                           'Array',['std'],null,
+  //                           tparam -> tparam.ComplexType(
+  //                             ctype ->  
+  //                           )
+  //                         )
+  //                       );
+  //                   default         : __.g().ctype().fromString('stx.schema.ID');   
+  //                 }
+  //               default             : throw 'e_undefined';
+  //             },
+  //             () -> kind.Var(
+  //               ctype -> ctype.Anonymous(field.type.getLeafComplexType())
+  //             )
+  //           ),
+  //           acc -> [acc.Public(),acc.Final()]
+  //         )
+  //     )
+  //   );
+  // }
   static public function getMainTypeDefinition(self:RecordType){
     final g = __.g();
     return g.type().Make(
@@ -105,17 +105,22 @@ class RecordTypeLift{
         field -> 
           fields.Make(
             field.name,
-            kind -> field.type.is_link().if_else(
-              () -> switch(field.type){
-                case TLink(t) : switch(t.relation){
-                  case HAS_MANY : 
-                }
-                default       : throw 'e_undefined';
-              },
-              () -> kind.Var(
-                t -> field.type.getMainComplexType()
-              )
-            )
+            kind -> kind.Var(
+              ctype -> 
+                field.type.is_terminal().if_else(
+                  () -> field.type.getTypePath().fudge(__.fault().of(E_Schema_AttemptingToDefineUnsupportedType(field.type))).toComplexType(),
+                  () -> 
+                    field.type.get_link().fold(
+                      ok -> switch(ok.relation){
+                        case HAS_MANY : ctype.Path(
+                          p -> p.Make('Cluster',['stx'],null,[ctype.Anonymous(ok.into.getFieldComplexTypesWane()).toTypeParam()])
+                        );
+                        default : ctype.Anonymous(ok.into.getFieldComplexTypesWane());
+                      },
+                      () -> ctype.Anonymous(field.type.getFieldComplexTypesWane())
+                    )
+                  )
+            ),
             acc -> [acc.Public(),acc.Final()]
           )
       )

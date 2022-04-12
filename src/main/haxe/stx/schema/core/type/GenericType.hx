@@ -17,7 +17,7 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
   }
   public function register(state:TypeContext):Type{
     var next : GenericType     = null;
-   Failure var t               = Ref.make(
+    var t               = Ref.make(
       () -> next
     );
     state.put(TGeneric(t));
