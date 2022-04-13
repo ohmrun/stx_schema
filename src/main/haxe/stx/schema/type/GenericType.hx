@@ -1,4 +1,4 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
 interface GenericTypeApi extends DataTypeApi{
   public final type : SType;
@@ -44,7 +44,7 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
     );
   }
 }
-@:using(stx.schema.core.type.GenericType.GenericTypeLift)
+@:using(stx.schema.type.GenericType.GenericTypeLift)
 @:forward abstract GenericType(GenericTypeApi) from GenericTypeApi to GenericTypeApi{
   static public var _(default,never) = GenericTypeLift;
   public function new(self) this = self;

@@ -1,4 +1,4 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
 interface UnionTypeApi extends DataTypeApi{
   final lhs : SType;
@@ -36,7 +36,7 @@ class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
     return this.identity().toString();
   }
 }
-@:using(stx.schema.core.type.UnionType.UnionTypeLift)
+@:using(stx.schema.type.UnionType.UnionTypeLift)
 @:forward abstract UnionType(UnionTypeApi) from UnionTypeApi to UnionTypeApi{
   public function new(self) this = self;
   @:noUsing static public function lift(self:UnionTypeApi):UnionType return new UnionType(self);

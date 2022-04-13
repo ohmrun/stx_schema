@@ -1,6 +1,6 @@
-package stx.schema.core;
+package stx.schema;
 
-@:using(stx.schema.core.SType.STypeLift)
+@:using(stx.schema.SType.STypeLift)
 enum STypeSum{
   STData(t:Ref<DataType>);
   STAnon(t:Ref<AnonType>);
@@ -12,7 +12,7 @@ enum STypeSum{
   STLazy(f:Ref<LazyType>);
   STMono;
 }
-@:using(stx.schema.core.SType.STypeLift)
+@:using(stx.schema.SType.STypeLift)
 class STypeCls{
   public final data : STypeSum;
   public function new(data){
@@ -102,7 +102,7 @@ class STypeCls{
       case STEnum(t)       : t.pop().register(state);
       case STLazy(t)       : t.pop().register(state);
       case STMono          :
-        __.log().trace("PPPPPL"); 
+        //__.log().trace("PPPPPL"); 
         new STypeCls(STMono);
     }
   }
@@ -143,28 +143,28 @@ class STypeCls{
   private function get_self():SType return lift(this);
 
   static public function Array(self:SType):SType{
-    return stx.schema.core.type.term.TypeArray.make(self).toSType();
+    return stx.schema.type.term.TypeArray.make(self).toSType();
   } 
   static public function Bool():SType{
-    return new stx.schema.core.type.term.TypeBool().toSType();
+    return new stx.schema.type.term.TypeBool().toSType();
   }
   static public function Float():SType{
-    return new stx.schema.core.type.term.TypeFloat().toSType();
+    return new stx.schema.type.term.TypeFloat().toSType();
   }
   static public function Int():SType{
-    return new stx.schema.core.type.term.TypeInt().toSType();
+    return new stx.schema.type.term.TypeInt().toSType();
   }
   static public function String():SType{
-    return new stx.schema.core.type.term.TypeString().toSType();
+    return new stx.schema.type.term.TypeString().toSType();
   }
   static public function Null(self:SType):SType{
-    return stx.schema.core.type.term.TypeNull.make(self).toSType();
+    return stx.schema.type.term.TypeNull.make(self).toSType();
   }
   static public function Mono():SType{
     return STMono;
   }
   // static public function Into(self:Ident,debrujin):SType{
-  //   return stx.schema.core.type.term.IntoSType.make(self,debrujin).toSType();
+  //   return stx.schema.type.term.IntoSType.make(self,debrujin).toSType();
   // }
   @:from static public function fromSTypeSum(self:STypeSum):SType{
     return lift(new STypeCls(self));
@@ -235,22 +235,22 @@ class STypeLift{
     }
   }
   static public function LeafType(name,pack){
-    return stx.schema.core.type.LeafType.make(name,pack);
+    return stx.schema.type.LeafType.make(name,pack);
   }
   static public function RecordType(name,pack,fields){
-    return stx.schema.core.type.RecordType.make(name,pack,fields);
+    return stx.schema.type.RecordType.make(name,pack,fields);
   }
   static public function AnonType(fields){
-    return stx.schema.core.type.AnonType.make(fields);
+    return stx.schema.type.AnonType.make(fields);
   }
   static public function GenericType(name,pack,inner){
-    return stx.schema.core.type.GenericType.make(name,pack,inner);
+    return stx.schema.type.GenericType.make(name,pack,inner);
   }
   static public function LinkType(into,relation,from){
-    return stx.schema.core.type.LinkType.make(into,relation,from);
+    return stx.schema.type.LinkType.make(into,relation,from);
   }
   static public function UnionType(name,pack,lhs,rhs){
-    return stx.schema.core.type.UnionType.make(name,pack,lhs,rhs);
+    return stx.schema.type.UnionType.make(name,pack,lhs,rhs);
   }
   static public function main(type:SType,state:GTypeContext):Void{
     switch(type.data){

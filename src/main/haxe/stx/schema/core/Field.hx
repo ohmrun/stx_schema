@@ -1,10 +1,10 @@
-package stx.schema.core.type;
+package stx.schema.core;
 
 typedef FieldDef = Has_toStringDef & {
   final type : SType;
   final name : String;
 }
-@:using(stx.schema.core.type.Field.FieldLift)
+@:using(stx.schema.core.Field.FieldLift)
 @:forward abstract Field(FieldDef) from FieldDef to FieldDef{
   public function new(self) this = self;
   @:noUsing static public function lift(self:FieldDef):Field return new Field(self);

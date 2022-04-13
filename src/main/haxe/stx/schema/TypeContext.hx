@@ -1,4 +1,4 @@
-package stx.schema.core;
+package stx.schema;
 
 class TypeContext extends Clazz{
   @:noUsing static public function make(){
@@ -11,10 +11,10 @@ public final register : StringMap<SType>;
   private function new(){
     super();   
     this.register = new StringMap();
-    this.put(new stx.schema.core.type.term.TypeBool().toSType());
-    this.put(new stx.schema.core.type.term.TypeFloat().toSType());
-    this.put(new stx.schema.core.type.term.TypeInt().toSType());
-    this.put(new stx.schema.core.type.term.TypeString().toSType());
+    this.put(new stx.schema.type.term.TypeBool().toSType());
+    this.put(new stx.schema.type.term.TypeFloat().toSType());
+    this.put(new stx.schema.type.term.TypeInt().toSType());
+    this.put(new stx.schema.type.term.TypeString().toSType());
   //  this.trigger  = Signal.trigger();
     this.index    = 0; 
   }

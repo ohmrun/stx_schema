@@ -1,4 +1,4 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
 interface Has_toStringApi{
   public function toString():String;

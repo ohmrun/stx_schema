@@ -1,4 +1,4 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
 interface EnumTypeApi extends DataTypeApi  {
   final constructors : Cluster<String>;
@@ -20,7 +20,7 @@ class EnumTypeCls extends DataTypeCls implements EnumTypeApi{
     return this.identity().toString();
   } 
 }
-@:using(stx.schema.core.type.EnumType.EnumTypeLift)
+@:using(stx.schema.type.EnumType.EnumTypeLift)
 @:forward abstract EnumType(EnumTypeApi) from EnumTypeApi to EnumTypeApi{
   public function new(self) this = self;
   @:noUsing static public function lift(self:EnumTypeApi):EnumType return new EnumType(self);

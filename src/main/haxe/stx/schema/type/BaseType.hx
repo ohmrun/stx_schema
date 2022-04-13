@@ -1,4 +1,4 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
 interface BaseTypeApi extends Has_toStringApi{
   public var debrujin(get,null):Null<Int>;
@@ -16,7 +16,7 @@ interface BaseTypeApi extends Has_toStringApi{
 
   public function toGTypePath():GTypePath;
 }
-@:using(stx.schema.core.type.BaseType.BaseTypeLift)
+@:using(stx.schema.type.BaseType.BaseTypeLift)
 abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
   public function new(validation){
     super();

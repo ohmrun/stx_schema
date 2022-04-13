@@ -1,10 +1,10 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
 interface RecordTypeApi extends DataTypeApi{
-  public final fields  : Cell<Cluster<stx.schema.core.type.Field>>;
+  public final fields  : Cell<Cluster<stx.schema.core.Field>>;
 }
 class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
-  public final fields  : Cell<Cluster<stx.schema.core.type.Field>>;
+  public final fields  : Cell<Cluster<stx.schema.core.Field>>;
   public function new(name,pack,fields){
     super(name,pack);
     this.fields   = fields;
@@ -22,10 +22,10 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
     );
     state.put(STRecord(type));
     final fs = (this.fields.pop().toIter()).lfold(
-      (next:stx.schema.core.type.Field,memo:Cluster<stx.schema.core.type.Field>) -> {
+      (next:stx.schema.core.Field,memo:Cluster<stx.schema.core.Field>) -> {
         final id    = next.type.identity();
         final type  = state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)));
-        return memo.snoc(stx.schema.core.type.Field.make(next.name,type));
+        return memo.snoc(stx.schema.core.Field.make(next.name,type));
       },
       Cluster.unit()
     );
@@ -35,7 +35,7 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
     return next.toSType();
   }
 }
-@:using(stx.schema.core.type.RecordType.RecordTypeLift)
+@:using(stx.schema.type.RecordType.RecordTypeLift)
 @:forward abstract RecordType(RecordTypeApi) from RecordTypeApi to RecordTypeApi{
   public function new(self) this = self;
   @:noUsing static public function lift(self:RecordTypeApi):RecordType return new RecordType(self);

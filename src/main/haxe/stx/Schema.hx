@@ -46,7 +46,7 @@ typedef ProcureProperty                           = stx.schema.declare.ProcurePr
 // typedef SchemaAnonDeclarationDef                  = stx.schema.SchemaAnonDeclaration.SchemaAnonDeclarationDef;
 
 typedef Schema                                    = stx.schema.Schema;
-typedef SchemaSum                                 = stx.schema.Schema.SchemaSum;
+  typedef SchemaSum                                 = stx.schema.Schema.SchemaSum;
 
 typedef RelationType                              = stx.schema.RelationType;
 
@@ -60,5 +60,187 @@ typedef WithValidationDef                         = stx.schema.WithValidationDef
 
 typedef TyperContext                              = stx.schema.TyperContext;
 typedef TyperContextCls                           = stx.schema.TyperContext.TyperContextCls;
-typedef ValidationComplyApi                       = ComplyApi<Dynamic,stx.schema.core.SType,Report<SchemaFailure>>;
-typedef ValidationComplyCls                       = ComplyCls<Dynamic,stx.schema.core.SType,Report<SchemaFailure>>;
+typedef ValidationComplyApi                       = ComplyApi<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
+typedef ValidationComplyCls                       = ComplyCls<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
+
+typedef TypeStatus                                = stx.schema.type.TypeStatus;
+
+typedef BaseTypeApi                               = stx.schema.type.BaseType.BaseTypeApi;
+typedef BaseTypeCls                               = stx.schema.type.BaseType.BaseTypeCls;
+
+typedef STypeSum                                  = stx.schema.SType.STypeSum;
+typedef SType                                     = stx.schema.SType;
+
+typedef DataTypeApi                               = stx.schema.type.DataType.DataTypeApi;
+typedef DataTypeCls                               = stx.schema.type.DataType.DataTypeCls;
+typedef DataType                                  = stx.schema.type.DataType;
+
+typedef AnonTypeApi                               = stx.schema.type.AnonType.AnonTypeApi;
+typedef AnonTypeCls                               = stx.schema.type.AnonType.AnonTypeCls;
+typedef AnonType                                  = stx.schema.type.AnonType;
+
+typedef RecordTypeApi                             = stx.schema.type.RecordType.RecordTypeApi;
+typedef RecordTypeCls                             = stx.schema.type.RecordType.RecordTypeCls;
+typedef RecordType                                = stx.schema.type.RecordType;
+
+typedef GenericTypeApi                            = stx.schema.type.GenericType.GenericTypeApi;
+typedef GenericTypeCls                            = stx.schema.type.GenericType.GenericTypeCls;
+typedef GenericType                               = stx.schema.type.GenericType;
+
+typedef UnionTypeCls                              = stx.schema.type.UnionType.UnionTypeCls;
+typedef UnionTypeApi                              = stx.schema.type.UnionType.UnionTypeApi;
+typedef UnionType                                 = stx.schema.type.UnionType;
+
+
+typedef LinkTypeCls                               = stx.schema.type.LinkType.LinkTypeCls;
+typedef LinkTypeApi                               = stx.schema.type.LinkType.LinkTypeApi;
+typedef LinkType                                  = stx.schema.type.LinkType;
+
+typedef EnumTypeApi                               = stx.schema.type.EnumType.EnumTypeApi;
+typedef EnumTypeCls                               = stx.schema.type.EnumType.EnumTypeCls;
+typedef EnumType                                  = stx.schema.type.EnumType;
+
+typedef Has_toStringDef                           = stx.schema.type.Has_toStringDef;
+typedef Has_toStringApi                           = stx.schema.type.Has_toString.Has_toStringApi;
+typedef Has_toStringCls                           = stx.schema.type.Has_toString.Has_toStringCls;
+
+typedef WithValidationCls                         = stx.schema.WithValidation.WithValidationCls;
+typedef WithValidationApi                         = stx.schema.WithValidation.WithValidationApi;
+
+typedef LeafType                                  = stx.schema.type.LeafType;
+typedef LazyType                                  = stx.schema.type.LazyType;
+
+typedef GTypeContext                              = stx.schema.GTypeContext;
+typedef TypeContext                               = stx.schema.TypeContext;
+
+// typedef LinkTypeDef                            = stx.schema.type.LinkType.LinkTypeDef;
+// typedef LinkType                               = stx.schema.type.LinkType
+
+// typedef SchemaBool                             = stx.schema.type.term.SchemaBool;
+// typedef SchemaInt                              = stx.schema.type.term.SchemaInt;
+// typedef SchemaString                           = stx.schema.type.term.SchemaString;
+// typedef SchemaNull                             = stx.schema.type.term.SchemaNull;
+
+class LiftSchema_register{
+  static public function register(self:Schema,state:TypeContext){
+    return switch(self){
+      case SchScalar(def)   :
+        __.log().debug('register scalar'); 
+        def.register(state); 
+      case SchRecord(def)   : 
+        __.log().debug('register record');
+        def.register(state);
+      case SchEnum(def)     :
+        __.log().debug('register enum'); 
+        def.register(state);
+      case SchGeneric(def)  : 
+        __.log().debug('register generic');
+        def.register(state);
+      case SchUnion(def)    :
+        __.log().debug('register union'); 
+        def.register(state);
+      case SchLazy(fn)      : 
+        __.log().debug('register lazy');
+        final schema = fn();
+        __.log().debug('unlazy');
+        fn().register(state);
+      case SchType(type)    : 
+        __.log().debug('register type');
+        type.register(state);
+    }
+  }
+}
+class LiftDeclareSchema{
+  static public function register(self:DeclareSchema,state:TypeContext){
+    return state.get(self.identity()).fold(
+      ok -> ok,
+      () -> {
+        final type = STData(Ref.pure((LeafType.make(self.id.name,self.id.pack,self.validation):DataType)));
+        state.put(type);
+        return type;
+      }
+    );
+  }
+}
+class LiftDeclareUnionSchema{
+  static public function register(self:DeclareUnionSchema,state:TypeContext):SType{
+    final lhs   = self.lhs.register(state);
+    final rhs   = self.rhs.register(state);
+    final type  = UnionType.make(self.id.name,self.id.pack,lhs,rhs,self.validation).toSType();
+    state.put(type);
+    return type;
+  }
+}
+class LiftDeclareEnumSchema_register{
+  static public function register(self:DeclareEnumSchema,state:TypeContext):SType{
+    final type = EnumType.make(self.id.name,self.id.pack,self.constructors).toSType();
+    state.put(type);
+    return type;
+  }
+}
+class LiftDeclareGenericSchema_register{
+  static public function register(self:DeclareGenericSchema,state:TypeContext):SType{
+    var next : GenericType    = null;
+    final fn = function(){
+      __.log().debug(self.identity().toString());
+      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.identity()));
+    }
+    var type                  = STGeneric(Ref.make(fn));
+    state.put(type);
+
+    next = state.get(self.type.identity()).fold(
+      (ok:SType) -> {
+        final next = GenericType.make(self.id.name,self.id.pack,ok,self.validation);
+        return next;
+      },
+      () -> {
+        return __.option(self.type.pop).fold(
+          ok -> {
+            final subtype = ok().register(state);
+            final next    = GenericType.make(self.id.name,self.id.pack,subtype,self.validation);
+            return next;
+          },
+          () -> {
+            __.log().trace("HERERERER");
+            return GenericType.make(self.id.name,self.id.pack,STMono,self.validation);
+          }
+        );
+      }
+    );
+    state.put(type);
+    return type;
+  }
+}
+class LiftDeclareRecordSchema_register{
+  static public function register(self:DeclareRecordSchema,state:TypeContext):SType{
+    var next : RecordType     = null;
+    var fn                    = function(){
+      //__.log().debug(self.identity().toString());
+      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.identity()));
+    }
+    var type                  = STRecord(Ref.make(fn));
+
+    final fs = self.fields.lfold(
+      function (next:Procure,memo:Cluster<stx.schema.core.Field>):Cluster<stx.schema.core.Field> {
+        final id    = next.type.identity();
+        __.log().debug('$id');
+        final type : SType = switch(next){
+          case Property(prop)   : 
+            next.type.register(state);
+          case Attribute(attr)  : 
+            //__.tracer()(next.type.register(state));
+            final type = state.get(attr.type.identity()).def(() -> attr.type.register(state));
+            final link = LinkType.make(type,attr.relation,attr.inverse,attr.validation);
+            link.toSType().register(state);
+        }
+        __.log().debug(_ -> _.pure(type));
+        return memo.snoc(stx.schema.core.Field.make(next.name,type));
+      },
+      Cluster.unit()
+    );
+    
+    next = new RecordTypeCls(self.id.name,self.id.pack,fs);
+    state.put(type);
+    return type;
+  }
+}

@@ -1,6 +1,6 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
-import stx.schema.core.type.Field;
+import stx.schema.core.Field;
 
 interface AnonTypeApi extends BaseTypeApi{
   public final fields  : Cell<Cluster<Field>>;
@@ -49,7 +49,7 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     return Ident.make(uuid);
   }
 }
-@:using(stx.schema.core.type.AnonType.AnonTypeLift)
+@:using(stx.schema.type.AnonType.AnonTypeLift)
 @:forward abstract AnonType(AnonTypeApi) from AnonTypeApi to AnonTypeApi{
   public function new(self) this = self;
   @:noUsing static public function lift(self:AnonTypeApi):AnonType return new AnonType(self);

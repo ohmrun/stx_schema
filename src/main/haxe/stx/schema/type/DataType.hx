@@ -1,4 +1,4 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
 interface DataTypeApi extends BaseTypeApi{
   public final name : String;
@@ -24,7 +24,7 @@ abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
     return SType.make(STData(Ref.pure((this:DataType))));
   }
 }
-@:using(stx.schema.core.type.DataType.DataTypeLift)
+@:using(stx.schema.type.DataType.DataTypeLift)
 @:forward abstract DataType(DataTypeApi) from DataTypeApi to DataTypeApi{
   static public var _(default,never) = DataTypeLift;
   public function new(self) this = self;

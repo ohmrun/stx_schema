@@ -1,4 +1,4 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
 class LeafType extends DataTypeCls{
   @:noUsing static public function make(name,pack,?validation){

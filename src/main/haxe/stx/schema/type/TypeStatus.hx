@@ -1,4 +1,4 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
 enum abstract TypeStatus(String){
   var TYPE_UNTOUCHED;

@@ -1,6 +1,6 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
-@:using(stx.schema.core.type.LazyType.LazyTypeLift)
+@:using(stx.schema.type.LazyType.LazyTypeLift)
 class LazyType extends BaseTypeCls{
   public var type(get,null) :Null<SType>;
   public function get_type(){

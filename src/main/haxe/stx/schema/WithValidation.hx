@@ -1,4 +1,4 @@
-package stx.schema.core;
+package stx.schema;
 
 interface WithValidationApi{
   public var validation(get,null) : Validations;

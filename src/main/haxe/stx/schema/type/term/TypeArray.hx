@@ -1,6 +1,6 @@
-package stx.schema.core.type.term;
+package stx.schema.type.term;
 
-@:using(stx.schema.core.type.term.TypeArray.TypeArrayLift)
+@:using(stx.schema.type.term.TypeArray.TypeArrayLift)
 class TypeArray extends GenericTypeCls{
   static public var _(default,never) = TypeArrayLift;
   @:noUsing static public function make(type){

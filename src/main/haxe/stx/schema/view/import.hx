@@ -2,7 +2,6 @@ package stx.schema.view;
 
 import haxe.macro.Expr;
 import haxe.macro.Type;
-import stx.schema.core.GTypeContext;
 
 using tink.MacroApi;
 import haxe.macro.Expr;

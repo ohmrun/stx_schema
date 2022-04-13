@@ -18,5 +18,8 @@ using stx.Nano;
 using stx.Assert;
 using stx.Schema;
 using stx.Show;
+using stx.Log;
 
 using stx.g.Lang;
+
+import stx.schema.Core;

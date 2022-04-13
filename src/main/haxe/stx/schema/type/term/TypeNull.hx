@@ -1,4 +1,4 @@
-package stx.schema.core.type.term;
+package stx.schema.type.term;
 
 class TypeNull extends GenericTypeCls{
   static public var _(default,never) = TypeNullLift;

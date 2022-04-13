@@ -1,4 +1,4 @@
-package stx.schema.core.type;
+package stx.schema.type;
 
 interface LinkTypeApi extends BaseTypeApi{
   public final into      : SType;
@@ -53,7 +53,7 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
     );
   }
 }
-@:using(stx.schema.core.type.LinkType.LinkTypeLift)
+@:using(stx.schema.type.LinkType.LinkTypeLift)
 @:forward abstract LinkType(LinkTypeApi) from LinkTypeApi to LinkTypeApi{
   public function new(self) this = self;
   @:noUsing static public function lift(self:LinkTypeApi):LinkType return new LinkType(self);
