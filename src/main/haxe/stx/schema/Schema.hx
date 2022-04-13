@@ -102,22 +102,22 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
     return lift(SchGeneric(self));
   }
   static public function Array(ref):Schema{
-    return lift(SchGeneric(stx.schema.term.SchemaArray.make(ref)));
+    return lift(SchGeneric(stx.schema.declare.term.SchemaArray.make(ref)));
   }
   static public function Bool():Schema{
-    return lift(SchScalar(stx.schema.term.SchemaBool.make()));
+    return lift(SchScalar(stx.schema.declare.term.SchemaBool.make()));
   }
   static public function Float():Schema{
-    return lift(SchScalar(stx.schema.term.SchemaFloat.make()));
+    return lift(SchScalar(stx.schema.declare.term.SchemaFloat.make()));
   }
   static public function Int():Schema{
-    return lift(SchScalar(stx.schema.term.SchemaInt.make()));
+    return lift(SchScalar(stx.schema.declare.term.SchemaInt.make()));
   }
   static public function Null(ref):Schema{
-    return lift(SchGeneric(stx.schema.term.SchemaNull.make(ref)));
+    return lift(SchGeneric(stx.schema.declare.term.SchemaNull.make(ref)));
   }
   static public function String():Schema{
-    return lift(SchScalar(stx.schema.term.SchemaString.make()));
+    return lift(SchScalar(stx.schema.declare.term.SchemaString.make()));
   }
   public function toString(){
     return _.fold(

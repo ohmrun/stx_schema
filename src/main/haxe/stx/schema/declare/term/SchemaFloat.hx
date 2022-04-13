@@ -1,11 +1,11 @@
-package stx.schema.term;
+package stx.schema.declare.term;
 
-abstract SchemaString(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
-  static public var _(default,never) = SchemaStringLift;
+abstract SchemaFloat(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
+  static public var _(default,never) = SchemaFloatLift;
   @:noUsing static public function make(){
-    return new SchemaString(
+    return new SchemaFloat(
       DeclareSchema.make0(
-        'String',
+        'Float',
         ['std'],
         ValidationType(_.validate())
       )
@@ -18,8 +18,8 @@ abstract SchemaString(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDe
     return DeclareSchema.lift(this);
   }
 }
-class SchemaStringLift{
+class SchemaFloatLift{
   static public function validate(){
-    return new stx.schema.validation.term.String();
+    return new stx.schema.validation.term.Float();
   }
 }

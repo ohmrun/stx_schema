@@ -11,10 +11,10 @@ class TyperContextCls{
         final map_put = (schema:Schema)->{
           map.set(schema.identity().toString(),schema);
         }
-        map_put(SchScalar(stx.schema.term.SchemaBool.make()));
-        map_put(SchScalar(stx.schema.term.SchemaFloat.make()));
-        map_put(SchScalar(stx.schema.term.SchemaInt.make()));
-        map_put(SchScalar(stx.schema.term.SchemaString.make()));
+        map_put(SchScalar(stx.schema.declare.term.SchemaBool.make()));
+        map_put(SchScalar(stx.schema.declare.term.SchemaFloat.make()));
+        map_put(SchScalar(stx.schema.declare.term.SchemaInt.make()));
+        map_put(SchScalar(stx.schema.declare.term.SchemaString.make()));
 
         return map;
       }

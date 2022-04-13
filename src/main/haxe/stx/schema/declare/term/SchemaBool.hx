@@ -1,4 +1,4 @@
-package stx.schema.term;
+package stx.schema.declare.term;
 
 abstract SchemaBool(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
   static public var _(default,never) = SchemaBoolLift;

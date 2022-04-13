@@ -1,4 +1,4 @@
-package stx.schema.term;
+package stx.schema.declare.term;
 
 abstract SchemaArray(DeclareGenericSchemaDef) from DeclareGenericSchemaDef to DeclareGenericSchemaDef{
   static public var _(default,never) = SchemaArrayLift;

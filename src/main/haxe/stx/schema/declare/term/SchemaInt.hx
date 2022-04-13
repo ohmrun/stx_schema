@@ -1,11 +1,11 @@
-package stx.schema.term;
+package stx.schema.declare.term;
 
-abstract SchemaFloat(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
-  static public var _(default,never) = SchemaFloatLift;
+abstract SchemaInt(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
+  static public var _(default,never) = SchemaIntLift;
   @:noUsing static public function make(){
-    return new SchemaFloat(
+    return new SchemaInt(
       DeclareSchema.make0(
-        'Float',
+        'Int',
         ['std'],
         ValidationType(_.validate())
       )
@@ -18,8 +18,8 @@ abstract SchemaFloat(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef
     return DeclareSchema.lift(this);
   }
 }
-class SchemaFloatLift{
+class SchemaIntLift{
   static public function validate(){
-    return new stx.schema.validation.term.Float();
+    return new stx.schema.validation.term.Int();
   }
 }

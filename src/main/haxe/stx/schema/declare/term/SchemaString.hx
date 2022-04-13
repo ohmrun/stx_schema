@@ -1,11 +1,11 @@
-package stx.schema.term;
+package stx.schema.declare.term;
 
-abstract SchemaInt(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
-  static public var _(default,never) = SchemaIntLift;
+abstract SchemaString(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
+  static public var _(default,never) = SchemaStringLift;
   @:noUsing static public function make(){
-    return new SchemaInt(
+    return new SchemaString(
       DeclareSchema.make0(
-        'Int',
+        'String',
         ['std'],
         ValidationType(_.validate())
       )
@@ -18,8 +18,8 @@ abstract SchemaInt(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
     return DeclareSchema.lift(this);
   }
 }
-class SchemaIntLift{
+class SchemaStringLift{
   static public function validate(){
-    return new stx.schema.validation.term.Int();
+    return new stx.schema.validation.term.String();
   }
 }
