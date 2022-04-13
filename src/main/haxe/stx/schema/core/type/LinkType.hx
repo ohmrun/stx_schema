@@ -56,7 +56,7 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
 @:using(stx.schema.core.type.LinkType.LinkTypeLift)
 @:forward abstract LinkType(LinkTypeApi) from LinkTypeApi to LinkTypeApi{
   public function new(self) this = self;
-  static public function lift(self:LinkTypeApi):LinkType return new LinkType(self);
+  @:noUsing static public function lift(self:LinkTypeApi):LinkType return new LinkType(self);
 
   public function prj():LinkTypeApi return this;
   private var self(get,never):LinkType;

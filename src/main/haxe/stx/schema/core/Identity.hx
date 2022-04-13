@@ -8,7 +8,7 @@ typedef IdentityDef = IdentDef & {
 @:forward abstract Identity(IdentityDef) from IdentityDef to IdentityDef{
   static public var _(default,never) = IdentityLift;
   public function new(self) this = self;
-  static public function lift(self:IdentityDef):Identity return new Identity(self);
+  @:noUsing static public function lift(self:IdentityDef):Identity return new Identity(self);
 
   public function prj():IdentityDef return this;
   private var self(get,never):Identity;

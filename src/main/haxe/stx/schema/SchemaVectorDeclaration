@@ -6,9 +6,9 @@ typedef SchemaVectorDeclarationDef = SchemaDeclarationDef & {
 @:forward abstract SchemaVectorDeclaration(SchemaVectorDeclarationDef) from SchemaVectorDeclarationDef to SchemaVectorDeclarationDef{
   static public var _(default,never) = SchemaVectorDeclarationLift;
   public function new(self) this = self;
-  static public function lift(self:SchemaVectorDeclarationDef):SchemaVectorDeclaration return new SchemaVectorDeclaration(self);
+  @:noUsing static public function lift(self:SchemaVectorDeclarationDef):SchemaVectorDeclaration return new SchemaVectorDeclaration(self);
 
-  static public function make(name,pack,type,?validation){
+  @:noUsing static public function make(name,pack,type,?validation){
     return lift({
       id            : Identity.fromIdent(Ident.make(name,pack)),
       type          : type,

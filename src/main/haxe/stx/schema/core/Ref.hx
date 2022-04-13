@@ -11,10 +11,10 @@ typedef RefDef<T:Has_toStringDef> = {
   }
   inline function new(self) this = self;
   
-  static public function lift<T:Has_toStringDef>(self:RefDef<T>){
+  @:noUsing static public function lift<T:Has_toStringDef>(self:RefDef<T>){
     return new Ref(self);
   }
-  static public function make<T:Has_toStringDef>(fn:() -> T){
+  @:noUsing static public function make<T:Has_toStringDef>(fn:() -> T){
     return lift({
         pop       : fn,
         toString  : () -> fn().toString()

@@ -8,16 +8,16 @@ typedef SchemaDeclarationDef = stx.schema.WithValidationDef & {
 @:forward abstract SchemaDeclaration(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaDeclarationDef{
   static public var _(default,never) = SchemaDeclarationLift;
   public function new(self) this = self;
-  static public function lift(self:SchemaDeclarationDef):SchemaDeclaration return new SchemaDeclaration(self);
+  @:noUsing static public function lift(self:SchemaDeclarationDef):SchemaDeclaration return new SchemaDeclaration(self);
 
 
-  static public function make(name,pack,lhs,rhs,?validation){
+  @:noUsing static public function make(name,pack,lhs,rhs,?validation){
     return lift({
       id          : Identity.make(Ident.make(name,pack),lhs,rhs),
       validation  : validation
     });
   }
-  static public function make0(name,pack,?validation){
+  @:noUsing static public function make0(name,pack,?validation){
     return make(name,pack,None,None,validation);
   }
   public function prj():SchemaDeclarationDef return this;

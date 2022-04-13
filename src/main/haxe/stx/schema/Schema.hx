@@ -13,7 +13,7 @@ enum SchemaSum{
 abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   static public var _(default,never) = SchemaLift;
   public function new(self) this = self;
-  static public function lift(self:SchemaSum):Schema return new Schema(self);
+  @:noUsing static public function lift(self:SchemaSum):Schema return new Schema(self);
 
   public function prj():SchemaSum return this;
   private var self(get,never):Schema;
@@ -76,6 +76,24 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.resolve(state),
       x -> SchType(x)
     );
+  }
+  @:from static public function fromRecordObject(self:{ name : String, ?pack : Array<String>, fields : { ?properties : Map<String,PropertyDeclaration> , ?attributes : Map<String,AttributeDeclaration> }, ?validation : Validations}){
+    return stx.schema.SchemaRecordDeclaration.make0(
+        self.name,self.pack,
+        Procurements.fromObject(self.fields),
+        self.validation
+      ).toSchema();
+  }
+  @:from static public function fromScalarObject(self:{ name : String, ?pack : Array<String>, ?validation : Validations}){
+    return fromSchemaDeclaration(
+      SchemaDeclaration.make(
+        self.name,self.pack,None,None,
+        self.validation
+      )
+    );
+  }
+  @:from static public function fromGenericObject(self:{name : String, ?pack : Array<String>, ?validation : Validations, ?type : Schema }){
+    return SchemaGenericDeclaration.make(self.name,self.pack,self.type,self.validation).toSchema();
   }
   @:from static public function fromSchemaDeclaration(self:SchemaDeclarationDef):Schema{
     return lift(SchScalar(self));

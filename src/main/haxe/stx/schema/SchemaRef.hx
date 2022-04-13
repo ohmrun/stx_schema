@@ -9,7 +9,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
 @:forward abstract SchemaRef(SchemaRefDef) from SchemaRefDef to SchemaRefDef{
   static public var _(default,never) = SchemaRefLift;
   public function new(self) this = self;
-  static public function lift(self:SchemaRefDef):SchemaRef return new SchemaRef(self);
+  @:noUsing static public function lift(self:SchemaRefDef):SchemaRef return new SchemaRef(self);
 
   public function resolve(state:TyperContext):SchemaRef{
     __.log().debug('resolve ref');
@@ -53,7 +53,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
       }
     );
   }
-  static public function make(identity:Identity,?pop){
+  @:noUsing static public function make(identity:Identity,?pop){
     return lift({
       name  : identity.name,
       pack  : identity.pack,
@@ -62,7 +62,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
       pop   : pop
     });
   }
-  static public function make0(name:String,pack:Cluster<String>,lhs:Option<Identity>,rhs:Option<Identity>,?pop){
+  @:noUsing static public function make0(name:String,pack:Cluster<String>,lhs:Option<Identity>,rhs:Option<Identity>,?pop){
     return make(Identity.make(Ident.make(name,pack),lhs,rhs),pop);
   }
   @:from static inline public function fromSchemaSum(self:SchemaSum){
@@ -84,6 +84,11 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
       lhs   : identity.lhs,
       rhs   : identity.rhs
     });
+  }
+  @:from static public inline function fromString(self:String){
+    final parts = self.split(".");
+    final name  = parts.pop();
+    return fromIdent(Ident.make(name,parts)); 
   }
   @:from static inline public function fromIdent(self:Ident){
     return make0(self.name,self.pack,None,None);

@@ -6,16 +6,16 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
 @:forward abstract SchemaRecordDeclaration(SchemaRecordDeclarationDef) from SchemaRecordDeclarationDef to SchemaRecordDeclarationDef{
   public function new(self) this = self;
   static public var _(default,never) = SchemaRecordDeclarationLift;
-  static public function lift(self:SchemaRecordDeclarationDef):SchemaRecordDeclaration return new SchemaRecordDeclaration(self);
+  @:noUsing static public function lift(self:SchemaRecordDeclarationDef):SchemaRecordDeclaration return new SchemaRecordDeclaration(self);
 
-  static public function make(ident,fields,?validation){
+  @:noUsing static public function make(ident:Ident,fields:Procurements,?validation:Validations){
     return lift({
       id          : Identity.fromIdent(ident),
       fields      : fields,
       validation  : validation
     });
   }
-  static public function make0(name:String,pack,fields:Procurements,?validation){
+  @:noUsing static public function make0(name:String,pack,fields:Procurements,?validation){
     return make(
       Ident.make(name,pack),
       fields,
@@ -52,6 +52,9 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
       procurement -> procurement.toString()      
     ).prj().join(",");
     return '$thiz($rest)';
+  }
+  public function toSchema(){
+    return Schema.lift(SchRecord(this));
   }
 }
 class SchemaRecordDeclarationLift{

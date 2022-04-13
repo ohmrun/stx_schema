@@ -1,7 +1,7 @@
 package stx.schema.core;
 
 class TypeContext extends Clazz{
-  static public function make(){
+  @:noUsing static public function make(){
     return new TypeContext();
   }
   public final register : StringMap<Type>;

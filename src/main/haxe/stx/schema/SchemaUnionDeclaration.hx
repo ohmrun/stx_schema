@@ -7,9 +7,9 @@ typedef SchemaUnionDeclarationDef = SchemaDeclarationDef & {
 @:forward abstract SchemaUnionDeclaration(SchemaUnionDeclarationDef) from SchemaUnionDeclarationDef to SchemaUnionDeclarationDef{
   static public var _(default,never) = SchemaUnionDeclarationLift;
   public function new(self) this = self;
-  static public function lift(self:SchemaUnionDeclarationDef):SchemaUnionDeclaration return new SchemaUnionDeclaration(self);
+  @:noUsing static public function lift(self:SchemaUnionDeclarationDef):SchemaUnionDeclaration return new SchemaUnionDeclaration(self);
 
-  static public function make(ident:Ident,lhs,rhs,?validation){
+  @:noUsing static public function make(ident:Ident,lhs,rhs,?validation){
     return lift({
       id            : Identity.fromIdent(ident),
       lhs           : lhs,
@@ -17,7 +17,7 @@ typedef SchemaUnionDeclarationDef = SchemaDeclarationDef & {
       validation    : _.validation.concat(__.option(validation).defv(Cluster.unit()))
     });
   }
-  static public function make0(name,pack,lhs,rhs,?validation){
+  @:noUsing static public function make0(name,pack,lhs,rhs,?validation){
     return make(
       Ident.make(name,pack),
       lhs,

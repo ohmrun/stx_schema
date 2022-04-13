@@ -6,7 +6,7 @@ typedef AttributeDeclarationDef = PropertyDeclarationDef & {
 }
 @:forward abstract AttributeDeclaration(AttributeDeclarationDef) from AttributeDeclarationDef to AttributeDeclarationDef{
   public function new(self) this = self;
-  static public function lift(self:AttributeDeclarationDef):AttributeDeclaration return new AttributeDeclaration(self);
+  @:noUsing static public function lift(self:AttributeDeclarationDef):AttributeDeclaration return new AttributeDeclaration(self);
 
   public function prj():AttributeDeclarationDef return this;
   private var self(get,never):AttributeDeclaration;

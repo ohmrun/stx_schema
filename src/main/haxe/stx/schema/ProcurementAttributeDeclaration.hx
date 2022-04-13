@@ -8,8 +8,8 @@ typedef ProcurementAttributeDeclarationDef = ProcurementPropertyDeclarationDef &
 @:forward abstract ProcurementAttributeDeclaration(ProcurementAttributeDeclarationDef) from ProcurementAttributeDeclarationDef to ProcurementAttributeDeclarationDef{
    static public var _(default,never) = ProcurementAttributeDeclarationLift;
   public function new(self) this = self;
-  static public function lift(self:ProcurementAttributeDeclarationDef):ProcurementAttributeDeclaration return new ProcurementAttributeDeclaration(self);
-  static public function make(name,type,relation,inverse,?validation){
+  @:noUsing static public function lift(self:ProcurementAttributeDeclarationDef):ProcurementAttributeDeclaration return new ProcurementAttributeDeclaration(self);
+  @:noUsing static public function make(name,type,relation,inverse,?validation){
     return lift({
       name        : name,
       type        : type,

@@ -8,7 +8,7 @@ enum ProcurementSum{
 @:forward abstract Procurement(ProcurementSum) from ProcurementSum to ProcurementSum{
   static public var _(default,never) = ProcurementLift;
   public function new(self) this = self;
-  static public function lift(self:ProcurementSum):Procurement return new Procurement(self);
+  @:noUsing static public function lift(self:ProcurementSum):Procurement return new Procurement(self);
 
   public function prj():ProcurementSum return this;
   private var self(get,never):Procurement;

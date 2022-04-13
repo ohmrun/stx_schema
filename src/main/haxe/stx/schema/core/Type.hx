@@ -134,8 +134,8 @@ class TypeCls{
 @:forward abstract Type(TypeCls) from TypeCls to TypeCls{
   static public var _(default,never) = TypeLift;  
   public function new(self) this = self;
-  static public function lift(self:TypeCls):Type return new Type(self);
-  static public function make(self:TypeSum):Type{
+  @:noUsing static public function lift(self:TypeCls):Type return new Type(self);
+  @:noUsing static public function make(self:TypeSum):Type{
     return lift(new TypeCls(self));
   }
   public function prj():TypeCls return this;

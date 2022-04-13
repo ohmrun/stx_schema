@@ -52,7 +52,7 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
 @:using(stx.schema.core.type.AnonType.AnonTypeLift)
 @:forward abstract AnonType(AnonTypeApi) from AnonTypeApi to AnonTypeApi{
   public function new(self) this = self;
-  static public function lift(self:AnonTypeApi):AnonType return new AnonType(self);
+  @:noUsing static public function lift(self:AnonTypeApi):AnonType return new AnonType(self);
 
   public function prj():AnonTypeApi return this;
   private var self(get,never):AnonType;

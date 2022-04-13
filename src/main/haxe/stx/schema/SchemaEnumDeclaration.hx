@@ -7,16 +7,16 @@ typedef SchemaEnumDeclarationDef = SchemaDeclarationDef & {
 @:forward abstract SchemaEnumDeclaration(SchemaEnumDeclarationDef) from SchemaEnumDeclarationDef to SchemaEnumDeclarationDef{
   static public var _(default,never) = SchemaEnumDeclarationLift;
   public function new(self) this = self;
-  static public function lift(self:SchemaEnumDeclarationDef):SchemaEnumDeclaration return new SchemaEnumDeclaration(self);
+  @:noUsing static public function lift(self:SchemaEnumDeclarationDef):SchemaEnumDeclaration return new SchemaEnumDeclaration(self);
 
-  static public function make(ident:Ident,constructors,?validation){
+  @:noUsing static public function make(ident:Ident,constructors,?validation){
     return lift({
       id            : Identity.fromIdent(ident),
       constructors  : constructors,
     validation    : _.validation.concat(__.option(validation).defv(Cluster.unit()))
     });
   }
-  static public function make0(name:String,pack,constructors,?validation){
+  @:noUsing static public function make0(name:String,pack,constructors,?validation){
     return make(Ident.make(name,pack),constructors,validation);
   }
   public function identity(){

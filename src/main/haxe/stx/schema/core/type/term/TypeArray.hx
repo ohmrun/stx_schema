@@ -3,7 +3,7 @@ package stx.schema.core.type.term;
 @:using(stx.schema.core.type.term.TypeArray.TypeArrayLift)
 class TypeArray extends GenericTypeCls{
   static public var _(default,never) = TypeArrayLift;
-  static public function make(type){
+  @:noUsing static public function make(type){
     return new TypeArray(type);
   }
   public function new(type:Type){

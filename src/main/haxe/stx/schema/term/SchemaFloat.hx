@@ -2,7 +2,7 @@ package stx.schema.term;
 
 abstract SchemaFloat(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaDeclarationDef{
   static public var _(default,never) = SchemaFloatLift;
-  static public function make(){
+  @:noUsing static public function make(){
     return new SchemaFloat(
       SchemaDeclaration.make0(
         'Float',

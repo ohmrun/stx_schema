@@ -28,7 +28,7 @@ abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
 @:forward abstract DataType(DataTypeApi) from DataTypeApi to DataTypeApi{
   static public var _(default,never) = DataTypeLift;
   public function new(self) this = self;
-  static public function lift(self:DataTypeApi):DataType return new DataType(self);
+  @:noUsing static public function lift(self:DataTypeApi):DataType return new DataType(self);
 
   public function prj():DataTypeApi return this;
   private var self(get,never):DataType;

@@ -22,7 +22,7 @@ enum SchemaFailureSum{
 }
 abstract SchemaFailure(SchemaFailureSum) from SchemaFailureSum to SchemaFailureSum{
   public function new(self) this = self;
-  static public function lift(self:SchemaFailureSum):SchemaFailure return new SchemaFailure(self);
+  @:noUsing static public function lift(self:SchemaFailureSum):SchemaFailure return new SchemaFailure(self);
 
   public function prj():SchemaFailureSum return this;
   private var self(get,never):SchemaFailure;

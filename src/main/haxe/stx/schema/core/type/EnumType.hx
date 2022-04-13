@@ -23,12 +23,12 @@ class EnumTypeCls extends DataTypeCls implements EnumTypeApi{
 @:using(stx.schema.core.type.EnumType.EnumTypeLift)
 @:forward abstract EnumType(EnumTypeApi) from EnumTypeApi to EnumTypeApi{
   public function new(self) this = self;
-  static public function lift(self:EnumTypeApi):EnumType return new EnumType(self);
+  @:noUsing static public function lift(self:EnumTypeApi):EnumType return new EnumType(self);
 
   public function prj():EnumTypeApi return this;
   private var self(get,never):EnumType;
   private function get_self():EnumType return lift(this);
-  static public function make(name,pack,constructors,?validation){
+  @:noUsing static public function make(name,pack,constructors,?validation){
     return lift(new EnumTypeCls(name,pack,constructors,validation));
   }
 }

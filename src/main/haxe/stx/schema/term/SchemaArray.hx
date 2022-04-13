@@ -2,7 +2,7 @@ package stx.schema.term;
 
 abstract SchemaArray(SchemaGenericDeclarationDef) from SchemaGenericDeclarationDef to SchemaGenericDeclarationDef{
   static public var _(default,never) = SchemaArrayLift;
-  static public function make(ref:SchemaRef){
+  @:noUsing static public function make(ref:SchemaRef){
     return new SchemaArray(
       SchemaGenericDeclaration.make(
         'Array',

@@ -52,14 +52,14 @@ class TyperContextCls{
 }
 @:forward abstract TyperContext(TyperContextCls) from TyperContextCls to TyperContextCls {
   public function new(self) this = self;
-  static public function make(schemas:Cluster<Schema>){
+  @:noUsing static public function make(schemas:Cluster<Schema>){
     var self = unit();
     for(schema in schemas){
       self.put(schema);
     }
     return self;
   }
-  static public function lift(self:TyperContextCls):TyperContext return new TyperContext(self);
+  @:noUsing static public function lift(self:TyperContextCls):TyperContext return new TyperContext(self);
   static public function unit(){
     return lift(new TyperContextCls());
   }

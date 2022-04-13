@@ -5,7 +5,7 @@ typedef PropertyDeclarationDef = stx.schema.WithValidationDef & {
 }
 @:forward abstract PropertyDeclaration(PropertyDeclarationDef) from PropertyDeclarationDef to PropertyDeclarationDef{
   public function new(self) this = self;
-  static public function lift(self:PropertyDeclarationDef):PropertyDeclaration return new PropertyDeclaration(self);
+  @:noUsing static public function lift(self:PropertyDeclarationDef):PropertyDeclaration return new PropertyDeclaration(self);
 
   public function prj():PropertyDeclarationDef return this;
   private var self(get,never):PropertyDeclaration;

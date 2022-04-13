@@ -8,7 +8,7 @@ typedef ProcurementsDef = Cluster<Procurement>;
 @:forward(lfold,map) abstract Procurements(ProcurementsDef) from ProcurementsDef to ProcurementsDef{
   static public var _(default,never) = ProcurementsLift;
   public function new(self) this = self;
-  static public function lift(self:ProcurementsDef):Procurements return new Procurements(self);
+  @:noUsing static public function lift(self:ProcurementsDef):Procurements return new Procurements(self);
 
   public function prj():ProcurementsDef return this;
   private var self(get,never):Procurements;

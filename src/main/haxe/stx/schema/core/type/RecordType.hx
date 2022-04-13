@@ -38,7 +38,7 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
 @:using(stx.schema.core.type.RecordType.RecordTypeLift)
 @:forward abstract RecordType(RecordTypeApi) from RecordTypeApi to RecordTypeApi{
   public function new(self) this = self;
-  static public function lift(self:RecordTypeApi):RecordType return new RecordType(self);
+  @:noUsing static public function lift(self:RecordTypeApi):RecordType return new RecordType(self);
 
   public function prj():RecordTypeApi return this;
   private var self(get,never):RecordType;
@@ -46,6 +46,14 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
 
   @:noUsing static public function make(name,pack,fields){ 
     return lift(new RecordTypeCls(name,pack,fields));
+  }
+
+  @:from static function fromObject(self:{ name : String, ?pack : Array<String>, fields : Map<String,Type> }):RecordType{
+    final fields = [];
+    for(k => v in self.fields){
+      fields.push(Field.make(k,v));
+    }
+    return new RecordTypeCls(self.name,self.pack,fields);
   }
 }
 class RecordTypeLift{

@@ -2,7 +2,7 @@ package stx.schema.core.type.term;
 
 class IntoType extends DataTypeCls{
  
-  static public function make(ident:Ident,debrujin:Int){
+  @:noUsing static public function make(ident:Ident,debrujin:Int){
     return new IntoType(ident.name,ident.pack,debrujin);
   }
   public function new(name,pack,debrujin){

@@ -43,7 +43,7 @@ class LazyType extends BaseTypeCls{
   public function toString(){
     return id.toString();
   }
-  static public function make(id,context){
+  @:noUsing static public function make(id,context){
     return new LazyType(id,context);
   }
 }

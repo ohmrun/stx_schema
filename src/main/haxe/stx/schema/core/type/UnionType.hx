@@ -39,7 +39,7 @@ class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
 @:using(stx.schema.core.type.UnionType.UnionTypeLift)
 @:forward abstract UnionType(UnionTypeApi) from UnionTypeApi to UnionTypeApi{
   public function new(self) this = self;
-  static public function lift(self:UnionTypeApi):UnionType return new UnionType(self);
+  @:noUsing static public function lift(self:UnionTypeApi):UnionType return new UnionType(self);
 
   public function prj():UnionTypeApi return this;
   private var self(get,never):UnionType;

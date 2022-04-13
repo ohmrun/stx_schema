@@ -2,7 +2,7 @@ package stx.schema.term;
 
 abstract SchemaBool(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaDeclarationDef{
   static public var _(default,never) = SchemaBoolLift;
-  static public function make(){
+  @:noUsing static public function make(){
     return new SchemaBool(
       SchemaDeclaration.make0(
         'Bool',

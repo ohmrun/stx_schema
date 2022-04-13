@@ -48,7 +48,7 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
 @:forward abstract GenericType(GenericTypeApi) from GenericTypeApi to GenericTypeApi{
   static public var _(default,never) = GenericTypeLift;
   public function new(self) this = self;
-  static public function lift(self:GenericTypeApi):GenericType return new GenericType(self);
+  @:noUsing static public function lift(self:GenericTypeApi):GenericType return new GenericType(self);
 
   public function prj():GenericTypeApi return this;
   private var self(get,never):GenericType;

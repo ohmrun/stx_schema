@@ -2,7 +2,7 @@ package stx.schema.term;
 
 abstract SchemaNull(SchemaGenericDeclarationDef) from SchemaGenericDeclarationDef to SchemaGenericDeclarationDef{
   static public var _(default,never) = SchemaNullLift;
-  static public function make(ref){
+  @:noUsing static public function make(ref){
     return new SchemaNull(
       SchemaGenericDeclaration.make(
         'Null',

@@ -8,8 +8,8 @@ typedef ProcurementPropertyDeclarationDef = stx.schema.WithValidationDef & {
 @:forward abstract ProcurementPropertyDeclaration(ProcurementPropertyDeclarationDef) from ProcurementPropertyDeclarationDef to ProcurementPropertyDeclarationDef{
   static public var _(default,never) = ProcurementPropertyDeclarationLift;
   public function new(self) this = self;
-  static public function lift(self:ProcurementPropertyDeclarationDef):ProcurementPropertyDeclaration return new ProcurementPropertyDeclaration(self);
-  static public function make(name,type,?validation){
+  @:noUsing static public function lift(self:ProcurementPropertyDeclarationDef):ProcurementPropertyDeclaration return new ProcurementPropertyDeclaration(self);
+  @:noUsing static public function make(name,type,?validation){
     return lift({
       name : name,
       type : type,

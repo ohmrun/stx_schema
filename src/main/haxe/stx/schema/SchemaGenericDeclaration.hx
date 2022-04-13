@@ -6,9 +6,9 @@ typedef SchemaGenericDeclarationDef = SchemaDeclarationDef & {
 @:forward abstract SchemaGenericDeclaration(SchemaGenericDeclarationDef) from SchemaGenericDeclarationDef to SchemaGenericDeclarationDef{
   static public var _(default,never) = SchemaGenericDeclarationLift;
   public function new(self) this = self;
-  static public function lift(self:SchemaGenericDeclarationDef):SchemaGenericDeclaration return new SchemaGenericDeclaration(self);
+  @:noUsing static public function lift(self:SchemaGenericDeclarationDef):SchemaGenericDeclaration return new SchemaGenericDeclaration(self);
 
-  static public function make(name,pack,type,?validation:Validations):SchemaGenericDeclaration{
+  @:noUsing static public function make(name,pack,type:SchemaRef,?validation:Validations):SchemaGenericDeclaration{
     return lift({
       id            : Identity.fromIdent(Ident.make(name,pack)),
       type          : type,
