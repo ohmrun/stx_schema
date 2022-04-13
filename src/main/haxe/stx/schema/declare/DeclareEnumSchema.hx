@@ -1,13 +1,13 @@
-package stx.schema;
+package stx.schema.declare;
 
-typedef SchemaEnumDeclarationDef = SchemaDeclarationDef & {
+typedef DeclareEnumSchemaDef = DeclareSchemaDef & {
   final constructors : Cluster<String>;
 }
-@:using(stx.schema.SchemaEnumDeclaration.SchemaEnumDeclarationLift)
-@:forward abstract SchemaEnumDeclaration(SchemaEnumDeclarationDef) from SchemaEnumDeclarationDef to SchemaEnumDeclarationDef{
-  static public var _(default,never) = SchemaEnumDeclarationLift;
+@:using(stx.schema.declare.DeclareEnumSchema.DeclareEnumSchemaLift)
+@:forward abstract DeclareEnumSchema(DeclareEnumSchemaDef) from DeclareEnumSchemaDef to DeclareEnumSchemaDef{
+  static public var _(default,never) = DeclareEnumSchemaLift;
   public function new(self) this = self;
-  @:noUsing static public function lift(self:SchemaEnumDeclarationDef):SchemaEnumDeclaration return new SchemaEnumDeclaration(self);
+  @:noUsing static public function lift(self:DeclareEnumSchemaDef):DeclareEnumSchema return new DeclareEnumSchema(self);
 
   @:noUsing static public function make(ident:Ident,constructors,?validation){
     return lift({
@@ -22,17 +22,17 @@ typedef SchemaEnumDeclarationDef = SchemaDeclarationDef & {
   public function identity(){
     return this.id;  
   }
-  public function prj():SchemaEnumDeclarationDef return this;
-  private var self(get,never):SchemaEnumDeclaration;
-  private function get_self():SchemaEnumDeclaration return lift(this);
+  public function prj():DeclareEnumSchemaDef return this;
+  private var self(get,never):DeclareEnumSchema;
+  private function get_self():DeclareEnumSchema return lift(this);
 
   public function toString(){
     final thiz = identity().toString();
     return '$thiz(${this.constructors.join(",")})';
   }
 } 
-class SchemaEnumDeclarationLift{
-  static public function resolve(self:SchemaEnumDeclaration,state:TyperContext):Schema{
+class DeclareEnumSchemaLift{
+  static public function resolve(self:DeclareEnumSchema,state:TyperContext):Schema{
     state.put(SchEnum(self));
     return SchEnum(self);
   }
@@ -61,12 +61,12 @@ class SchemaEnumDeclarationLift{
     }
   ");
   /**
-    Creates a GTypeDeclaration that declares the structure of self:SchemaEnumDeclaration.
+    Creates a GTypeDeclaration that declares the structure of self:DeclareEnumSchema.
   **/
-  static public inline function to_self_constructor(self:SchemaEnumDeclaration){
+  static public inline function to_self_constructor(self:DeclareEnumSchema){
     final e = __.g().expr();
     return __.g().expr().Call(
-      e.Path("stx.schema.SchemaEnumDeclaration.make"),
+      e.Path("stx.declare.schema.DeclareEnumSchema.make"),
       [
         e.Call(
           e.Path('stx.nano.Ident.make'),

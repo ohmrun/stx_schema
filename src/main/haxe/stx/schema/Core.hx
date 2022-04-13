@@ -9,8 +9,8 @@ typedef BaseTypeCls                 = stx.schema.core.type.BaseType.BaseTypeCls;
 typedef FieldDef                    = stx.schema.core.type.Field.FieldDef;
 typedef Field                       = stx.schema.core.type.Field;
 
-typedef TypeSum                     = stx.schema.core.Type.TypeSum;
-typedef Type                        = stx.schema.core.Type;
+typedef STypeSum                    = stx.schema.core.SType.STypeSum;
+typedef SType                       = stx.schema.core.SType;
 
 typedef DataTypeApi                 = stx.schema.core.type.DataType.DataTypeApi;
 typedef DataTypeCls                 = stx.schema.core.type.DataType.DataTypeCls;
@@ -96,46 +96,46 @@ class LiftSchema_register{
     }
   }
 }
-class LiftSchemaDeclaration{
-  static public function register(self:SchemaDeclaration,state:TypeContext){
+class LiftDeclareSchema{
+  static public function register(self:DeclareSchema,state:TypeContext){
     return state.get(self.identity()).fold(
       ok -> ok,
       () -> {
-        final type = TData(Ref.pure((LeafType.make(self.id.name,self.id.pack,self.validation):DataType)));
+        final type = STData(Ref.pure((LeafType.make(self.id.name,self.id.pack,self.validation):DataType)));
         state.put(type);
         return type;
       }
     );
   }
 }
-class LiftSchemaUnionDeclaration{
-  static public function register(self:SchemaUnionDeclaration,state:TypeContext):Type{
+class LiftDeclareUnionSchema{
+  static public function register(self:DeclareUnionSchema,state:TypeContext):SType{
     final lhs   = self.lhs.register(state);
     final rhs   = self.rhs.register(state);
-    final type  = UnionType.make(self.id.name,self.id.pack,lhs,rhs,self.validation).toType();
+    final type  = UnionType.make(self.id.name,self.id.pack,lhs,rhs,self.validation).toSType();
     state.put(type);
     return type;
   }
 }
-class LiftSchemaEnumDeclaration_register{
-  static public function register(self:SchemaEnumDeclaration,state:TypeContext):Type{
-    final type = EnumType.make(self.id.name,self.id.pack,self.constructors).toType();
+class LiftDeclareEnumSchema_register{
+  static public function register(self:DeclareEnumSchema,state:TypeContext):SType{
+    final type = EnumType.make(self.id.name,self.id.pack,self.constructors).toSType();
     state.put(type);
     return type;
   }
 }
-class LiftSchemaGenericDeclaration_register{
-  static public function register(self:SchemaGenericDeclaration,state:TypeContext):Type{
+class LiftDeclareGenericSchema_register{
+  static public function register(self:DeclareGenericSchema,state:TypeContext):SType{
     var next : GenericType    = null;
     final fn = function(){
       __.log().debug(self.identity().toString());
       return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.identity()));
     }
-    var type                  = TGeneric(Ref.make(fn));
+    var type                  = STGeneric(Ref.make(fn));
     state.put(type);
 
     next = state.get(self.type.identity()).fold(
-      (ok:Type) -> {
+      (ok:SType) -> {
         final next = GenericType.make(self.id.name,self.id.pack,ok,self.validation);
         return next;
       },
@@ -148,7 +148,7 @@ class LiftSchemaGenericDeclaration_register{
           },
           () -> {
             __.log().trace("HERERERER");
-            return GenericType.make(self.id.name,self.id.pack,TMono,self.validation);
+            return GenericType.make(self.id.name,self.id.pack,STMono,self.validation);
           }
         );
       }
@@ -157,27 +157,27 @@ class LiftSchemaGenericDeclaration_register{
     return type;
   }
 }
-class LiftSchemaRecordDeclaration_register{
-  static public function register(self:SchemaRecordDeclaration,state:TypeContext):Type{
+class LiftDeclareRecordSchema_register{
+  static public function register(self:DeclareRecordSchema,state:TypeContext):SType{
     var next : RecordType     = null;
     var fn                    = function(){
       //__.log().debug(self.identity().toString());
       return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.identity()));
     }
-    var type                  = TRecord(Ref.make(fn));
+    var type                  = STRecord(Ref.make(fn));
 
     final fs = self.fields.lfold(
-      function (next:Procurement,memo:Cluster<stx.schema.core.type.Field>):Cluster<stx.schema.core.type.Field> {
+      function (next:Procure,memo:Cluster<stx.schema.core.type.Field>):Cluster<stx.schema.core.type.Field> {
         final id    = next.type.identity();
         __.log().debug('$id');
-        final type : Type = switch(next){
+        final type : SType = switch(next){
           case Property(prop)   : 
             next.type.register(state);
           case Attribute(attr)  : 
             //__.tracer()(next.type.register(state));
             final type = state.get(attr.type.identity()).def(() -> attr.type.register(state));
             final link = LinkType.make(type,attr.relation,attr.inverse,attr.validation);
-            link.toType().register(state);
+            link.toSType().register(state);
         }
         __.log().debug(_ -> _.pure(type));
         return memo.snoc(stx.schema.core.type.Field.make(next.name,type));

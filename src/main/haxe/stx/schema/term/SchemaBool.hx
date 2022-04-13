@@ -1,18 +1,18 @@
 package stx.schema.term;
 
-abstract SchemaBool(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaDeclarationDef{
+abstract SchemaBool(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
   static public var _(default,never) = SchemaBoolLift;
   @:noUsing static public function make(){
     return new SchemaBool(
-      SchemaDeclaration.make0(
+      DeclareSchema.make0(
         'Bool',
         ['std'],
         ValidationType(_.validate())
       )
     );
   }
-  @:to public function toSchemaDeclaration(){
-    return SchemaDeclaration.lift(this);
+  @:to public function toDeclareSchema(){
+    return DeclareSchema.lift(this);
   }
   private function new(self){
     this = self;

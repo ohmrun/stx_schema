@@ -6,7 +6,7 @@ class TypeArray extends GenericTypeCls{
   @:noUsing static public function make(type){
     return new TypeArray(type);
   }
-  public function new(type:Type){
+  public function new(type:SType){
     super("Array",["std"],type);
   }
   override public function get_validation(){

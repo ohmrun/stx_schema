@@ -1,13 +1,13 @@
-package stx.schema;
+package stx.schema.declare;
 
-typedef SchemaUnionDeclarationDef = SchemaDeclarationDef & {
+typedef DeclareUnionSchemaDef = DeclareSchemaDef & {
   final lhs : SchemaRef;
   final rhs : SchemaRef;
 }
-@:forward abstract SchemaUnionDeclaration(SchemaUnionDeclarationDef) from SchemaUnionDeclarationDef to SchemaUnionDeclarationDef{
-  static public var _(default,never) = SchemaUnionDeclarationLift;
+@:forward abstract DeclareUnionSchema(DeclareUnionSchemaDef) from DeclareUnionSchemaDef to DeclareUnionSchemaDef{
+  static public var _(default,never) = DeclareUnionSchemaLift;
   public function new(self) this = self;
-  @:noUsing static public function lift(self:SchemaUnionDeclarationDef):SchemaUnionDeclaration return new SchemaUnionDeclaration(self);
+  @:noUsing static public function lift(self:DeclareUnionSchemaDef):DeclareUnionSchema return new DeclareUnionSchema(self);
 
   @:noUsing static public function make(ident:Ident,lhs,rhs,?validation){
     return lift({
@@ -48,20 +48,21 @@ typedef SchemaUnionDeclarationDef = SchemaDeclarationDef & {
     state.put(SchUnion(result));
     return SchUnion(result);
   }
-  public function prj():SchemaUnionDeclarationDef return this;
-  private var self(get,never):SchemaUnionDeclaration;
-  private function get_self():SchemaUnionDeclaration return lift(this);
+  public function prj():DeclareUnionSchemaDef return this;
+  private var self(get,never):DeclareUnionSchema;
+  private function get_self():DeclareUnionSchema return lift(this);
 
   public function toString(){
     return identity().toString();
   }
 } 
-class SchemaUnionDeclarationLift{
+class DeclareUnionSchemaLift{
   static public var validation(get,null) : Validations;
   static public function get_validation(){
     return Cluster.unit();
   }
-  static public inline function to_self_constructor(self:SchemaUnionDeclaration){
+  //TODO
+  static public inline function to_self_constructor(self:DeclareUnionSchema){
     final e = __.g().expr();
     return 
     return throw UNIMPLEMENTED;

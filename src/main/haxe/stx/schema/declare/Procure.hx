@@ -1,23 +1,23 @@
-package stx.schema;
+package stx.schema.declare;
 
-enum ProcurementSum{
-  Property(def:ProcurementPropertyDeclaration);
-  Attribute(def:ProcurementAttributeDeclaration);
+enum ProcureSum{
+  Property(def:ProcureProperty);
+  Attribute(def:ProcureAttribute);
 }
-@:using(stx.schema.Procurement.ProcurementLift)
-@:forward abstract Procurement(ProcurementSum) from ProcurementSum to ProcurementSum{
-  static public var _(default,never) = ProcurementLift;
+@:using(stx.schema.declare.Procure.ProcureLift)
+@:forward abstract Procure(ProcureSum) from ProcureSum to ProcureSum{
+  static public var _(default,never) = ProcureLift;
   public function new(self) this = self;
-  @:noUsing static public function lift(self:ProcurementSum):Procurement return new Procurement(self);
+  @:noUsing static public function lift(self:ProcureSum):Procure return new Procure(self);
 
-  public function prj():ProcurementSum return this;
-  private var self(get,never):Procurement;
-  private function get_self():Procurement return lift(this);
+  public function prj():ProcureSum return this;
+  private var self(get,never):Procure;
+  private function get_self():Procure return lift(this);
 
-  @:from static public function fromProcurementPropertyDeclaration(self:ProcurementPropertyDeclaration){
+  @:from static public function fromProcureProperty(self:ProcureProperty){
     return lift(Property(self));
   }
-  @:from static public function fromProcurementAttributeDeclaration(self:ProcurementAttributeDeclaration){
+  @:from static public function fromProcureAttribute(self:ProcureAttribute){
     return lift(Attribute(self));
   }
   public var type(get,never) : SchemaRef;
@@ -45,19 +45,19 @@ enum ProcurementSum{
     );
   }
 }
-class ProcurementLift{
-  static public function fold<Z>(self:Procurement,property:ProcurementPropertyDeclaration->Z,attribute:ProcurementAttributeDeclaration->Z):Z{
+class ProcureLift{
+  static public function fold<Z>(self:Procure,property:ProcureProperty->Z,attribute:ProcureAttribute->Z):Z{
     return switch(self){
       case Property(def)  : property(def);
       case Attribute(def) : attribute(def);
     } 
   }
-  static public function with_type(self:Procurement,type:SchemaRef){
+  static public function with_type(self:Procure,type:SchemaRef){
     return fold(self,t -> Property(t.with_type(type)),t -> Attribute(t.with_type(type)));
   }
-  static public function to_self_constructor(self:Procurement){
+  static public function to_self_constructor(self:Procure){
     final e     = __.g().expr();
-    final head  = 'stx.schema.Procurement.ProcurementSum'; 
+    final head  = 'stx.schema.Procure.ProcureSum'; 
     return e.Call(
       e.Path(
         switch(self){

@@ -1,12 +1,12 @@
 package stx.schema.validation.term;
 
 class Array implements ValidationComplyApi extends ValidationComplyCls{
-  public function comply(value:Dynamic,type:Type){
+  public function comply(value:Dynamic,type:SType){
     return if(value == null){
       __.report();
     }else{
       switch(type.data){
-        case TGeneric(def)  :
+        case STGeneric(def)  :
           var fn : Dynamic -> Report<SchemaFailure>   = def.pop().type.validation.lfold.bind(_,type);
           var arr : Cluster<Dynamic>                  = value;
           return arr.lfold(

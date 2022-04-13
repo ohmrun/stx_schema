@@ -8,11 +8,11 @@ enum SchemaFailureSum{
   E_Schema_ValidationError(validation:Validation,caught:SchemaFailure);
   E_Schema_Dynamic(e:Dynamic);
   E_Schema_WrongSchemaType(type:Schema);
-  E_Schema_WrongType(type:stx.schema.core.Type);
+  E_Schema_WrongType(type:stx.schema.core.SType);
   E_Schema_UnexpectedGeneric;
   E_Schema_UnexpectedType;
   E_Schema_IdentityUnresolved(identity:stx.schema.core.Identity);
-  E_Schema_AttemptingToDefineUnsupportedType(type:stx.schema.core.Type);
+  E_Schema_AttemptingToDefineUnsupportedType(type:stx.schema.core.SType);
   E_Schema_UnexpectedMono;
   E_Schema_LazyTypeEmpty;
   E_Schema_SchemaTypeNotSupportedHere;

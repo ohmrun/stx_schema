@@ -8,7 +8,7 @@ class Main{
       type.leaf(state);
     }
   }
-  static function toTypeDefinition(self:stx.schema.Type,state:GTypeContext){
+  static function toSType()Definition(self:stx.schema.Type,state:GTypeContext){
     switch(self.data){
       case TData(t)     : __.accept(None);
       case TAnon(t)     : __.accept(None);

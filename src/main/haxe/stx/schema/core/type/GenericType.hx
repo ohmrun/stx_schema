@@ -1,10 +1,10 @@
 package stx.schema.core.type;
 
 interface GenericTypeApi extends DataTypeApi{
-  public final type : Type;
+  public final type : SType;
 }
 class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
-  public final type : Type;
+  public final type : SType;
   public function new(name,pack,type,?validation){
     super(name,pack,validation);
     this.type = type;
@@ -12,15 +12,15 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
   public function toString(){
     return identity().toString();
   }
-  override public function toType():Type{
-    return Type.make(TGeneric(Ref.pure((this:GenericType))));
+  override public function toSType():SType{
+    return SType.make(STGeneric(Ref.pure((this:GenericType))));
   }
-  public function register(state:TypeContext):Type{
+  public function register(state:TypeContext):SType{
     var next : GenericType     = null;
     var t               = Ref.make(
       () -> next
     );
-    state.put(TGeneric(t));
+    state.put(STGeneric(t));
     var tI              = 
       state
         .get(this.type.identity())
@@ -33,7 +33,7 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
         ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity())));
 
     next = new GenericTypeCls(this.name,this.pack,tI);
-    return next.toType();
+    return next.toSType();
   }
   override public function identity(){
     final ident = Ident.make(name,pack);

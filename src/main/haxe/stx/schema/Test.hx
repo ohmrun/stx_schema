@@ -34,7 +34,7 @@ class Test{
     __.test(
       [
         // new SchemaTest() ,
-        new SchemaEnumDeclarationTest(),
+        new DeclareEnumSchemaTest(),
       ],
       []    
     );

@@ -1,12 +1,12 @@
 package stx.schema.core.type;
 
 interface UnionTypeApi extends DataTypeApi{
-  final lhs : Type;
-  final rhs : Type;
+  final lhs : SType;
+  final rhs : SType;
 }
 class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
-  public final lhs : Type;
-  public final rhs : Type;
+  public final lhs : SType;
+  public final rhs : SType;
   public function new(name,pack,lhs,rhs,?validation){
     super(name,pack,validation);
     this.lhs = lhs;
@@ -19,18 +19,18 @@ class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
       Some(rhs.identity())
     );
   }
-  public function register(state:TypeContext):Type{
+  public function register(state:TypeContext):SType{
     var next : UnionType    = null;
     final t                 = Ref.make(
       () -> next
     );
-    state.put(TUnion(t));
+    state.put(STUnion(t));
 
     final l   = state.get(lhs.identity()).fudge(__.fault().of(E_Schema_IdentityUnresolved(lhs.identity())));
     final r   = state.get(rhs.identity()).fudge(__.fault().of(E_Schema_IdentityUnresolved(rhs.identity())));
   
     next = new UnionTypeCls(this.name,this.pack,l,r);
-    return TUnion(next);
+    return STUnion(next);
   }
   public function toString(){
     return this.identity().toString();
@@ -53,14 +53,14 @@ class UnionTypeLift{
   static public function main(self:UnionType,state:GTypeContext){
     // final g     = __.g();
     // final expr  = g.expr();
-    // final lhs_type_path   = GTypeContext._.toTypePath(self.lhs,state);
-    // final rhs_type_path   = GTypeContext._.toTypePath(self.rhs,state);
+    // final lhs_type_path   = GTypeContext._.toSType()Path(self.lhs,state);
+    // final rhs_type_path   = GTypeContext._.toSType()Path(self.rhs,state);
     // //if(state.definitions)
     // return lhs_type_path.zip(rhs_type_path).flat_map(
     //   __.decouple((l:GTypePath,r:GTypePath) -> {
     //     final underlying_type = g.type_path().Make(
     //       'Either','std.haxe.extern'.split('.'),
-    //       null,[l,r].map(x -> x.toTypeParam())
+    //       null,[l,r].map(x -> x.toSType()Param())
     //     );
     //     final abstract_ident                    = Ident.make(self.name,self.pack);
     //     final abstract_type_path                = g.type_path().Make(self.name,self.pack); 

@@ -20,8 +20,8 @@ abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
   public function ident():Ident{
     return Ident.make(name,pack);
   }
-  public function toType(){
-    return Type.make(TData(Ref.pure((this:DataType))));
+  public function toSType(){
+    return SType.make(STData(Ref.pure((this:DataType))));
   }
 }
 @:using(stx.schema.core.type.DataType.DataTypeLift)

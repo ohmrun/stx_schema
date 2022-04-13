@@ -24,15 +24,15 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   override public function get_validation(){
     return Cluster.unit();
   }
-  public function toType(){
-    return Type.make(TAnon(Ref.pure((this:AnonType))));
+  public function toSType(){
+    return SType.make(STAnon(Ref.pure((this:AnonType))));
   }
-  public function register(state:TypeContext):Type{
+  public function register(state:TypeContext):SType{
     var next : AnonType     = null;
     var type                = Ref.make(
       () -> next
     );
-    state.put(TAnon(type));
+    state.put(STAnon(type));
     final fs = (this.fields.pop().toIter()).lfold(
       (next:Field,memo:Cluster<Field>) -> {
         final id    = next.type.identity();
@@ -43,7 +43,7 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     );
     
     next = new AnonTypeCls(Cell.pure(fs),this.uuid);
-    return next.toType();
+    return next.toSType();
   }
   public function identity():Identity{
     return Ident.make(uuid);

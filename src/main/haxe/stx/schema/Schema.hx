@@ -1,13 +1,13 @@
 package stx.schema;
 
 enum SchemaSum{
-  SchScalar(def:SchemaDeclaration);
-  SchRecord(def:SchemaRecordDeclaration);
-  SchEnum(def:SchemaEnumDeclaration);
-  SchGeneric(def:SchemaGenericDeclaration);
-  SchUnion(def:SchemaUnionDeclaration);
+  SchScalar(def:DeclareSchema);
+  SchRecord(def:DeclareRecordSchema);
+  SchEnum(def:DeclareEnumSchema);
+  SchGeneric(def:DeclareGenericSchema);
+  SchUnion(def:DeclareUnionSchema);
   SchLazy(fn:Void->Schema);
-  SchType(type:Type);
+  SchType(type:SType);
 }
 @:using(stx.schema.Schema.SchemaLift)
 abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
@@ -71,34 +71,34 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       this,
       x -> x.resolve(state),
       x -> x.resolve(state),
-      x -> SchemaEnumDeclaration._.resolve(x,state),
+      x -> DeclareEnumSchema._.resolve(x,state),
       x -> x.resolve(state),
       x -> x.resolve(state),
       x -> SchType(x)
     );
   }
-  @:from static public function fromRecordObject(self:{ name : String, ?pack : Array<String>, fields : { ?properties : Map<String,PropertyDeclaration> , ?attributes : Map<String,AttributeDeclaration> }, ?validation : Validations}){
-    return stx.schema.SchemaRecordDeclaration.make0(
+  @:from static public function fromRecordObject(self:{ name : String, ?pack : Array<String>, fields : { ?properties : Map<String,DeclareProperty> , ?attributes : Map<String,DeclareAttribute> }, ?validation : Validations}){
+    return stx.schema.declare.DeclareRecordSchema.make0(
         self.name,self.pack,
         Procurements.fromObject(self.fields),
         self.validation
       ).toSchema();
   }
   @:from static public function fromScalarObject(self:{ name : String, ?pack : Array<String>, ?validation : Validations}){
-    return fromSchemaDeclaration(
-      SchemaDeclaration.make(
+    return fromDeclareSchema(
+      DeclareSchema.make(
         self.name,self.pack,None,None,
         self.validation
       )
     );
   }
   @:from static public function fromGenericObject(self:{name : String, ?pack : Array<String>, ?validation : Validations, ?type : Schema }){
-    return SchemaGenericDeclaration.make(self.name,self.pack,self.type,self.validation).toSchema();
+    return DeclareGenericSchema.make(self.name,self.pack,self.type,self.validation).toSchema();
   }
-  @:from static public function fromSchemaDeclaration(self:SchemaDeclarationDef):Schema{
+  @:from static public function fromDeclareSchema(self:DeclareSchemaDef):Schema{
     return lift(SchScalar(self));
   }
-  @:from static public function fromSchemaGenericDeclaration(self:SchemaGenericDeclaration):Schema{
+  @:from static public function fromDeclareGenericSchema(self:DeclareGenericSchema):Schema{
     return lift(SchGeneric(self));
   }
   static public function Array(ref):Schema{
@@ -132,7 +132,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   }
 }
 class SchemaLift{
-  static public inline function fold<Z>(self:SchemaSum,scalar : SchemaDeclaration -> Z, record : SchemaRecordDeclaration  -> Z, enm : SchemaEnumDeclaration -> Z, generic : SchemaGenericDeclaration -> Z, union : SchemaUnionDeclaration -> Z, type : Type -> Z) : Z {
+  static public inline function fold<Z>(self:SchemaSum,scalar : DeclareSchema -> Z, record : DeclareRecordSchema  -> Z, enm : DeclareEnumSchema -> Z, generic : DeclareGenericSchema -> Z, union : DeclareUnionSchema -> Z, type : SType -> Z) : Z {
     return switch(self){
       case SchScalar(def)   : scalar(def);
       case SchRecord(def)   : record(def);
@@ -143,6 +143,9 @@ class SchemaLift{
       case SchType(def)     : type(def);
     }
   }
+  /**
+    Creates a declaration that declares the Schema.
+  **/
   static public inline function to_self_constructor(self:SchemaSum):GExpr{
     var v = self.value();
 
@@ -156,11 +159,11 @@ class SchemaLift{
           ),
           args -> [
             switch(v.ctr()){
-              case "SchScalar"  : SchemaDeclaration._.to_self_constructor(v.params()[0]);
-              case "SchRecord"  : SchemaRecordDeclaration._.to_self_constructor(v.params()[0]);
-              case "SchEnum"    : SchemaEnumDeclaration._.to_self_constructor(v.params()[0]);
-              case "SchGeneric" : SchemaGenericDeclaration._.to_self_constructor(v.params()[0]);
-              case "SchUnion"   : SchemaUnionDeclaration._.to_self_constructor(v.params()[0]);
+              case "SchScalar"  : DeclareSchema._.to_self_constructor(v.params()[0]);
+              case "SchRecord"  : DeclareRecordSchema._.to_self_constructor(v.params()[0]);
+              case "SchEnum"    : DeclareEnumSchema._.to_self_constructor(v.params()[0]);
+              case "SchGeneric" : DeclareGenericSchema._.to_self_constructor(v.params()[0]);
+              case "SchUnion"   : DeclareUnionSchema._.to_self_constructor(v.params()[0]);
               case "SchLazy"    : to_self_constructor(v.params()[0]());
               case "SchType"    : throw E_Schema_SchemaTypeNotSupportedHere;
               case x            : throw E_Makro_EnumConstructorNotFound(v,x);

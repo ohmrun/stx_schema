@@ -18,7 +18,7 @@ abstract Validations(Cluster<Validation>) from Cluster<Validation> to Cluster<Va
   }
 }
 class ValidationsLift{
-  static public function lfold(self:Validations,value:Dynamic,type:Type){
+  static public function lfold(self:Validations,value:Dynamic,type:SType){
     return Cluster._.lfold(
       self,
       (next:Validation,memo:Report<SchemaFailure>) -> memo.concat(next.lfold(value,type)),

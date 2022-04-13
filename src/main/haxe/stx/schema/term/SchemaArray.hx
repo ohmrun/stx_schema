@@ -1,10 +1,10 @@
 package stx.schema.term;
 
-abstract SchemaArray(SchemaGenericDeclarationDef) from SchemaGenericDeclarationDef to SchemaGenericDeclarationDef{
+abstract SchemaArray(DeclareGenericSchemaDef) from DeclareGenericSchemaDef to DeclareGenericSchemaDef{
   static public var _(default,never) = SchemaArrayLift;
   @:noUsing static public function make(ref:SchemaRef){
     return new SchemaArray(
-      SchemaGenericDeclaration.make(
+      DeclareGenericSchema.make(
         'Array',
         ['std'],
         ref,
@@ -15,8 +15,8 @@ abstract SchemaArray(SchemaGenericDeclarationDef) from SchemaGenericDeclarationD
   private function new(self){
     this = self;
   }
-  @:to public function toSchemaGenericDeclaration(){
-    return SchemaGenericDeclaration.lift(this);
+  @:to public function toDeclareGenericSchema(){
+    return DeclareGenericSchema.lift(this);
   }
   public function resolve(state:TyperContext):Schema{  
     final result =  SchGeneric(state.get(this.type.identity()).fold(

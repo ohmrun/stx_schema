@@ -11,10 +11,10 @@ interface BaseTypeApi extends Has_toStringApi{
 
   public function identity():Identity;
   
-  public function toType():Type;
-  public function register(state:TypeContext):Type;
+  public function toSType():SType;
+  public function register(state:TypeContext):SType;
 
-  public function toTypePath():GTypePath;
+  public function toGTypePath():GTypePath;
 }
 @:using(stx.schema.core.type.BaseType.BaseTypeLift)
 abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
@@ -33,11 +33,11 @@ abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
   private function get_debrujin():Null<Int>{
     return 1;
   }
-  abstract public function toType():Type;
+  abstract public function toSType():SType;
   abstract public function identity():Identity;
-  abstract public function register(state:TypeContext):Type;
+  abstract public function register(state:TypeContext):SType;
 
-  public function toTypePath():GTypePath{
+  public function toGTypePath():GTypePath{
     final munged                               = this.identity().toIdent_munged();
     return __.g().type_path().Make(munged.name,munged.pack.toArray());
   }

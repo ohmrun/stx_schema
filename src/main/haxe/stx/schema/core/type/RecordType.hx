@@ -20,7 +20,7 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
     var type                  = Ref.make(
       () -> next
     );
-    state.put(TRecord(type));
+    state.put(STRecord(type));
     final fs = (this.fields.pop().toIter()).lfold(
       (next:stx.schema.core.type.Field,memo:Cluster<stx.schema.core.type.Field>) -> {
         final id    = next.type.identity();
@@ -32,7 +32,7 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
     
     next = new RecordTypeCls(this.name,this.pack,fs);
    
-    return next.toType();
+    return next.toSType();
   }
 }
 @:using(stx.schema.core.type.RecordType.RecordTypeLift)
@@ -48,7 +48,7 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
     return lift(new RecordTypeCls(name,pack,fields));
   }
 
-  @:from static function fromObject(self:{ name : String, ?pack : Array<String>, fields : Map<String,Type> }):RecordType{
+  @:from static function fromObject(self:{ name : String, ?pack : Array<String>, fields : Map<String,SType> }):RecordType{
     final fields = [];
     for(k => v in self.fields){
       fields.push(Field.make(k,v));

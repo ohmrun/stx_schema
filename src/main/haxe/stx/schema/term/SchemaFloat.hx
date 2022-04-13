@@ -1,10 +1,10 @@
 package stx.schema.term;
 
-abstract SchemaFloat(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaDeclarationDef{
+abstract SchemaFloat(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
   static public var _(default,never) = SchemaFloatLift;
   @:noUsing static public function make(){
     return new SchemaFloat(
-      SchemaDeclaration.make0(
+      DeclareSchema.make0(
         'Float',
         ['std'],
         ValidationType(_.validate())
@@ -14,8 +14,8 @@ abstract SchemaFloat(SchemaDeclarationDef) from SchemaDeclarationDef to SchemaDe
   private function new(self){
     this = self;
   }
-  @:to public function toSchemaDeclaration(){
-    return SchemaDeclaration.lift(this);
+  @:to public function toDeclareSchema(){
+    return DeclareSchema.lift(this);
   }
 }
 class SchemaFloatLift{

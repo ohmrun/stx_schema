@@ -1,10 +1,10 @@
-package stx.schema;
+package stx.schema.declare;
 
 import haxe.ds.Map;
 
-typedef ProcurementsDef = Cluster<Procurement>;
+typedef ProcurementsDef = Cluster<Procure>;
 
-@:using(stx.schema.Procurements.ProcurementsLift)
+@:using(stx.schema.declare.Procurements.ProcurementsLift)
 @:forward(lfold,map) abstract Procurements(ProcurementsDef) from ProcurementsDef to ProcurementsDef{
   static public var _(default,never) = ProcurementsLift;
   public function new(self) this = self;
@@ -14,18 +14,18 @@ typedef ProcurementsDef = Cluster<Procurement>;
   private var self(get,never):Procurements;
   private function get_self():Procurements return lift(this);
 
-  @:from static public function fromObject(self:{ ?properties : Map<String,PropertyDeclaration>, ?attributes : Map<String,AttributeDeclaration> }){
+  @:from static public function fromObject(self:{ ?properties : Map<String,DeclareProperty>, ?attributes : Map<String,DeclareAttribute> }){
     final out = [];
 
     for(k => v in __.option(self.properties).defv(new Map())){
-      var next : ProcurementPropertyDeclarationDef = {
+      var next : ProcurePropertyDef = {
         name :  k,
         type : v.type
       }
       out.push(Property(next));
     }
     for(k => v in __.option(self.attributes).defv(new Map())){
-      var next : ProcurementAttributeDeclarationDef = {
+      var next : ProcureAttributeDef = {
         name :  k,
         type        : v.type,
         validation  : v.validation,

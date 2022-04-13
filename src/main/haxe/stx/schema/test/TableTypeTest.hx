@@ -19,7 +19,7 @@ class TableTypeTest extends TestCase{
     final gtype_ctx   = new GTypeContext(typer.context);
     for(type in types){
       switch(type.data){
-        case TRecord(t) :
+        case STRecord(t) :
           try{
             final tdef = t.pop().getMainTypeDefinition();
             trace(tdef.toSource());

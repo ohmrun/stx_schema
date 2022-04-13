@@ -1,10 +1,10 @@
 package stx.schema.term;
 
-abstract SchemaNull(SchemaGenericDeclarationDef) from SchemaGenericDeclarationDef to SchemaGenericDeclarationDef{
+abstract SchemaNull(DeclareGenericSchemaDef) from DeclareGenericSchemaDef to DeclareGenericSchemaDef{
   static public var _(default,never) = SchemaNullLift;
   @:noUsing static public function make(ref){
     return new SchemaNull(
-      SchemaGenericDeclaration.make(
+      DeclareGenericSchema.make(
         'Null',
         ['std'],
         ref,
@@ -15,8 +15,8 @@ abstract SchemaNull(SchemaGenericDeclarationDef) from SchemaGenericDeclarationDe
   private function new(self){
     this = self;
   }
-  @:to public function toSchemaGenericDeclaration(){
-    return SchemaGenericDeclaration.lift(this);
+  @:to public function toDeclareGenericSchema(){
+    return DeclareGenericSchema.lift(this);
   }
 }
 class SchemaNullLift{

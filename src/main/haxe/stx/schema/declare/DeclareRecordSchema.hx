@@ -1,12 +1,12 @@
-package stx.schema;
+package stx.schema.declare;
 
-typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
+typedef DeclareRecordSchemaDef = DeclareSchemaDef & {
   final fields : Procurements;
 }
-@:forward abstract SchemaRecordDeclaration(SchemaRecordDeclarationDef) from SchemaRecordDeclarationDef to SchemaRecordDeclarationDef{
+@:forward abstract DeclareRecordSchema(DeclareRecordSchemaDef) from DeclareRecordSchemaDef to DeclareRecordSchemaDef{
   public function new(self) this = self;
-  static public var _(default,never) = SchemaRecordDeclarationLift;
-  @:noUsing static public function lift(self:SchemaRecordDeclarationDef):SchemaRecordDeclaration return new SchemaRecordDeclaration(self);
+  static public var _(default,never) = DeclareRecordSchemaLift;
+  @:noUsing static public function lift(self:DeclareRecordSchemaDef):DeclareRecordSchema return new DeclareRecordSchema(self);
 
   @:noUsing static public function make(ident:Ident,fields:Procurements,?validation:Validations){
     return lift({
@@ -22,9 +22,9 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
       validation
     );
   }
-  public function prj():SchemaRecordDeclarationDef return this;
-  private var self(get,never):SchemaRecordDeclaration;
-  private function get_self():SchemaRecordDeclaration return lift(this);
+  public function prj():DeclareRecordSchemaDef return this;
+  private var self(get,never):DeclareRecordSchema;
+  private function get_self():DeclareRecordSchema return lift(this);
 
   public function identity(){
     return this.id;
@@ -32,7 +32,7 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
   public function resolve(state:TyperContext):Schema{
     __.log().debug('resolve record');
     final fieldsI = this.fields.map(
-      (field:Procurement) -> {
+      (field:Procure) -> {
         __.log().debug(_ -> _.thunk( () -> field));
         final ref = state.get(field.type.identity()).fold(
           x   -> SchemaRef.fromSchema(x),
@@ -57,11 +57,11 @@ typedef SchemaRecordDeclarationDef = SchemaDeclarationDef & {
     return Schema.lift(SchRecord(this));
   }
 }
-class SchemaRecordDeclarationLift{
-  static public function to_self_constructor(self:SchemaRecordDeclaration){
+class DeclareRecordSchemaLift{
+  static public function to_self_constructor(self:DeclareRecordSchema){
     final e = __.g().expr();
     return e.Call(
-      e.Path('stx.schema.SchemaRecordDeclaration.make'),
+      e.Path('stx.schema.declare.DeclareRecordSchema.make'),
       [
         e.Call(
           e.Path('stx.Ident.make'),

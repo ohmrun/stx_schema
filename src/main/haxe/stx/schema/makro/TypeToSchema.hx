@@ -9,7 +9,7 @@ class TypeToSchema{
 
   }
   // static public function toSchema(type:haxe.macro.Type){
-  //   function f(type:Type){
+  //   function f(type:SType){
   //     return switch(type){
   //       case TInst(t,[])        :	
   //       case TInst(t, arr)      : __.reject(__.fault().of(E_Schema_UnexpectedGeneric));

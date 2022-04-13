@@ -31,7 +31,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
      ) 
    );
   }
-  public function register(state:TypeContext):Type{
+  public function register(state:TypeContext):SType{
     __.log().debug('register ref: ${identity()}');
     return state.get(identity()).def(
       () -> {
@@ -45,7 +45,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
           },
           () -> {
             __.log().trace(_ -> _.pure(identity()));
-            final val = LazyType.make(identity(),state).toType();
+            final val = LazyType.make(identity(),state).toSType();
             state.put(val);
             return val;
           }
@@ -96,8 +96,8 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   @:from static inline public function fromIdentity(self:Identity){
     return make0(self.name,self.pack,self.lhs,self.rhs);
   }
-  @:from static inline public function fromSchemaDeclaration(self:SchemaDeclarationDef){
-    return fromSchemaSum(Schema.fromSchemaDeclaration(self));
+  @:from static inline public function fromDeclareSchema(self:DeclareSchemaDef){
+    return fromSchemaSum(Schema.fromDeclareSchema(self));
   }
   public function identity(){
     return Identity.lift(this);

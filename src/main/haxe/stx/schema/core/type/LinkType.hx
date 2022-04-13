@@ -1,13 +1,13 @@
 package stx.schema.core.type;
 
 interface LinkTypeApi extends BaseTypeApi{
-  public final into      : Type;
-  public final relation  : SchemaRelationSum;
+  public final into      : SType;
+  public final relation  : RelationType;
   public final inverse   : String;
 }
 class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
-  public final into      : Type;
-  public final relation  : SchemaRelationSum;
+  public final into      : SType;
+  public final relation  : RelationType;
   public final inverse   : String;
 
   public function new(into,relation,inverse,?validation){
@@ -17,13 +17,13 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
     this.inverse    = inverse;
     this.validation = validation;
   }
-  public function toType():Type{
-    return TLink(Ref.pure((this:LinkType)));
+  public function toSType():SType{
+    return STLink(Ref.pure((this:LinkType)));
   }
   public function toString(){
     return '$relation $into $inverse';
   }
-  public function register(state:TypeContext):Type{
+  public function register(state:TypeContext):SType{
     var next : LinkType     = null;
     var t                   = Ref.make(
       function():LinkType{
@@ -42,7 +42,7 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
       }
     );
     
-    return TLink(t);
+    return STLink(t);
   }
   public function identity(){
     final ident = Ident.make('Link',['std']);
@@ -74,7 +74,7 @@ class LinkTypeLift{
   static public function main(self:LinkType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function lookup(self:LinkType,?pos:Pos):Type{
+  static public function lookup(self:LinkType,?pos:Pos):SType{
     trace(pos);
     return self.into.fields.search(
       kv -> {

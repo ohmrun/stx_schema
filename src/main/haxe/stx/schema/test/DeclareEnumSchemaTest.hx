@@ -1,8 +1,8 @@
 package stx.schema.test;
 
-class SchemaEnumDeclarationTest extends TestCase{
+class DeclareEnumSchemaTest extends TestCase{
   public function test(){
-    final e = SchemaEnumDeclaration.make(
+    final e = DeclareEnumSchema.make(
       Ident.make('TestEnum',["some","pack"]),
       ['fst','snd','thd']
     );

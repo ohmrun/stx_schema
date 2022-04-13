@@ -1,6 +1,6 @@
 package stx.schema;
 
-enum SchemaRelationSum{
+enum RelationType{
   HAS_MANY;
   HAS_ONE;
   

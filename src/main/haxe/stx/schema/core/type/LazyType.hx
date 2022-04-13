@@ -2,7 +2,7 @@ package stx.schema.core.type;
 
 @:using(stx.schema.core.type.LazyType.LazyTypeLift)
 class LazyType extends BaseTypeCls{
-  public var type(get,null) :Null<Type>;
+  public var type(get,null) :Null<SType>;
   public function get_type(){
     //throw "here";
     __.log().trace('lazy: ${ctx.get(this.id)}');
@@ -31,14 +31,14 @@ class LazyType extends BaseTypeCls{
     return type == null ? None : Some(type);
   }
   override function get_validation():Validations{
-    return get_type_option().map((x:Type) -> x.validation).defv([].imm());
+    return get_type_option().map((x:SType) -> x.validation).defv([].imm());
   }
   public function register(state:TypeContext){
-    //state.put(this.toType());
-    return this.toType();
+    //state.put(this.StoSType());
+    return this.toSType();
   }
-  public function toType():Type{
-    return TLazy(Ref.pure(this));
+  public function toSType():SType{
+    return STLazy(Ref.pure(this));
   }
   public function toString(){
     return id.toString();

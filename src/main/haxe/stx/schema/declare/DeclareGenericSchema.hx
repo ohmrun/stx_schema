@@ -1,14 +1,14 @@
-package stx.schema;
+package stx.schema.declare;
 
-typedef SchemaGenericDeclarationDef = SchemaDeclarationDef & {
+typedef DeclareGenericSchemaDef = DeclareSchemaDef & {
   final type : SchemaRef;
 }
-@:forward abstract SchemaGenericDeclaration(SchemaGenericDeclarationDef) from SchemaGenericDeclarationDef to SchemaGenericDeclarationDef{
-  static public var _(default,never) = SchemaGenericDeclarationLift;
+@:forward abstract DeclareGenericSchema(DeclareGenericSchemaDef) from DeclareGenericSchemaDef to DeclareGenericSchemaDef{
+  static public var _(default,never) = DeclareGenericSchemaLift;
   public function new(self) this = self;
-  @:noUsing static public function lift(self:SchemaGenericDeclarationDef):SchemaGenericDeclaration return new SchemaGenericDeclaration(self);
+  @:noUsing static public function lift(self:DeclareGenericSchemaDef):DeclareGenericSchema return new DeclareGenericSchema(self);
 
-  @:noUsing static public function make(name,pack,type:SchemaRef,?validation:Validations):SchemaGenericDeclaration{
+  @:noUsing static public function make(name,pack,type:SchemaRef,?validation:Validations):DeclareGenericSchema{
     return lift({
       id            : Identity.fromIdent(Ident.make(name,pack)),
       type          : type,
@@ -33,9 +33,9 @@ typedef SchemaGenericDeclarationDef = SchemaDeclarationDef & {
     state.put(result);
     return result; 
   }
-  public function prj():SchemaGenericDeclarationDef return this;
-  private var self(get,never):SchemaGenericDeclaration;
-  private function get_self():SchemaGenericDeclaration return lift(this);
+  public function prj():DeclareGenericSchemaDef return this;
+  private var self(get,never):DeclareGenericSchema;
+  private function get_self():DeclareGenericSchema return lift(this);
 
   @:to public function toSchema():Schema{
     return SchGeneric(this);
@@ -45,15 +45,15 @@ typedef SchemaGenericDeclarationDef = SchemaDeclarationDef & {
     return thiz;
   }
 } 
-class SchemaGenericDeclarationLift{
+class DeclareGenericSchemaLift{
   static public var validation(get,null) : Validations;
   static public function get_validation(){
     return Cluster.unit();
   } 
-  static public function to_self_constructor(self:SchemaGenericDeclaration){
+  static public function to_self_constructor(self:DeclareGenericSchema){
     final e = __.g().expr();
     return e.Call(
-      e.Path('stx.schema.SchemaGenericDeclaration.make'),
+      e.Path('stx.schema.declare.DeclareGenericSchema.make'),
       [
         e.Const( c -> c.String(self.id.name)),
         e.ArrayDecl(

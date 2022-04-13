@@ -12,7 +12,7 @@ class LeafType extends DataTypeCls{
     return this.identity().toString();
   }
   public function register(state:TypeContext){
-    state.put(this.toType());
-    return this.toType();
+    state.put(this.toSType());
+    return this.toSType();
   }
 } 
