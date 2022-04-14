@@ -12,12 +12,18 @@ class GenericTypeCls extends ConcreteType implements GenericTypeApi{
   public function toString(){
     return this.identity.toString();
   }
-public function toSType():SType{
-    return SType.make(STGeneric(Ref.pure((this:GenericType))));
+  public function toSType():SType{
+    return SType.make(STGeneric(
+      Ref.make(
+        () -> Identity.make(ident,Some(this.type.identity),None),
+        () -> (this:GenericType)
+      )
+    ));
   }
   public function register(state:TypeContext):SType{
     var next : GenericType     = null;
     var t               = Ref.make(
+      () -> this.identity,
       () -> next
     );
     state.put(STGeneric(t));
@@ -28,7 +34,7 @@ public function toSType():SType{
           ok -> __.option(ok),
           () -> this.type.is_anon().if_else(
             () -> __.option(this.type.register(state)),
-            () -> __.option(null)
+            () -> state.get(this.type.identity)
           )
         ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity)));
 
@@ -36,11 +42,13 @@ public function toSType():SType{
     return next.toSType();
   }
   override public function get_identity(){
-    return Identity.make(
+    trace("HJERE");
+    final result =  Identity.make(
       this.ident,
       __.option(this.type.identity),
       None
     );
+    return result;
   }
 }
 @:using(stx.schema.type.GenericType.GenericTypeLift)

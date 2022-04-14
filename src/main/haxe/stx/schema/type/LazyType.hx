@@ -29,7 +29,12 @@ class LazyType extends BaseTypeCls{
     return this.toSType();
   }
   public function toSType():SType{
-    return STLazy(Ref.pure(this));
+    return STLazy(
+      Ref.make(
+        () -> lookup,
+        () -> this
+      )
+    );
   }
   public function toString(){
     return identity.toString();

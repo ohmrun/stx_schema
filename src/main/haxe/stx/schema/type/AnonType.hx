@@ -8,9 +8,9 @@ interface AnonTypeApi extends BaseTypeApi{
 class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   public final uuid    : String;
   public final fields  : Cell<Cluster<Field>>;
-  public function new(fields,?uuid,?meta,?validation){
+  public function new(fields,uuid,?meta,?validation){
     super(meta,validation);
-    this.uuid     = __.option(uuid).def(__.uuid.bind('xxxxx'));
+    this.uuid     = uuid;
     this.fields   = fields;
     this.debrujin = 1;//Context.instance.next(); 
   }
@@ -25,11 +25,12 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     return Cluster.unit();
   }
   public function toSType(){
-    return SType.make(STAnon(Ref.pure((this:AnonType))));
+    return SType.make(STAnon(Ref.make(() -> this.identity,() -> (this:AnonType))));
   }
   public function register(state:TypeContext):SType{
     var next : AnonType     = null;
     var type                = Ref.make(
+      () -> this.identity,
       () -> next
     );
     state.put(STAnon(type));
@@ -58,8 +59,8 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   private var self(get,never):AnonType;
   private function get_self():AnonType return lift(this);
 
-  @:noUsing static public function make(fields){ 
-    return lift(new AnonTypeCls(fields));
+  @:noUsing static public function make(fields,uuid){ 
+    return new AnonTypeCls(fields,uuid);
   }
 }
 class AnonTypeLift{

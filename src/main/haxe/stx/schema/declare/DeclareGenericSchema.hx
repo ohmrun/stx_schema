@@ -1,7 +1,8 @@
 package stx.schema.declare;
 
 interface DeclareGenericSchemaApi extends DeclareSchemaApi{
-  final type : SchemaRef;
+  final type  : SchemaRef;
+  final ident : Ident;
 }
 class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends DeclareSchemaConcrete{
   public final type : SchemaRef;

@@ -1,7 +1,8 @@
 package stx.schema.declare;
 
 interface DeclareEnumSchemaApi extends DeclareSchemaApi{
-  final constructors : Cluster<String>;
+  final constructors  : Cluster<String>;
+  final ident         : Ident; 
 }
 class DeclareEnumSchemaCls implements DeclareEnumSchemaApi extends DeclareSchemaConcrete{
   public final constructors : Cluster<String>;

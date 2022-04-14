@@ -53,7 +53,7 @@ typedef ProcureProperty                           = stx.schema.declare.ProcurePr
 // typedef SchemaAnonDeclarationDef                  = stx.schema.SchemaAnonDeclaration.SchemaAnonDeclarationDef;
 
 typedef Schema                                    = stx.schema.Schema;
-  typedef SchemaSum                                 = stx.schema.Schema.SchemaSum;
+typedef SchemaSum                                 = stx.schema.Schema.SchemaSum;
 
 typedef RelationType                              = stx.schema.RelationType;
 
@@ -108,10 +108,9 @@ typedef EnumTypeApi                               = stx.schema.type.EnumType.Enu
 typedef EnumTypeCls                               = stx.schema.type.EnumType.EnumTypeCls;
 typedef EnumType                                  = stx.schema.type.EnumType;
 
-typedef Has_toStringDef                           = stx.schema.type.Has_toStringDef;
-typedef Has_toStringApi                           = stx.schema.type.Has_toString.Has_toStringApi;
-typedef Has_toStringCls                           = stx.schema.type.Has_toString.Has_toStringCls;
-
+typedef Has_getIdentityDef                        = stx.schema.type.Has_getIdentityDef;
+typedef Has_getIdentityApi                        = stx.schema.type.Has_getIdentity.Has_getIdentityApi;
+typedef Has_getIdentityCls                        = stx.schema.type.Has_getIdentity.Has_getIdentityCls;
 typedef WithValidationCls                         = stx.schema.WithValidation.WithValidationCls;
 typedef WithValidationApi                         = stx.schema.WithValidation.WithValidationApi;
 
@@ -143,7 +142,7 @@ class LiftSchema_register{
         def.register(state);
       case SchGeneric(def)  : 
         __.log().debug('register generic');
-        def.register(state);
+        LiftDeclareGenericSchema_register.register(def,state);
       case SchUnion(def)    :
         __.log().debug('register union'); 
         def.register(state);
@@ -163,7 +162,10 @@ class LiftDeclareSchema{
     return state.get(self.id).fold(
       ok -> ok,
       () -> {
-        final type = STData(Ref.pure((LeafType.make(Ident.make(self.id.name,self.id.pack),self.validation):DataType)));
+        final ident = Ident.make(self.id.name,self.id.pack);
+        final ref   = () -> Identity.fromIdent(ident);
+        final inner = LeafType.make(ident,self.meta,self.validation);
+        final type  = STData(Ref.make(ref,() -> (inner:DataType)));
         state.put(type);
         return type;
       }
@@ -181,7 +183,7 @@ class LiftDeclareUnionSchema{
 }
 class LiftDeclareEnumSchema_register{
   static public function register(self:DeclareEnumSchema,state:TypeContext):SType{
-    final type = EnumType.make(self.id,self.constructors).toSType();
+    final type = EnumType.make(self.ident,self.constructors,self.meta,self.validation).toSType();
     state.put(type);
     return type;
   }
@@ -191,10 +193,24 @@ class LiftDeclareGenericSchema_register{
     var next : GenericType    = null;
     final fn = function(){
       __.log().debug(self.id.toString());
+      trace(next);
       return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.id));
     }
-    var type                  = STGeneric(Ref.make(fn));
-    state.put(type);
+    var type                  = STGeneric(
+      Ref.make(
+        () -> Identity.make(self.ident,Some(Identity.lift(self.type)),None),
+        fn
+      )
+    );
+    trace(self.type.id);
+    try{
+      state.put(type);
+    }catch(e:haxe.Exception){
+      trace(e);
+      throw(e);
+    }
+    
+    trace(self.type.id);
 
     next = state.get(self.type.id).fold(
       (ok:SType) -> {
@@ -205,16 +221,17 @@ class LiftDeclareGenericSchema_register{
         return __.option(self.type.pop).fold(
           ok -> {
             final subtype = ok().register(state);
-            final next    = GenericType.make(self.id.name,self.id.pack,subtype,self.validation);
+            final next    = GenericType.make(self.ident,subtype,self.meta,self.validation);
             return next;
           },
           () -> {
             __.log().trace("HERERERER");
-            return GenericType.make(self.id.name,self.id.pack,STMono,self.validation);
+            return GenericType.make(self.ident,STMono,self.meta,self.validation);
           }
         );
       }
     );
+    trace(next);
     state.put(type);
     return type;
   }
@@ -226,7 +243,7 @@ class LiftDeclareRecordSchema_register{
       //__.log().debug(self.id.toString());
       return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.id));
     }
-    var type                  = STRecord(Ref.make(fn));
+    var type                  = STRecord(Ref.make(() -> Identity.fromIdent(self.ident),fn));
 
     final fs = self.fields.lfold(
       function (next:Procure,memo:Cluster<stx.schema.core.Field>):Cluster<stx.schema.core.Field> {

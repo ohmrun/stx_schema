@@ -15,7 +15,7 @@ class RecordTypeCls extends ConcreteType implements RecordTypeApi{
     return Cluster.unit();
   }
   public function toSType():SType{
-    return STRecord(Ref.pure(this.toRecordTypeApi()));
+    return STRecord(Ref.make(() -> this.identity,() -> this.toRecordTypeApi()));
   }
   public function toString(){
     return this.identity.toString();
@@ -23,6 +23,7 @@ class RecordTypeCls extends ConcreteType implements RecordTypeApi{
   public function register(state:TypeContext){
     var next : RecordType     = null;
     var type                  = Ref.make(
+      () -> this.identity,
       () -> next
     );
     state.put(STRecord(type));

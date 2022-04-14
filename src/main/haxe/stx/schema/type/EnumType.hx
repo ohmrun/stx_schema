@@ -15,7 +15,7 @@ class EnumTypeCls extends ConcreteType implements EnumTypeApi{
     return this.toSType();
   }
   public function toSType():SType{
-    return STEnum(Ref.pure(EnumType.lift(this)));
+    return STEnum(Ref.make(() -> this.identity, () -> EnumType.lift(this)));
   }
   public function toString(){
     return this.identity.toString();

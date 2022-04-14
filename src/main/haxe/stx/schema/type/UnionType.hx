@@ -7,8 +7,8 @@ interface UnionTypeApi extends DataTypeApi{
 class UnionTypeCls extends ConcreteType implements UnionTypeApi {
   public final lhs : SType;
   public final rhs : SType;
-  public function new(ident,lhs,rhs,?validation){
-    super(ident,validation);
+  public function new(ident,lhs,rhs,?meta,?validation){
+    super(ident,meta,validation);
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -22,6 +22,7 @@ class UnionTypeCls extends ConcreteType implements UnionTypeApi {
   public function register(state:TypeContext):SType{
     var next : UnionType    = null;
     final t                 = Ref.make(
+      () -> this.identity,
       () -> next
     );
     state.put(STUnion(t));
@@ -30,10 +31,10 @@ class UnionTypeCls extends ConcreteType implements UnionTypeApi {
     final r   = state.get(rhs.identity).fudge(__.fault().of(E_Schema_IdentityUnresolved(rhs.identity)));
   
     next = new UnionTypeCls(this.ident,l,r);
-    return STUnion(next);
+    return STUnion(Ref.make(() -> this.identity,() -> next));
   }
   public function toSType():SType{
-    return STUnion(Ref.pure((this:UnionType)));
+    return STUnion(Ref.make(() -> this.identity, () -> (this:UnionType)));
   }
   public function toString(){
     return this.identity.toString();
@@ -48,8 +49,8 @@ class UnionTypeCls extends ConcreteType implements UnionTypeApi {
   private var self(get,never):UnionType;
   private function get_self():UnionType return lift(this);
 
-  @:noUsing static public function make(ident,lhs,rhs,?validation){ 
-    return lift(new UnionTypeCls(ident,lhs,rhs,validation));
+  @:noUsing static public function make(ident,lhs,rhs,?meta,?validation){ 
+    return lift(new UnionTypeCls(ident,lhs,rhs,meta,validation));
   }
 }
 class UnionTypeLift{

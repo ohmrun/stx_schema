@@ -18,7 +18,7 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
     this.validation = validation;
   }
   public function toSType():SType{
-    return STLink(Ref.pure((this:LinkType)));
+    return STLink(Ref.make(() -> this.identity,() -> (this:LinkType)));
   }
   public function toString(){
     return '$relation $into $inverse';
@@ -26,6 +26,7 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   public function register(state:TypeContext):SType{
     var next : LinkType     = null;
     var t                   = Ref.make(
+      () -> this.identity,
       function():LinkType{
         final inner = state.get(this.into.identity).def(() -> this.into.register(state));
         var tI              = 
@@ -45,7 +46,7 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
     return STLink(t);
   }
   public function get_identity(){
-    final ident = Ident.make('Link',['std']);
+    final ident = Ident.make('${this.relation}',['link']);
     return Identity.make(
       ident,
       __.option(this.into.identity),

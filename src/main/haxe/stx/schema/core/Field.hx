@@ -1,6 +1,6 @@
 package stx.schema.core;
 
-typedef FieldDef = Has_toStringDef & {
+typedef FieldDef = Has_getIdentityDef & {
   final type : SType;
   final name : String;
 }
@@ -10,9 +10,9 @@ typedef FieldDef = Has_toStringDef & {
   @:noUsing static public function lift(self:FieldDef):Field return new Field(self);
   @:noUsing static public function make(name:String,type:SType):Field{
     return lift({
-      name      : name,
-      type      : type, 
-      toString  : () -> type.toString()
+      name          : name,
+      type          : type, 
+      getIdentity   : () -> type.identity
     });
   }
   public function prj():FieldDef return this;

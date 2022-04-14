@@ -2,6 +2,7 @@ package stx.schema.declare;
 
 interface DeclareRecordSchemaApi extends DeclareSchemaApi{
   public final fields : Procurements;
+  public final ident  : Ident;
 }
 class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareSchemaConcrete{
   public function new(ident,fields,meta,validation){

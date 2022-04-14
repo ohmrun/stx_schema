@@ -1,13 +1,14 @@
 package stx.schema.declare;
 
 interface DeclareUnionSchemaApi extends DeclareSchemaApi{
-  final lhs : SchemaRef;
-  final rhs : SchemaRef;
+  final ident : Ident;
+  final lhs   : SchemaRef;
+  final rhs   : SchemaRef;
 }
 class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareSchemaCls{
   public final lhs   : SchemaRef;
   public final rhs   : SchemaRef;
-  final ident : Ident;
+  public final ident : Ident;
 
   public function new(ident:Ident,lhs,rhs,meta,validation){
     super(meta); 

@@ -24,7 +24,7 @@ class DeclareSchemaBase extends DeclareSchemaCls{
   public function get_validation(){ return this.validation; }  
 }
 abstract class DeclareSchemaConcrete extends DeclareSchemaCls{
-  final ident : Ident;
+  public final ident : Ident;
   public function new(ident,meta){
     this.ident = ident;
     super(meta);

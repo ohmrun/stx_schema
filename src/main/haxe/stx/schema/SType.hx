@@ -79,14 +79,14 @@ class STypeCls{
   public var identity(get,never) : Identity;
   public function get_identity():Identity{
     return switch(data){
-      case STData(t)       : t.pop().identity; 
-      case STAnon(t)       : t.pop().identity;
-      case STRecord(t)     : t.pop().identity;
-      case STGeneric(t)    : t.pop().identity;
-      case STUnion(t)      : t.pop().identity;
-      case STLink(t)       : t.pop().identity;
-      case STEnum(t)       : t.pop().identity;
-      case STLazy(t)       : t.pop().identity;
+      case STData(t)       : t.getIdentity(); 
+      case STAnon(t)       : t.getIdentity();
+      case STRecord(t)     : t.getIdentity();
+      case STGeneric(t)    : t.getIdentity();
+      case STUnion(t)      : t.getIdentity();
+      case STLink(t)       : t.getIdentity();
+      case STEnum(t)       : t.getIdentity();
+      case STLazy(t)       : t.getIdentity();
       case STMono          :
         //throw 'abstract identity'; 
         Identity.fromIdent(Ident.make('TMono'));
@@ -146,7 +146,7 @@ class STypeCls{
   static public function RecordType(name,pack,fields):SType{
     return _.RecordType(name,pack,fields).toSType();
   }
-  static public function AnonType(fields):SType{
+  static public function AnonType(fields,anon):SType{
     return _.AnonType(fields).toSType();
   }
   static public function GenericType(name,pack,inner):SType{
@@ -212,7 +212,7 @@ class STypeLift{
     return stx.schema.type.RecordType.make(name,pack,fields);
   }
   static public function AnonType(fields){
-    return stx.schema.type.AnonType.make(fields);
+    return stx.schema.type.AnonType.make(fields,__.uuid("xxxxx"));
   }
   static public function GenericType(name,pack,inner){
     return stx.schema.type.GenericType.make(name,pack,inner);
