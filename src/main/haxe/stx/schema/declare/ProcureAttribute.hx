@@ -28,6 +28,9 @@ typedef ProcureAttributeDef = ProcurePropertyDef & {
   public function toString(){
     return __.show({name : this.name, type : this.type.toString(), relation : this.relation, inverse : this.inverse });
   }
+  @:to public function toProcure(){
+    return Attribute(this);
+  }
 }
 class ProcureAttributeLift{
   static public function to_self_constructor(self:ProcureAttribute){

@@ -1,39 +1,58 @@
 package stx.schema.declare;
 
-typedef DeclareGenericSchemaDef = DeclareSchemaDef & {
+interface DeclareGenericSchemaApi extends DeclareSchemaApi{
   final type : SchemaRef;
 }
-@:forward abstract DeclareGenericSchema(DeclareGenericSchemaDef) from DeclareGenericSchemaDef to DeclareGenericSchemaDef{
-  static public var _(default,never) = DeclareGenericSchemaLift;
-  public function new(self) this = self;
-  @:noUsing static public function lift(self:DeclareGenericSchemaDef):DeclareGenericSchema return new DeclareGenericSchema(self);
-
-  @:noUsing static public function make(name,pack,type:SchemaRef,?validation:Validations):DeclareGenericSchema{
-    return lift({
-      id            : Identity.fromIdent(Ident.make(name,pack)),
-      type          : type,
-      validation    : _.validation.concat(__.option(validation).defv(Cluster.unit()))
-    });
+class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends DeclareSchemaConcrete{
+  public final type : SchemaRef;
+  public function new(ident,type,meta,?validation){
+    this.type       = type;
+    this.validation = validation;
+    super(ident,meta);
   }
-  public function identity(){
+  override public function get_id(){ 
     return Identity.make(
       Ident.make(
-        this.id.name,
-        this.id.pack
+        this.ident.name,
+        this.ident.pack
       ),
       Some(Identity.lift(this.type)),
       None
     );
   }
+  public function get_validation(){ return this.validation; }
+} 
+@:forward abstract DeclareGenericSchema(DeclareGenericSchemaApi) from DeclareGenericSchemaApi to DeclareGenericSchemaApi{
+  static public var _(default,never) = DeclareGenericSchemaLift;
+  public function new(self) this = self;
+  @:noUsing static public function lift(self:DeclareGenericSchemaApi):DeclareGenericSchema return new DeclareGenericSchema(self);
+
+  //Identity.make(Ident.make(name,pack),Some(type.id),None)
+  @:noUsing static public function make(ident:Ident,type:SchemaRef,?meta:PExpr<Primitive>,?validation:Validations):DeclareGenericSchema{
+    return lift(new DeclareGenericSchemaCls(
+      ident,
+      type,
+      __.option(meta).defv(Empty),
+      _.validation.concat(__.option(validation).defv(Cluster.unit()))
+    ));
+  }
+  @:noUsing static public function make0(name,pack,type:SchemaRef,?meta:PExpr<Primitive>,?validation:Validations):DeclareGenericSchema{
+    return lift(new DeclareGenericSchemaCls(
+      Ident.make(name,pack),
+      type,
+      __.option(meta).defv(Empty),
+      _.validation.concat(__.option(validation).defv(Cluster.unit()))
+    ));
+  }
   public function resolve(state:TyperContext){
-    final typeI   = state.get(this.type.identity()).map(SchemaRef.fromSchema).def(
+    final typeI   = state.get(this.type.id).map(SchemaRef.fromSchema).def(
       () -> this.type.resolve(state)
     );
-    final result  = SchGeneric(make(this.id.name,this.id.pack,typeI,this.validation));
+    final result  = SchGeneric(make0(this.id.name,this.id.pack,typeI,this.validation));
     state.put(result);
     return result; 
   }
-  public function prj():DeclareGenericSchemaDef return this;
+  public function prj():DeclareGenericSchemaApi return this;
   private var self(get,never):DeclareGenericSchema;
   private function get_self():DeclareGenericSchema return lift(this);
 
@@ -41,7 +60,7 @@ typedef DeclareGenericSchemaDef = DeclareSchemaDef & {
     return SchGeneric(this);
   }
   public function toString(){
-    final thiz = identity().toString();
+    final thiz = this.id.toString();
     return thiz;
   }
 } 

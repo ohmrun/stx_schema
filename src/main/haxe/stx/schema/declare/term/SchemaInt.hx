@@ -1,12 +1,13 @@
 package stx.schema.declare.term;
 
-abstract SchemaInt(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
+abstract SchemaInt(DeclareSchemaApi) from DeclareSchemaApi to DeclareSchemaApi{
   static public var _(default,never) = SchemaIntLift;
   @:noUsing static public function make(){
     return new SchemaInt(
       DeclareSchema.make0(
         'Int',
-        ['std'],
+        ['std'] ,
+        Empty,
         ValidationType(_.validate())
       )
     );

@@ -9,19 +9,26 @@ typedef SchemaFailure                             = stx.fail.SchemaFailure;
 typedef SchemaFailureSum                          = stx.fail.SchemaFailure.SchemaFailureSum;
 
 typedef DeclareSchema                             = stx.schema.declare.DeclareSchema;
-typedef DeclareSchemaDef                          = stx.schema.declare.DeclareSchema.DeclareSchemaDef;
+typedef DeclareSchemaApi                          = stx.schema.declare.DeclareSchema.DeclareSchemaApi;
+typedef DeclareSchemaCls                          = stx.schema.declare.DeclareSchema.DeclareSchemaCls;
+typedef DeclareSchemaBase                         = stx.schema.declare.DeclareSchema.DeclareSchemaBase;
+typedef DeclareSchemaConcrete                     = stx.schema.declare.DeclareSchema.DeclareSchemaConcrete;
 
 typedef DeclareRecordSchema                       = stx.schema.declare.DeclareRecordSchema;
-typedef DeclareRecordSchemaDef                    = stx.schema.declare.DeclareRecordSchema.DeclareRecordSchemaDef;
+typedef DeclareRecordSchemaCls                    = stx.schema.declare.DeclareRecordSchema.DeclareRecordSchemaCls;
+typedef DeclareRecordSchemaApi                    = stx.schema.declare.DeclareRecordSchema.DeclareRecordSchemaApi;
 
 typedef DeclareGenericSchema                      = stx.schema.declare.DeclareGenericSchema;
-typedef DeclareGenericSchemaDef                   = stx.schema.declare.DeclareGenericSchema.DeclareGenericSchemaDef;
+typedef DeclareGenericSchemaApi                   = stx.schema.declare.DeclareGenericSchema.DeclareGenericSchemaApi;
+typedef DeclareGenericSchemaCls                   = stx.schema.declare.DeclareGenericSchema.DeclareGenericSchemaCls;
 
 typedef DeclareUnionSchema                        = stx.schema.declare.DeclareUnionSchema;
-typedef DeclareUnionSchemaDef                     = stx.schema.declare.DeclareUnionSchema.DeclareUnionSchemaDef;
+typedef DeclareUnionSchemaApi                     = stx.schema.declare.DeclareUnionSchema.DeclareUnionSchemaApi;
+typedef DeclareUnionSchemaCls                     = stx.schema.declare.DeclareUnionSchema.DeclareUnionSchemaCls;
 
 typedef DeclareEnumSchema                         = stx.schema.declare.DeclareEnumSchema;
-typedef DeclareEnumSchemaDef                      = stx.schema.declare.DeclareEnumSchema.DeclareEnumSchemaDef;
+typedef DeclareEnumSchemaApi                      = stx.schema.declare.DeclareEnumSchema.DeclareEnumSchemaApi;
+typedef DeclareEnumSchemaCls                      = stx.schema.declare.DeclareEnumSchema.DeclareEnumSchemaCls;
 
 typedef Procure                                   = stx.schema.declare.Procure;
 typedef ProcureSum                                = stx.schema.declare.Procure.ProcureSum;
@@ -67,6 +74,7 @@ typedef TypeStatus                                = stx.schema.type.TypeStatus;
 
 typedef BaseTypeApi                               = stx.schema.type.BaseType.BaseTypeApi;
 typedef BaseTypeCls                               = stx.schema.type.BaseType.BaseTypeCls;
+//typedef BaseType                                  = stx.schema.type.BaseType.BaseType;
 
 typedef STypeSum                                  = stx.schema.SType.STypeSum;
 typedef SType                                     = stx.schema.SType;
@@ -152,10 +160,10 @@ class LiftSchema_register{
 }
 class LiftDeclareSchema{
   static public function register(self:DeclareSchema,state:TypeContext){
-    return state.get(self.identity()).fold(
+    return state.get(self.id).fold(
       ok -> ok,
       () -> {
-        final type = STData(Ref.pure((LeafType.make(self.id.name,self.id.pack,self.validation):DataType)));
+        final type = STData(Ref.pure((LeafType.make(Ident.make(self.id.name,self.id.pack),self.validation):DataType)));
         state.put(type);
         return type;
       }
@@ -166,14 +174,14 @@ class LiftDeclareUnionSchema{
   static public function register(self:DeclareUnionSchema,state:TypeContext):SType{
     final lhs   = self.lhs.register(state);
     final rhs   = self.rhs.register(state);
-    final type  = UnionType.make(self.id.name,self.id.pack,lhs,rhs,self.validation).toSType();
+    final type  = UnionType.make(self.ident,lhs,rhs,self.meta,self.validation).toSType();
     state.put(type);
     return type;
   }
 }
 class LiftDeclareEnumSchema_register{
   static public function register(self:DeclareEnumSchema,state:TypeContext):SType{
-    final type = EnumType.make(self.id.name,self.id.pack,self.constructors).toSType();
+    final type = EnumType.make(self.id,self.constructors).toSType();
     state.put(type);
     return type;
   }
@@ -182,15 +190,15 @@ class LiftDeclareGenericSchema_register{
   static public function register(self:DeclareGenericSchema,state:TypeContext):SType{
     var next : GenericType    = null;
     final fn = function(){
-      __.log().debug(self.identity().toString());
-      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.identity()));
+      __.log().debug(self.id.toString());
+      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.id));
     }
     var type                  = STGeneric(Ref.make(fn));
     state.put(type);
 
-    next = state.get(self.type.identity()).fold(
+    next = state.get(self.type.id).fold(
       (ok:SType) -> {
-        final next = GenericType.make(self.id.name,self.id.pack,ok,self.validation);
+        final next = GenericType.make(self.ident,ok,self.meta,self.validation);
         return next;
       },
       () -> {
@@ -215,22 +223,22 @@ class LiftDeclareRecordSchema_register{
   static public function register(self:DeclareRecordSchema,state:TypeContext):SType{
     var next : RecordType     = null;
     var fn                    = function(){
-      //__.log().debug(self.identity().toString());
-      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.identity()));
+      //__.log().debug(self.id.toString());
+      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.id));
     }
     var type                  = STRecord(Ref.make(fn));
 
     final fs = self.fields.lfold(
       function (next:Procure,memo:Cluster<stx.schema.core.Field>):Cluster<stx.schema.core.Field> {
-        final id    = next.type.identity();
+        final id    = next.type.id;
         __.log().debug('$id');
         final type : SType = switch(next){
           case Property(prop)   : 
             next.type.register(state);
           case Attribute(attr)  : 
             //__.tracer()(next.type.register(state));
-            final type = state.get(attr.type.identity()).def(() -> attr.type.register(state));
-            final link = LinkType.make(type,attr.relation,attr.inverse,attr.validation);
+            final type = state.get(attr.type.id).def(() -> attr.type.register(state));
+            final link = LinkType.make(type,attr.relation,attr.inverse,Empty,attr.validation);
             link.toSType().register(state);
         }
         __.log().debug(_ -> _.pure(type));
@@ -239,7 +247,7 @@ class LiftDeclareRecordSchema_register{
       Cluster.unit()
     );
     
-    next = new RecordTypeCls(self.id.name,self.id.pack,fs);
+    next = new RecordTypeCls(Ident.make(self.id.name,self.id.pack),fs,self.meta,self.validation);
     state.put(type);
     return type;
   }

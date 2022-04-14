@@ -13,7 +13,7 @@ abstract SchemaAnonDeclaration(SchemaAnonDeclarationDef) from SchemaAnonDeclarat
 
   public function resolve(state:Schemata):Schema{
     final fieldsI = this.fields.map(
-      field -> state.get(field.identity()).fold(
+      field -> state.get(field.identity).fold(
         ok -> field.with_type(ok),
         () -> field.with_type(field.type.resolve(state))
       )

@@ -4,19 +4,19 @@ interface UnionTypeApi extends DataTypeApi{
   final lhs : SType;
   final rhs : SType;
 }
-class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
+class UnionTypeCls extends ConcreteType implements UnionTypeApi {
   public final lhs : SType;
   public final rhs : SType;
-  public function new(name,pack,lhs,rhs,?validation){
-    super(name,pack,validation);
+  public function new(ident,lhs,rhs,?validation){
+    super(ident,validation);
     this.lhs = lhs;
     this.rhs = rhs;
   }
-  override public function identity(){
+  override public function get_identity(){
     return Identity.make(
-      Ident.make(name,pack),
-      Some(lhs.identity()),
-      Some(rhs.identity())
+      this.ident,
+      Some(lhs.identity),
+      Some(rhs.identity)
     );
   }
   public function register(state:TypeContext):SType{
@@ -26,14 +26,17 @@ class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
     );
     state.put(STUnion(t));
 
-    final l   = state.get(lhs.identity()).fudge(__.fault().of(E_Schema_IdentityUnresolved(lhs.identity())));
-    final r   = state.get(rhs.identity()).fudge(__.fault().of(E_Schema_IdentityUnresolved(rhs.identity())));
+    final l   = state.get(lhs.identity).fudge(__.fault().of(E_Schema_IdentityUnresolved(lhs.identity)));
+    final r   = state.get(rhs.identity).fudge(__.fault().of(E_Schema_IdentityUnresolved(rhs.identity)));
   
-    next = new UnionTypeCls(this.name,this.pack,l,r);
+    next = new UnionTypeCls(this.ident,l,r);
     return STUnion(next);
   }
+  public function toSType():SType{
+    return STUnion(Ref.pure((this:UnionType)));
+  }
   public function toString(){
-    return this.identity().toString();
+    return this.identity.toString();
   }
 }
 @:using(stx.schema.type.UnionType.UnionTypeLift)
@@ -45,8 +48,8 @@ class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
   private var self(get,never):UnionType;
   private function get_self():UnionType return lift(this);
 
-  @:noUsing static public function make(name,pack,lhs,rhs,?validation){ 
-    return lift(new UnionTypeCls(name,pack,lhs,rhs,validation));
+  @:noUsing static public function make(ident,lhs,rhs,?validation){ 
+    return lift(new UnionTypeCls(ident,lhs,rhs,validation));
   }
 }
 class UnionTypeLift{

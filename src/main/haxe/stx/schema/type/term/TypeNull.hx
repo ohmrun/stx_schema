@@ -6,7 +6,7 @@ class TypeNull extends GenericTypeCls{
     return new TypeNull(type);
   }
   public function new(type){
-    super("Null",["std"],type);
+    super(Ident.make("Null",["std"]),type);
   }
   override public function get_validation(){
     return Cluster.pure(ValidationType(_.validate()));

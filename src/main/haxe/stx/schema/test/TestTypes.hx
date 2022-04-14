@@ -15,6 +15,10 @@ class TestTypes{
             inverse   : "author",
             type      : __.way().into("Article"),
             relation  : HAS_MANY
+          },
+          "key" => {
+            type : __.way().into("Key"),
+            relation : HAS_ONE
           }
         ]
       }
@@ -34,7 +38,15 @@ class TestTypes{
         ]
       }
     });
+    final key = _.record({
+      name : "Key",
+      fields : {
+        properties : [
+          "value" => Schema.String()
+        ] 
+      }
+    });
     final states       = _.enumeration('States',['human'],['awake','sleepy','asleep','hungry','horny','dead']);
-    return [user,article,states];
+    return [user,article,states,key];
   }
 }

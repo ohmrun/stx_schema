@@ -3,7 +3,7 @@ package stx.schema.type.term;
 class TypeString extends LeafType{
   static public var _(default,never) = TypeStringLift;
   public function new(){
-    super("String",["std"]);
+    super(Ident.make("String",["std"]));
   }
   override public function get_validation(){
     return Cluster.pure(ValidationType(_.validate()));

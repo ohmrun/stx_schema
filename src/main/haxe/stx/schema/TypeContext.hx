@@ -4,7 +4,7 @@ class TypeContext extends Clazz{
   @:noUsing static public function make(){
     return new TypeContext();
   }
-public final register : StringMap<SType>;
+  public final register : StringMap<SType>;
   
   private var index    : Int;
   
@@ -19,7 +19,7 @@ public final register : StringMap<SType>;
     this.index    = 0; 
   }
   public function put(type:SType){
-    this.register.set(type.identity().toString(),type);
+    this.register.set(type.identity.toString(),type);
   }
   public function next():Int{
     var n = index;

@@ -3,7 +3,7 @@ package stx.schema.type.term;
 class TypeBool extends LeafType{
   static public var _(default,never) = TypeBoolLift;
   public function new(){
-    super("Bool",["std"]);
+    super(Ident.make("Bool",["std"]));
   }
   override public function get_validation(){
     return Cluster.pure(ValidationType(_.validate()));

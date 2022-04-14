@@ -31,39 +31,16 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.validation
     );
   }
-  public var name(get,never):String;
-  private function get_name():String{
+  public var id(get,never):Identity;
+  private function get_id():Identity{
     return _.fold(
       this,
-      x -> x.id.name,
-      x -> x.id.name,
-      x -> x.id.name,
-      x -> x.id.name,
-      x -> x.id.name,
-      x -> x.identity().name
-    );
-  }
-  public var pack(get,never):Cluster<String>;
-  private function get_pack():Cluster<String>{
-    return __.option(_.fold(
-      this,
-      x -> x.id.pack,
-      x -> x.id.pack,
-      x -> x.id.pack,
-      x -> x.id.pack,
-      x -> x.id.pack,
-      x -> x.identity().pack
-    )).def(() -> Cluster.unit());
-  }
-  public function identity():Identity{
-    return _.fold(
-      this,
-      x -> x.identity(),
-      x -> x.identity(),
-      x -> x.identity(),
-      x -> x.identity(),
-      x -> x.identity(),
-      x -> x.identity()
+      x -> x.id,
+      x -> x.id,
+      x -> x.id,
+      x -> x.id,
+      x -> x.id,
+      x -> x.identity
     );
   }
   public function resolve(state:TyperContext):Schema{
@@ -77,10 +54,11 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> SchType(x)
     );
   }
-  @:from static public function fromRecordObject(self:{ name : String, ?pack : Array<String>, fields : { ?properties : Map<String,DeclareProperty> , ?attributes : Map<String,DeclareAttribute> }, ?validation : Validations}){
+  @:from static public function fromRecordObject(self:{ name : String, ?pack : Array<String>, ?meta : PExpr<Primitive>, fields : { ?properties : Map<String,DeclareProperty> , ?attributes : Map<String,DeclareAttribute> }, ?validation : Validations}){
     return stx.schema.declare.DeclareRecordSchema.make0(
         self.name,self.pack,
         Procurements.fromObject(self.fields),
+        self.meta,
         self.validation
       ).toSchema();
   }
@@ -93,9 +71,9 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
     );
   }
   @:from static public function fromGenericObject(self:{name : String, ?pack : Array<String>, ?validation : Validations, ?type : Schema }){
-    return DeclareGenericSchema.make(self.name,self.pack,self.type,self.validation).toSchema();
+    return DeclareGenericSchema.make(Ident.make(self.name,self.pack),self.type,self.validation).toSchema();
   }
-  @:from static public function fromDeclareSchema(self:DeclareSchemaDef):Schema{
+  @:from static public function fromDeclareSchema(self:DeclareSchemaApi):Schema{
     return lift(SchScalar(self));
   }
   @:from static public function fromDeclareGenericSchema(self:DeclareGenericSchema):Schema{

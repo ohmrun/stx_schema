@@ -4,7 +4,7 @@ class TypeFloat extends LeafType{
   static public var _(default,never) = TypeFloatLift;
 
   public function new(){
-    super("Float",["std"]);
+    super(Ident.make("Float",["std"]));
   }
   override public function get_validation(){
     return Cluster.pure(ValidationType(_.validate()));

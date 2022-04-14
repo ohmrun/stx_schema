@@ -1,33 +1,40 @@
 package stx.schema.declare;
 
-typedef DeclareEnumSchemaDef = DeclareSchemaDef & {
+interface DeclareEnumSchemaApi extends DeclareSchemaApi{
   final constructors : Cluster<String>;
 }
+class DeclareEnumSchemaCls implements DeclareEnumSchemaApi extends DeclareSchemaConcrete{
+  public final constructors : Cluster<String>;
+  public function new(ident,constructors,meta,validation){
+    super(ident,meta);
+    this.validation   = validation;
+    this.constructors = constructors;
+  }
+  public function get_validation(){ return this.validation; } 
+}
 @:using(stx.schema.declare.DeclareEnumSchema.DeclareEnumSchemaLift)
-@:forward abstract DeclareEnumSchema(DeclareEnumSchemaDef) from DeclareEnumSchemaDef to DeclareEnumSchemaDef{
+@:forward abstract DeclareEnumSchema(DeclareEnumSchemaApi) from DeclareEnumSchemaApi to DeclareEnumSchemaApi{
   static public var _(default,never) = DeclareEnumSchemaLift;
   public function new(self) this = self;
-  @:noUsing static public function lift(self:DeclareEnumSchemaDef):DeclareEnumSchema return new DeclareEnumSchema(self);
+  @:noUsing static public function lift(self:DeclareEnumSchemaApi):DeclareEnumSchema return new DeclareEnumSchema(self);
 
-  @:noUsing static public function make(ident:Ident,constructors,?validation){
-    return lift({
-      id            : Identity.fromIdent(ident),
-      constructors  : constructors,
-    validation    : _.validation.concat(__.option(validation).defv(Cluster.unit()))
-    });
+  @:noUsing static public function make(ident:Ident,constructors,?meta,?validation){
+    return lift(new DeclareEnumSchemaCls(
+      ident,
+      constructors,
+      __.option(meta).defv(Empty),
+      _.validation.concat(__.option(validation).defv(Cluster.unit()))
+    ));
   }
-  @:noUsing static public function make0(name:String,pack,constructors,?validation){
-    return make(Ident.make(name,pack),constructors,validation);
+  @:noUsing static public function make0(name:String,pack,constructors,?meta,?validation){
+    return make(Ident.make(name,pack),constructors,meta,validation);
   }
-  public function identity(){
-    return this.id;  
-  }
-  public function prj():DeclareEnumSchemaDef return this;
+  public function prj():DeclareEnumSchemaApi return this;
   private var self(get,never):DeclareEnumSchema;
   private function get_self():DeclareEnumSchema return lift(this);
 
   public function toString(){
-    final thiz = identity().toString();
+    final thiz = this.id.toString();
     return '$thiz(${this.constructors.join(",")})';
   }
 } 

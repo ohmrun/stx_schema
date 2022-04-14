@@ -1,18 +1,23 @@
 package stx.schema.type;
 
 class LeafType extends DataTypeCls{
-  @:noUsing static public function make(name,pack,?validation){
-    return new LeafType(name,pack);
+  @:noUsing static public function make(ident,?meta,?validation){
+    return new LeafType(ident);
   }
-  public function new(name,pack,?validation){
-    super(name,pack == null ? [] : pack,validation);
+  public final ident : Ident;
+  public function new(ident,?meta,?validation){
+    super(meta,validation);
+    this.ident  = ident;
     this.status = TYPE_COMPLETED;
   }
   public function toString(){
-    return this.identity().toString();
+    return this.identity.toString();
   }
   public function register(state:TypeContext){
     state.put(this.toSType());
     return this.toSType();
+  }
+  public function get_identity(){
+    return Identity.fromIdent(this.ident);
   }
 } 

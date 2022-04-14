@@ -7,7 +7,7 @@ class TypeArray extends GenericTypeCls{
     return new TypeArray(type);
   }
   public function new(type:SType){
-    super("Array",["std"],type);
+    super(Ident.make("Array",["std"]),type);
   }
   override public function get_validation(){
     return Cluster.pure(ValidationType(_.validate()));

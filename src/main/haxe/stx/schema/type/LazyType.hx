@@ -3,29 +3,20 @@ package stx.schema.type;
 @:using(stx.schema.type.LazyType.LazyTypeLift)
 class LazyType extends BaseTypeCls{
   public var type(get,null) :Null<SType>;
+  public final lookup : Identity;
+
   public function get_type(){
     //throw "here";
-    __.log().trace('lazy: ${ctx.get(this.id)}');
-    return ctx.get(this.id).defv(null);
+    __.log().trace('lazy: ${ctx.get(this.lookup)}');
+    return ctx.get(this.lookup).defv(null);
   }
-  private final id  : Identity;
   private final ctx : TypeContext;
   
-  public function new(id,ctx,?validations){
-    super(validations);
-    this.id   = id;
-    this.ctx  = ctx;
-  }
-  public var name(get,null):String;
-  function get_name(){
-    return this.id.name;
-  }
-  public var pack(get,null):Way;
-  function get_pack(){
-    return this.id.pack;
-  }
-  public function identity(){
-    return this.id;
+  public function new(lookup,ctx,?meta,?validations){
+    super(meta,validations);
+    
+    this.ctx    = ctx;
+    this.lookup = lookup;
   }
   private function get_type_option(){
     return type == null ? None : Some(type);
@@ -41,10 +32,13 @@ class LazyType extends BaseTypeCls{
     return STLazy(Ref.pure(this));
   }
   public function toString(){
-    return id.toString();
+    return identity.toString();
   }
   @:noUsing static public function make(id,context){
     return new LazyType(id,context);
+  }
+  public function get_identity(){
+    return __.option(this.type).map(x -> x.identity).defv(this.lookup);
   }
 }
 class LazyTypeLift{  

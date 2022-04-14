@@ -24,16 +24,16 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
        },
        () -> {
           return make(
-            identity(),
-            () -> state.get(identity()).fudge(__.fault().of(E_Schema_IdentityUnresolved(identity())))
+            id,
+            () -> state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)))
           );
        }
      ) 
    );
   }
   public function register(state:TypeContext):SType{
-    __.log().debug('register ref: ${identity()}');
-    return state.get(identity()).def(
+    __.log().debug('register ref: ${id}');
+    return state.get(id).def(
       () -> {
         __.log().trace(_ -> _.pure(this.pop));
         return __.option(this.pop).fold(
@@ -44,8 +44,8 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
             schema.register(state);
           },
           () -> {
-            __.log().trace(_ -> _.pure(identity()));
-            final val = LazyType.make(identity(),state).toSType();
+            __.log().trace(_ -> _.pure(id));
+            final val = LazyType.make(id,state).toSType();
             state.put(val);
             return val;
           }
@@ -68,15 +68,15 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   @:from static inline public function fromSchemaSum(self:SchemaSum){
     final that : Schema = Schema.lift(self);
     return lift({
-      name  : that.name,
-      pack  : that.pack,
+      name  : that.id.name,
+      pack  : that.id.pack,
       pop   : () -> that,
-      lhs   : None,
-      rhs   : None
+      lhs   : that.id.lhs,
+      rhs   : that.id.rhs
     });
   }
   @:from static inline public function fromSchema(self:Schema){
-    final identity = self.identity();
+    final identity = self.id;
     return lift({
       name  : identity.name,
       pack  : identity.pack,
@@ -96,11 +96,16 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   @:from static inline public function fromIdentity(self:Identity){
     return make0(self.name,self.pack,self.lhs,self.rhs);
   }
-  @:from static inline public function fromDeclareSchema(self:DeclareSchemaDef){
+  @:from static inline public function fromDeclareSchema(self:DeclareSchemaApi){
     return fromSchemaSum(Schema.fromDeclareSchema(self));
   }
-  public function identity(){
-    return Identity.lift(this);
+  public var id(get,never) : Identity;
+  public function get_id(){
+    return Identity.make(
+      Ident.make(this.name,this.pack),
+      this.lhs,
+      this.rhs
+    );
   }
   public function prj():SchemaRefDef return this;
   private var self(get,never):SchemaRef;

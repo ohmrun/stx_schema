@@ -1,29 +1,19 @@
 package stx.schema.type;
 
 interface DataTypeApi extends BaseTypeApi{
-  public final name : String;
-  public final pack : Way;
 
-  public function ident():Ident;
 }
 abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
-  public final name : String;
-  public final pack : Way;
-  public function new(name:String,pack:Array<String>,?validation){
-    super(validation);
-    this.name = name;
-    this.pack = Way.lift(pack);
-  }
-  public function identity(){
-    return Identity.fromIdent(Ident.make(name,pack));
-  }
-  public function ident():Ident{
-    return Ident.make(name,pack);
+  public function new(?meta,?validation){
+    super(meta,validation);
   }
   public function toSType(){
     return SType.make(STData(Ref.pure((this:DataType))));
   }
 }
+// abstract class DataTypeBase extends DataTypeCls{
+
+// }
 @:using(stx.schema.type.DataType.DataTypeLift)
 @:forward abstract DataType(DataTypeApi) from DataTypeApi to DataTypeApi{
   static public var _(default,never) = DataTypeLift;

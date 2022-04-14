@@ -2,23 +2,24 @@ package stx.schema.type;
 
 interface EnumTypeApi extends DataTypeApi  {
   final constructors : Cluster<String>;
+  final ident        : Ident;
 }
-class EnumTypeCls extends DataTypeCls implements EnumTypeApi{
+class EnumTypeCls extends ConcreteType implements EnumTypeApi{
   public final constructors : Cluster<String>;
-  public function new(name,pack,constructors,?validation){
-    super(name,pack,validation);
+  public function new(ident,constructors,?meta,?validation){
+    super(ident,meta,validation);
     this.constructors = constructors;
   }
   public function register(state:TypeContext){
     state.put(this.toSType());
     return this.toSType();
   }
-  override public function toSType():SType{
+  public function toSType():SType{
     return STEnum(Ref.pure(EnumType.lift(this)));
   }
   public function toString(){
-    return this.identity().toString();
-  } 
+    return this.identity.toString();
+  }
 }
 @:using(stx.schema.type.EnumType.EnumTypeLift)
 @:forward abstract EnumType(EnumTypeApi) from EnumTypeApi to EnumTypeApi{
@@ -41,8 +42,8 @@ class EnumTypeLift{
   }
   static public function getTypeDefinition(self:EnumType){
     return __.g().type().Make(
-      self.name,
-      self.pack,
+      self.ident.name,
+      self.ident.pack,
       ttype -> ttype.Abstract(
         ct -> ct.fromString('std.String'),
         ct -> [ct.fromString('std.String')],

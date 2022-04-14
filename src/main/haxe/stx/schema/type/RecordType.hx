@@ -2,18 +2,23 @@ package stx.schema.type;
 
 interface RecordTypeApi extends DataTypeApi{
   public final fields  : Cell<Cluster<stx.schema.core.Field>>;
+  public final ident   : Ident;
+  public function toRecordTypeApi():RecordTypeApi;
 }
-class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
+class RecordTypeCls extends ConcreteType implements RecordTypeApi{
   public final fields  : Cell<Cluster<stx.schema.core.Field>>;
-  public function new(name,pack,fields){
-    super(name,pack);
+  public function new(ident,fields,?meta,?validation){
+    super(ident,meta,validation);
     this.fields   = fields;
   }
   override public function get_validation(){
     return Cluster.unit();
   }
+  public function toSType():SType{
+    return STRecord(Ref.pure(this.toRecordTypeApi()));
+  }
   public function toString(){
-    return this.identity().toString();
+    return this.identity.toString();
   }
   public function register(state:TypeContext){
     var next : RecordType     = null;
@@ -23,16 +28,19 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
     state.put(STRecord(type));
     final fs = (this.fields.pop().toIter()).lfold(
       (next:stx.schema.core.Field,memo:Cluster<stx.schema.core.Field>) -> {
-        final id    = next.type.identity();
+        final id    = next.type.identity;
         final type  = state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)));
         return memo.snoc(stx.schema.core.Field.make(next.name,type));
       },
       Cluster.unit()
     );
     
-    next = new RecordTypeCls(this.name,this.pack,fs);
+    next = new RecordTypeCls(this.ident,fs,meta,validation);
    
     return next.toSType();
+  }
+  public function toRecordTypeApi():RecordTypeApi{
+    return this;
   }
 }
 @:using(stx.schema.type.RecordType.RecordTypeLift)
@@ -48,13 +56,6 @@ class RecordTypeCls extends DataTypeCls implements RecordTypeApi{
     return lift(new RecordTypeCls(name,pack,fields));
   }
 
-  @:from static function fromObject(self:{ name : String, ?pack : Array<String>, fields : Map<String,SType> }):RecordType{
-    final fields = [];
-    for(k => v in self.fields){
-      fields.push(Field.make(k,v));
-    }
-    return new RecordTypeCls(self.name,self.pack,fields);
-  }
 }
 class RecordTypeLift{
   static public function main(self:RecordType,state:GTypeContext):Void{
@@ -106,8 +107,8 @@ class RecordTypeLift{
   static public function getMainTypeDefinition(self:RecordType){
     final g = __.g();
     return g.type().Make(
-      '${self.name}Main',
-      self.pack,
+      '${self.ident.name}Main',
+      self.ident.pack,
       tkind -> tkind.Structure(),
       fields -> self.fields.pop().map(
         field -> 

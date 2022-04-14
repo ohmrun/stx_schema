@@ -1,4 +1,4 @@
-package stx.schema.core;
+package stx.schema;
 
 class View{
   

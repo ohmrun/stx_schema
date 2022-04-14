@@ -1,40 +1,48 @@
 package stx.schema.declare;
 
-typedef DeclareRecordSchemaDef = DeclareSchemaDef & {
-  final fields : Procurements;
+interface DeclareRecordSchemaApi extends DeclareSchemaApi{
+  public final fields : Procurements;
 }
-@:forward abstract DeclareRecordSchema(DeclareRecordSchemaDef) from DeclareRecordSchemaDef to DeclareRecordSchemaDef{
+class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareSchemaConcrete{
+  public function new(ident,fields,meta,validation){
+    this.fields     = fields;
+    this.validation = validation;
+    super(ident,meta);
+  }
+  public final fields : Procurements;
+  public function get_validation(){ return this.validation; }
+}
+@:forward abstract DeclareRecordSchema(DeclareRecordSchemaApi) from DeclareRecordSchemaApi to DeclareRecordSchemaApi{
   public function new(self) this = self;
   static public var _(default,never) = DeclareRecordSchemaLift;
-  @:noUsing static public function lift(self:DeclareRecordSchemaDef):DeclareRecordSchema return new DeclareRecordSchema(self);
+  @:noUsing static public function lift(self:DeclareRecordSchemaApi):DeclareRecordSchema return new DeclareRecordSchema(self);
 
-  @:noUsing static public function make(ident:Ident,fields:Procurements,?validation:Validations){
-    return lift({
-      id          : Identity.fromIdent(ident),
-      fields      : fields,
-      validation  : validation
-    });
+  @:noUsing static public function make(ident:Ident,fields:Procurements,?meta,?validation:Validations){
+    return lift(new DeclareRecordSchemaCls(
+      ident,
+      fields,
+      __.option(meta).defv(Empty),
+      validation
+    ));
   }
-  @:noUsing static public function make0(name:String,pack,fields:Procurements,?validation){
+  @:noUsing static public function make0(name:String,pack,fields:Procurements,?meta,?validation){
     return make(
       Ident.make(name,pack),
       fields,
+      meta,
       validation
     );
   }
-  public function prj():DeclareRecordSchemaDef return this;
+  public function prj():DeclareRecordSchemaApi return this;
   private var self(get,never):DeclareRecordSchema;
   private function get_self():DeclareRecordSchema return lift(this);
 
-  public function identity(){
-    return this.id;
-  }
   public function resolve(state:TyperContext):Schema{
     __.log().debug('resolve record');
     final fieldsI = this.fields.map(
       (field:Procure) -> {
         __.log().debug(_ -> _.thunk( () -> field));
-        final ref = state.get(field.type.identity()).fold(
+        final ref = state.get(field.type.id).fold(
           x   -> SchemaRef.fromSchema(x),
           ()  -> field.type.resolve(state)
         );
@@ -47,7 +55,7 @@ typedef DeclareRecordSchemaDef = DeclareSchemaDef & {
     return SchRecord(result);
   }
   public function toString(){
-    final thiz = identity().toString();
+    final thiz = this.id.toString();
     final rest = @:privateAccess this.fields.map(
       procurement -> procurement.toString()      
     ).prj().join(",");

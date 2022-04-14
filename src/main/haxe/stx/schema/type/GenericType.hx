@@ -3,16 +3,16 @@ package stx.schema.type;
 interface GenericTypeApi extends DataTypeApi{
   public final type : SType;
 }
-class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
+class GenericTypeCls extends ConcreteType implements GenericTypeApi{
   public final type : SType;
-  public function new(name,pack,type,?validation){
-    super(name,pack,validation);
-    this.type = type;
+  public function new(ident,type,?meta,?validation){
+    super(ident,meta,validation);
+    this.type     = type;
   }
   public function toString(){
-    return identity().toString();
+    return this.identity.toString();
   }
-  override public function toSType():SType{
+public function toSType():SType{
     return SType.make(STGeneric(Ref.pure((this:GenericType))));
   }
   public function register(state:TypeContext):SType{
@@ -23,23 +23,22 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
     state.put(STGeneric(t));
     var tI              = 
       state
-        .get(this.type.identity())
+        .get(this.type.identity)
         .fold(
           ok -> __.option(ok),
           () -> this.type.is_anon().if_else(
             () -> __.option(this.type.register(state)),
             () -> __.option(null)
           )
-        ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity())));
+        ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity)));
 
-    next = new GenericTypeCls(this.name,this.pack,tI);
+    next = new GenericTypeCls(this.ident,tI);
     return next.toSType();
   }
-  override public function identity(){
-    final ident = Ident.make(name,pack);
+  override public function get_identity(){
     return Identity.make(
-      ident,
-      __.option(this.type.identity()),
+      this.ident,
+      __.option(this.type.identity),
       None
     );
   }
@@ -54,8 +53,8 @@ class GenericTypeCls extends DataTypeCls implements GenericTypeApi{
   private var self(get,never):GenericType;
   private function get_self():GenericType return lift(this);
 
-  @:noUsing static public function make(name,pack,inner,?validation){ 
-    return lift(new GenericTypeCls(name,pack,inner,validation));
+  @:noUsing static public function make(ident:Ident,inner,?meta,?validation){ 
+    return lift(new GenericTypeCls(ident,inner,meta,validation));
   }
 }
 class GenericTypeLift{

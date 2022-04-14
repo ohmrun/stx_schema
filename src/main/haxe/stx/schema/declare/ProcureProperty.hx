@@ -26,6 +26,9 @@ typedef ProcurePropertyDef = stx.schema.WithValidationDef & {
   public function toString(){
     return __.show({ name : this.name, type : this.type.toString() });
   }
+  @:to public function toProcure(){
+    return Property(this);
+  }
 }
 class ProcurePropertyLift{
   static public function to_self_constructor(self:ProcureProperty){

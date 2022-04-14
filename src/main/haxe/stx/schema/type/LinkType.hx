@@ -10,8 +10,8 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   public final relation  : RelationType;
   public final inverse   : String;
 
-  public function new(into,relation,inverse,?validation){
-    super(validation);
+  public function new(into,relation,inverse,?meta,?validation){
+    super(meta,validation);
     this.into       = into;
     this.relation   = relation;
     this.inverse    = inverse;
@@ -27,28 +27,28 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
     var next : LinkType     = null;
     var t                   = Ref.make(
       function():LinkType{
-        final inner = state.get(this.into.identity()).def(() -> this.into.register(state));
+        final inner = state.get(this.into.identity).def(() -> this.into.register(state));
         var tI              = 
           state
-            .get(this.into.identity())
+            .get(this.into.identity)
             .fold(
               ok -> __.option(ok),
               () -> this.into.is_anon().if_else(//TODO: this shouldn't be a thing
-                () -> __.option(state.get(this.into.identity()).def(() ->this.into.register(state))),
+                () -> __.option(state.get(this.into.identity).def(() ->this.into.register(state))),
                 () -> __.option(null)
               )
-            ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity())));
+            ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity)));
         return new LinkTypeCls(tI,relation,inverse);
       }
     );
     
     return STLink(t);
   }
-  public function identity(){
+  public function get_identity(){
     final ident = Ident.make('Link',['std']);
     return Identity.make(
       ident,
-      __.option(this.into.identity()),
+      __.option(this.into.identity),
       None
     );
   }
@@ -62,8 +62,8 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   private var self(get,never):LinkType;
   private function get_self():LinkType return lift(this);
 
-  @:noUsing static public function make(into,relation,inverse,?validation){ 
-    return lift(new LinkTypeCls(into,relation,inverse,validation));
+  @:noUsing static public function make(into,relation,inverse,?meta,?validation){ 
+    return lift(new LinkTypeCls(into,relation,inverse,meta,validation));
   }
 }
 class LinkTypeLift{
@@ -74,21 +74,14 @@ class LinkTypeLift{
   static public function main(self:LinkType,state:GTypeContext){
     return throw UNIMPLEMENTED;
   }
-  static public function lookup(self:LinkType,?pos:Pos):SType{
-    trace(pos);
+  static public function lookup(self:LinkType):Option<SType>{
     return self.into.fields.search(
       kv -> {
         __.log().debug('${self.inverse} ${kv.name}');
         return self.inverse == kv.name;
       }
-    ).resolve(
-      f -> f.of(E_Schema_InverseNotFound(self))
-    ).fold(
-      x -> x.type,
-      e -> {
-        __.crack(e);
-        return null;
-      }
+    ).map(
+      x -> x.type
     );
   }
   // static public function getLeafComplexType(self:LinkType):GComplexType{

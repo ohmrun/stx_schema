@@ -8,8 +8,8 @@ interface AnonTypeApi extends BaseTypeApi{
 class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   public final uuid    : String;
   public final fields  : Cell<Cluster<Field>>;
-  public function new(fields,?uuid,?validation){
-    super(validation);
+  public function new(fields,?uuid,?meta,?validation){
+    super(meta,validation);
     this.uuid     = __.option(uuid).def(__.uuid.bind('xxxxx'));
     this.fields   = fields;
     this.debrujin = 1;//Context.instance.next(); 
@@ -35,7 +35,7 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     state.put(STAnon(type));
     final fs = (this.fields.pop().toIter()).lfold(
       (next:Field,memo:Cluster<Field>) -> {
-        final id    = next.type.identity();
+        final id    = next.type.identity;
         final type  = state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)));
         return memo.snoc(Field.make(next.name,type));
       },
@@ -45,7 +45,7 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     next = new AnonTypeCls(Cell.pure(fs),this.uuid);
     return next.toSType();
   }
-  public function identity():Identity{
+  public function get_identity():Identity{
     return Ident.make(uuid);
   }
 }

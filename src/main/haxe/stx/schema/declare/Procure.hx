@@ -34,9 +34,6 @@ enum ProcureSum{
       case Attribute(def) : def.name;
     } 
   }
-  public function identity(){
-    return get_type().identity();
-  }
   public function toString(){
     return _.fold(
       this,

@@ -8,21 +8,27 @@ interface BaseTypeApi extends Has_toStringApi{
   private function get_validation():Validations;
 
   public var status : TypeStatus; 
+  public var meta   : PExpr<Primitive>;
 
-  public function identity():Identity;
-  
+  public var identity(get,null):Identity;
+  public function get_identity():Identity;
+
   public function toSType():SType;
   public function register(state:TypeContext):SType;
 
   public function toGTypePath():GTypePath;
+
+  public function toBaseTypeApi():BaseTypeApi;
 }
 @:using(stx.schema.type.BaseType.BaseTypeLift)
 abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
-  public function new(validation){
+  public function new(meta,validation){
     super();
     this.status     = TYPE_UNTOUCHED;
+    this.meta       = __.option(meta).defv(Empty);
     this.validation = validation;
   }
+  public var meta   : PExpr<Primitive>;
   public var status : TypeStatus;
   
   public var validation(get,null) : Validations;
@@ -33,13 +39,18 @@ abstract class BaseTypeCls extends Has_toStringCls implements BaseTypeApi{
   private function get_debrujin():Null<Int>{
     return 1;
   }
+  public var identity(get,null):Identity;
+  abstract public function get_identity():Identity;
+
   abstract public function toSType():SType;
-  abstract public function identity():Identity;
   abstract public function register(state:TypeContext):SType;
 
   public function toGTypePath():GTypePath{
-    final munged                               = this.identity().toIdent_munged();
+    final munged                               = this.identity.toIdent_munged();
     return __.g().type_path().Make(munged.name,munged.pack.toArray());
+  }
+  public function toBaseTypeApi():BaseTypeApi{
+    return this;
   }
 }
 class BaseTypeLift{

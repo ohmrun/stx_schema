@@ -1,12 +1,13 @@
 package stx.schema.declare.term;
 
-abstract SchemaBool(DeclareSchemaDef) from DeclareSchemaDef to DeclareSchemaDef{
+abstract SchemaBool(DeclareSchemaApi) from DeclareSchemaApi to DeclareSchemaApi{
   static public var _(default,never) = SchemaBoolLift;
   @:noUsing static public function make(){
     return new SchemaBool(
       DeclareSchema.make0(
         'Bool',
         ['std'],
+        Empty,
         ValidationType(_.validate())
       )
     );

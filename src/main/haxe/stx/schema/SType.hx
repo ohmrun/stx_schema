@@ -46,36 +46,6 @@ class STypeCls{
       ()  -> Validations.unit()
     );
   }
-  public var name(get,never) : String;
-  public function get_name(){
-    return SType._.fold(
-      data,
-      t   -> t.name,
-      t   -> null,
-      t   -> t.name,
-      t   -> t.name,
-      t   -> t.name,
-      t   -> null,
-      t   -> t.name,
-      t   -> t.name,
-      ()  -> null
-    );
-  }
-  public var pack(get,never) : Cluster<String>;
-  public function get_pack(){
-    return SType._.fold(
-      data,
-      t   -> t.pack,
-      t   -> Cluster.unit(),
-      t   -> t.pack,
-      t   -> t.pack,
-      t   -> t.pack,
-      t   -> Cluster.unit(),
-      t   -> t.pack,
-      t   -> t.pack,
-      ()  -> Cluster.unit()
-    );
-  }
   public var debrujin(get,never) : Int;
   public function get_debrujin(){
     return SType._.fold(
@@ -106,16 +76,17 @@ class STypeCls{
         new STypeCls(STMono);
     }
   }
-  public function identity():Identity{
+  public var identity(get,never) : Identity;
+  public function get_identity():Identity{
     return switch(data){
-      case STData(t)       : t.pop().identity(); 
-      case STAnon(t)       : t.pop().identity();
-      case STRecord(t)     : t.pop().identity();
-      case STGeneric(t)    : t.pop().identity();
-      case STUnion(t)      : t.pop().identity();
-      case STLink(t)       : t.pop().identity();
-      case STEnum(t)       : t.pop().identity();
-      case STLazy(t)       : t.pop().identity();
+      case STData(t)       : t.pop().identity; 
+      case STAnon(t)       : t.pop().identity;
+      case STRecord(t)     : t.pop().identity;
+      case STGeneric(t)    : t.pop().identity;
+      case STUnion(t)      : t.pop().identity;
+      case STLink(t)       : t.pop().identity;
+      case STEnum(t)       : t.pop().identity;
+      case STLazy(t)       : t.pop().identity;
       case STMono          :
         //throw 'abstract identity'; 
         Identity.fromIdent(Ident.make('TMono'));
@@ -230,7 +201,7 @@ class STypeLift{
   }
   static public function get_inverse(self:SType):Option<SType>{
     return switch(self.data){
-      case STLink(t) : Some(t.pop().lookup());
+      case STLink(t) : t.pop().lookup();
       default        : None;
     }
   }
