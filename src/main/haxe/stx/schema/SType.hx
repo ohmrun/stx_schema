@@ -2,7 +2,7 @@ package stx.schema;
 
 @:using(stx.schema.SType.STypeLift)
 enum STypeSum{
-  STData(t:Ref<DataType>);
+  STScalar(t:Ref<ScalarType>);
   STAnon(t:Ref<AnonType>);
   STRecord(t:Ref<RecordType>);
   STGeneric(t:Ref<GenericType>);
@@ -20,7 +20,7 @@ class STypeCls{
   }
   public function toString():String{
     return switch(data){
-      case STData(t)       : t.toString(); 
+      case STScalar(t)       : t.toString(); 
       case STAnon(t)       : t.toString();
       case STRecord(t)     : t.toString();
       case STGeneric(t)    : t.toString();
@@ -63,7 +63,7 @@ class STypeCls{
   }
   public function register(state:TypeContext):SType{
     return switch(data){
-      case STData(t)       : t.pop().register(state); 
+      case STScalar(t)       : t.pop().register(state); 
       case STAnon(t)       : t.pop().register(state);
       case STRecord(t)     : t.pop().register(state);
       case STGeneric(t)    : t.pop().register(state);
@@ -79,7 +79,7 @@ class STypeCls{
   public var identity(get,never) : Identity;
   public function get_identity():Identity{
     return switch(data){
-      case STData(t)       : t.getIdentity(); 
+      case STScalar(t)       : t.getIdentity(); 
       case STAnon(t)       : t.getIdentity();
       case STRecord(t)     : t.getIdentity();
       case STGeneric(t)    : t.getIdentity();
@@ -160,9 +160,9 @@ class STypeCls{
   }
 }
 class STypeLift{
-  static public inline function fold<Z>(self:STypeSum, data:DataType -> Z, anon : AnonType -> Z, record : RecordType -> Z, generic : GenericType -> Z, union : UnionType -> Z, link : LinkType -> Z, _enum : EnumType -> Z, lazy : LazyType -> Z, mono : Void -> Z) : Z {
+  static public inline function fold<Z>(self:STypeSum, data:ScalarType -> Z, anon : AnonType -> Z, record : RecordType -> Z, generic : GenericType -> Z, union : UnionType -> Z, link : LinkType -> Z, _enum : EnumType -> Z, lazy : LazyType -> Z, mono : Void -> Z) : Z {
     return switch(self){
-      case STData(t)       : data(t.pop()); 
+      case STScalar(t)       : data(t.pop()); 
       case STAnon(t)       : anon(t.pop());
       case STRecord(t)     : record(t.pop());
       case STGeneric(t)    : generic(t.pop());
@@ -181,7 +181,7 @@ class STypeLift{
   }
   static public function is_terminal(self:SType){
     return switch(self.data){
-      case STData(_) : true;
+      case STScalar(_) : true;
       case STAnon(_) : true;
       case STLazy(f) : is_terminal(f.pop().type);
       default       : false;
@@ -225,7 +225,7 @@ class STypeLift{
   }
   static public function main(type:SType,state:GTypeContext):Void{
     switch(type.data){
-      case STData(t)     :
+      case STScalar(t)     :
       case STRecord(t)   : t.pop().main(state);
       case STGeneric(t)  : t.pop().main(state);
       case STUnion(t)    : t.pop().main(state);
@@ -238,7 +238,7 @@ class STypeLift{
   }
   static public function leaf(self:SType,state:GTypeContext):Void{
     switch(self.data){
-      case STData(t)     :
+      case STScalar(t)     :
       case STRecord(t)   : t.pop().leaf(state);
       case STGeneric(t)  : t.pop().leaf(state);
       case STUnion(t)    : t.pop().leaf(state);
@@ -251,7 +251,7 @@ class STypeLift{
   }
   static public function getTypePath(self:SType){
     return switch(self.data){
-      case STData(t)     : Some(t.pop().toGTypePath());
+      case STScalar(t)     : Some(t.pop().toGTypePath());
       case STRecord(t)   : Some(t.pop().toGTypePath());
       case STGeneric(t)  : Some(t.pop().toGTypePath());
       case STUnion(t)    : Some(t.pop().toGTypePath());

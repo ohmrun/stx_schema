@@ -54,10 +54,7 @@ abstract class DeclareSchemaConcrete extends DeclareSchemaCls{
   private var self(get,never):DeclareSchema;
   private function get_self():DeclareSchema return lift(this);
 
-  public function resolve(state:TyperContext):Schema{
-    state.put(this);
-    return SchScalar(this); 
-  }
+  
   public function toString(){
     return this.id.toString();
   }

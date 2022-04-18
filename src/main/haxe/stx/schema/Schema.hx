@@ -1,7 +1,7 @@
 package stx.schema;
 
 enum SchemaSum{
-  SchScalar(def:DeclareSchema);
+  SchScalar(def:DeclareScalarSchema);
   SchRecord(def:DeclareRecordSchema);
   SchEnum(def:DeclareEnumSchema);
   SchGeneric(def:DeclareGenericSchema);
@@ -62,18 +62,23 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
         self.validation
       ).toSchema();
   }
-  @:from static public function fromScalarObject(self:{ name : String, ?pack : Array<String>, ?validation : Validations}){
-    return fromDeclareSchema(
-      DeclareSchema.make(
-        self.name,self.pack,None,None,
-        self.validation
+  @:from static public function fromScalarObject(self:{ name : String, ?pack : Array<String>, ?meta : PExpr<Primitive>, ?ctype : GComplexType, ?validation : Validations}){
+    final ident = Ident.make(self.name,self.pack);
+    final ctype = __.option(self.ctype).def(() -> __.g().ctype().Path(p -> p.fromIdent(ident)));
+    final meta  = __.option(self.meta).defv(Empty);
+    return fromDeclareScalarSchema(
+        DeclareScalarSchema.make(
+          Identity.fromIdent(ident),
+          ctype,
+          meta,
+          self.validation
       )
     );
   }
   @:from static public function fromGenericObject(self:{name : String, ?pack : Array<String>, ?validation : Validations, ?type : Schema }){
     return DeclareGenericSchema.make(Ident.make(self.name,self.pack),self.type,self.validation).toSchema();
   }
-  @:from static public function fromDeclareSchema(self:DeclareSchemaApi):Schema{
+  @:from static public function fromDeclareScalarSchema(self:DeclareScalarSchemaApi):Schema{
     return lift(SchScalar(self));
   }
   @:from static public function fromDeclareGenericSchema(self:DeclareGenericSchema):Schema{
@@ -110,7 +115,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   }
 }
 class SchemaLift{
-  static public inline function fold<Z>(self:SchemaSum,scalar : DeclareSchema -> Z, record : DeclareRecordSchema  -> Z, enm : DeclareEnumSchema -> Z, generic : DeclareGenericSchema -> Z, union : DeclareUnionSchema -> Z, type : SType -> Z) : Z {
+  static public inline function fold<Z>(self:SchemaSum,scalar : DeclareScalarSchema -> Z, record : DeclareRecordSchema  -> Z, enm : DeclareEnumSchema -> Z, generic : DeclareGenericSchema -> Z, union : DeclareUnionSchema -> Z, type : SType -> Z) : Z {
     return switch(self){
       case SchScalar(def)   : scalar(def);
       case SchRecord(def)   : record(def);

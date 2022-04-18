@@ -2,9 +2,8 @@
 package stx.schema.declare;
 
 typedef DeclareAttributeDef = DeclarePropertyDef & {
-  final relation   : RelationType;
-  //final 
-  final inverse    : Null<String>;
+  final relation    : RelationType; 
+  final ?inverse    : Null<String>;
 }
 @:forward abstract DeclareAttribute(DeclareAttributeDef) from DeclareAttributeDef to DeclareAttributeDef{
   public function new(self) this = self;

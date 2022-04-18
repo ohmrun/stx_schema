@@ -7,9 +7,6 @@ abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
   public function new(?meta,?validation){
     super(meta,validation);
   }
-  public function toSType(){
-    return SType.make(STData(Ref.make(() -> this.identity,() -> (this:DataType))));
-  }
 }
 // abstract class DataTypeBase extends DataTypeCls{
 

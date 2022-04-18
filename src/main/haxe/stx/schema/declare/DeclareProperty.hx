@@ -6,16 +6,16 @@ typedef DeclarePropertyDef = stx.schema.WithValidationDef & {
 @:forward abstract DeclareProperty(DeclarePropertyDef) from DeclarePropertyDef to DeclarePropertyDef{
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclarePropertyDef):DeclareProperty return new DeclareProperty(self);
-  @:noUsing static public function make(type){
+  @:noUsing static public function make(type:SchemaRef){
     return lift({ type : type  });
   }
   public function prj():DeclarePropertyDef return this;
   private var self(get,never):DeclareProperty;
   private function get_self():DeclareProperty return lift(this);
 
-  @:from static public function fromDeclareSchemaApi(self:DeclareSchemaApi){
+  @:from static public function fromDeclareScalarSchemaApi(self:DeclareScalarSchemaApi){
     return lift({
-      type : SchemaRef.fromDeclareSchema(self)
+      type : SchemaRef.fromDeclareScalarSchema(self)
     });
   }
   @:from static public function fromSchema(self:Schema){

@@ -1,6 +1,6 @@
 package stx.schema.type;
 
-class LeafType extends DataTypeCls{
+class LeafType extends ScalarTypeCls{
   @:noUsing static public function make(ident,?meta,?validation){
     return new LeafType(ident);
   }

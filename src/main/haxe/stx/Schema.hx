@@ -14,6 +14,10 @@ typedef DeclareSchemaCls                          = stx.schema.declare.DeclareSc
 typedef DeclareSchemaBase                         = stx.schema.declare.DeclareSchema.DeclareSchemaBase;
 typedef DeclareSchemaConcrete                     = stx.schema.declare.DeclareSchema.DeclareSchemaConcrete;
 
+typedef DeclareScalarSchema                       = stx.schema.declare.DeclareScalarSchema;
+typedef DeclareScalarSchemaApi                    = stx.schema.declare.DeclareScalarSchema.DeclareScalarSchemaApi;
+typedef DeclareScalarSchemaCls                    = stx.schema.declare.DeclareScalarSchema.DeclareScalarSchemaCls;
+
 typedef DeclareRecordSchema                       = stx.schema.declare.DeclareRecordSchema;
 typedef DeclareRecordSchemaCls                    = stx.schema.declare.DeclareRecordSchema.DeclareRecordSchemaCls;
 typedef DeclareRecordSchemaApi                    = stx.schema.declare.DeclareRecordSchema.DeclareRecordSchemaApi;
@@ -82,6 +86,11 @@ typedef SType                                     = stx.schema.SType;
 typedef DataTypeApi                               = stx.schema.type.DataType.DataTypeApi;
 typedef DataTypeCls                               = stx.schema.type.DataType.DataTypeCls;
 typedef DataType                                  = stx.schema.type.DataType;
+
+typedef ScalarTypeApi                             = stx.schema.type.ScalarType.ScalarTypeApi;
+typedef ScalarTypeCls                             = stx.schema.type.ScalarType.ScalarTypeCls;
+typedef ScalarType                                = stx.schema.type.ScalarType;
+
 
 typedef AnonTypeApi                               = stx.schema.type.AnonType.AnonTypeApi;
 typedef AnonTypeCls                               = stx.schema.type.AnonType.AnonTypeCls;
@@ -158,14 +167,14 @@ class LiftSchema_register{
   }
 }
 class LiftDeclareSchema{
-  static public function register(self:DeclareSchema,state:TypeContext){
+  static public function register(self:DeclareScalarSchema,state:TypeContext){
     return state.get(self.id).fold(
       ok -> ok,
       () -> {
         final ident = Ident.make(self.id.name,self.id.pack);
         final ref   = () -> Identity.fromIdent(ident);
         final inner = LeafType.make(ident,self.meta,self.validation);
-        final type  = STData(Ref.make(ref,() -> (inner:DataType)));
+        final type  = STScalar(Ref.make(ref,() -> (inner:ScalarType)));
         state.put(type);
         return type;
       }
@@ -258,7 +267,7 @@ class LiftDeclareRecordSchema_register{
             final link = LinkType.make(type,attr.relation,attr.inverse,Empty,attr.validation);
             link.toSType().register(state);
         }
-        __.log().debug(_ -> _.pure(type));
+        //__.log().debug(_ -> _.pure(type));
         return memo.snoc(stx.schema.core.Field.make(next.name,type));
       },
       Cluster.unit()

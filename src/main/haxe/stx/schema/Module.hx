@@ -1,8 +1,8 @@
 package stx.schema;
 
 class Module extends Clazz{
-  public function scalar(name,pack,?validation){
-    return SchScalar(DeclareSchema.make(name,pack,None,None,validation));
+  public function scalar(name,pack,ctype,meta,?validation){
+    return SchScalar(DeclareScalarSchema.make(Identity.make(Ident.make(name,pack),None,None),ctype,meta,validation));
   }
   public function record(self:{ name : String, ?pack : Cluster<String>, fields : Procurements, ?meta : PExpr<Primitive> , ?validation : Validations }){
     return SchRecord(DeclareRecordSchema.make0(self.name,self.pack,self.fields,self.meta,self.validation));

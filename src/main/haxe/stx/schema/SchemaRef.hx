@@ -96,8 +96,8 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   @:from static inline public function fromIdentity(self:Identity){
     return make0(self.name,self.pack,self.lhs,self.rhs);
   }
-  @:from static inline public function fromDeclareSchema(self:DeclareSchemaApi){
-    return fromSchemaSum(Schema.fromDeclareSchema(self));
+  @:from static inline public function fromDeclareScalarSchema(self:DeclareScalarSchemaApi){
+    return fromSchemaSum(Schema.fromDeclareScalarSchema(self));
   }
   public var id(get,never) : Identity;
   public function get_id(){

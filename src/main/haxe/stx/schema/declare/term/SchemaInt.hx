@@ -1,12 +1,11 @@
 package stx.schema.declare.term;
 
-abstract SchemaInt(DeclareSchemaApi) from DeclareSchemaApi to DeclareSchemaApi{
+abstract SchemaInt(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to DeclareScalarSchemaApi{
   static public var _(default,never) = SchemaIntLift;
   @:noUsing static public function make(){
     return new SchemaInt(
-      DeclareSchema.make0(
-        'Int',
-        ['std'] ,
+      SchemaScalar.make0(
+        'Int',['std'] ,
         Empty,
         ValidationType(_.validate())
       )
@@ -15,8 +14,8 @@ abstract SchemaInt(DeclareSchemaApi) from DeclareSchemaApi to DeclareSchemaApi{
   private function new(self){
     this = self;
   }
-  @:to public function toDeclareSchema(){
-    return DeclareSchema.lift(this);
+  @:to public function toDeclareScalarSchema(){
+    return DeclareScalarSchema.lift(this);
   }
 }
 class SchemaIntLift{
