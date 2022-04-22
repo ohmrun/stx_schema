@@ -44,6 +44,8 @@ class TyperContextCls{
       }      
     }
     __.log().debug("done");
+    __.log().debug(_ -> _.pure(this.context.register));
+    trace(this.context.register);
     return this;
   }
   public function toString(){

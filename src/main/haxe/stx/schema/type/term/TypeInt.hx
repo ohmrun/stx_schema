@@ -3,7 +3,8 @@ package stx.schema.type.term;
 class TypeInt extends LeafType{
   static public var _(default,never) = TypeIntLift;
   public function new(){
-    super(Ident.make("Int",["std"]));
+    final ident = Ident.make("Int",["std"]);
+    super(ident,__.g().ctype().Path(p -> p.fromIdent(ident)),Empty);
   }
   override public function get_validation(){
     return Cluster.pure(ValidationType(_.validate()));

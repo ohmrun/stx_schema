@@ -173,7 +173,7 @@ class LiftDeclareSchema{
       () -> {
         final ident = Ident.make(self.id.name,self.id.pack);
         final ref   = () -> Identity.fromIdent(ident);
-        final inner = LeafType.make(ident,self.meta,self.validation);
+        final inner = LeafType.make(ident,self.ctype,self.meta,self.validation);
         final type  = STScalar(Ref.make(ref,() -> (inner:ScalarType)));
         state.put(type);
         return type;
@@ -276,5 +276,12 @@ class LiftDeclareRecordSchema_register{
     next = new RecordTypeCls(Ident.make(self.id.name,self.id.pack),fs,self.meta,self.validation);
     state.put(type);
     return type;
+  }
+}
+class LiftGComplexTypeCtrIdentityToGComplexType{
+  static public function fromIdentity(ctr:GComplexTypeCtr,self:Identity){
+    final lhs = self.lhs.map(fromIdentity.bind(ctr)).map(GTPType).map(x -> [x]).defv([]);
+    final rhs = self.rhs.map(fromIdentity.bind(ctr)).map(GTPType).map(x -> [x]).defv([]);
+    return GTypePath.__.Make(self.name,self.pack,null,lhs.concat(rhs));
   }
 }

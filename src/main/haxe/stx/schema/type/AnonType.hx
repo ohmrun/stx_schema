@@ -64,14 +64,20 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   }
 }
 class AnonTypeLift{
-
-  static public function main(self:AnonType,state:GTypeContext){
-    return throw UNIMPLEMENTED;
+  static public function toGComplexType_with(self:AnonType,rest:SType->GComplexType){
+    return __.g().ctype().Anonymous(
+      f ->  self.fields.pop().map(
+        field -> f.Make(
+          field.name,
+          ftype -> ftype.Var(
+            _ -> rest(field.type)
+          ),
+          acc -> [acc.Public(),acc.Final()]
+        )
+      )
+    );
   }
-  static public function leaf(self:AnonType,state:GTypeContext){
-    for(field in self.fields.pop()){
-      
-    }    
-    return throw UNIMPLEMENTED;
-  }
+  // static public function toMangledIdentity(self:AnonType):MangledIdentity{
+    
+  // }
 }

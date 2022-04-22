@@ -22,6 +22,16 @@ typedef IdentityDef = IdentDef & {
       rhs  : rhs
     });
   }
+  // public function down(name:String,pack:Array<String>){
+  //   return Identity.make(
+  //     Ident.make(
+  //       name,
+  //       this.pack.concat([(this.name:Chars).uncapitalize_first_letter()].concat(pack))
+  //     ),
+  //     this.lhs,
+  //     this.rhs
+  //   );
+  // }
   public function toString():String{
     final code = (this:Ident).toIdentifier();
     final rest =  switch([this.lhs,this.rhs]){

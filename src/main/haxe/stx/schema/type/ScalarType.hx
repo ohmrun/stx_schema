@@ -2,9 +2,11 @@ package stx.schema.type;
 
 interface ScalarTypeApi extends DataTypeApi{
   final ctype : GComplexType;
+  final ident : Ident;
 }
 abstract class ScalarTypeCls extends DataTypeCls implements ScalarTypeApi{
-  public function new(ctype,meta,?validation){
+  public function new(ident,ctype,meta,?validation){
+    this.ident = ident;
     this.ctype = ctype;
     super(meta,validation);
   }

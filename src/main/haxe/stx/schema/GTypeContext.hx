@@ -3,7 +3,7 @@ package stx.schema;
 class GTypeContext extends Clazz{
   static public var _(default,never) = GTypeContextLift;
   public final context      : TypeContext;
-  public final definitions  : StringMap<GTypeDefinition>;
+  public final definitions  : StringMap<Option<GTypeDefinition>>;
   public final show         : haxe.macro.Printer; 
 
   public function new(context){
@@ -15,11 +15,25 @@ class GTypeContext extends Clazz{
   // public function has(def:HTypeDefinition){
   //   return definitions.exists(identity.toString());
   // }
-  // public function put(def:HTypeDefinition){
-  //   this.set(def.)
-  // }
+  public function mark(id:Identity){
+    this.definitions.set(id.toString(),None);
+  }
+  public function put(def:GTypeDefinition){
+    final identity = 
+    this.definitions.set(Identity.fromIdent(def.ident()).toString(),Some(def));
+  }
+  public function get(id:Identity){
+    return __.option(this.definitions.get(id.toString())).flat_map(x -> x);
+  }
+  public function has(id:Identity){
+    return switch(this.definitions.get(id.toString())){
+      case Some(_)  : true;
+      case None     : true;
+      case null     : false; 
+    }
+  }
   public function toString(){
-    return 'GTypeContext';
+    return 'GTypeContext:($definitions)';
   }
 }
 class GTypeContextLift{

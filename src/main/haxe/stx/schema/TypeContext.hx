@@ -11,10 +11,10 @@ class TypeContext extends Clazz{
   private function new(){
     super();   
     this.register = new StringMap();
-    this.put(new stx.schema.type.term.TypeBool().toSType());
-    this.put(new stx.schema.type.term.TypeFloat().toSType());
-    this.put(new stx.schema.type.term.TypeInt().toSType());
-    this.put(new stx.schema.type.term.TypeString().toSType());
+    // this.put(new stx.schema.type.term.TypeBool().toSType());
+    // this.put(new stx.schema.type.term.TypeFloat().toSType());
+    // this.put(new stx.schema.type.term.TypeInt().toSType());
+    // this.put(new stx.schema.type.term.TypeString().toSType());
   //  this.trigger  = Signal.trigger();
     this.index    = 0; 
   }
@@ -31,7 +31,10 @@ class TypeContext extends Clazz{
     return __.option(register.get(identity.toString()));
   }
   public function has(type:SType){
-    return register.exists(type.toString());
+    return register.exists(type.identity.toString());
+  }
+  public function hasIdentity(identity:Identity){
+    return register.exists(identity.toString());
   }
   static public function unit(){
     return new TypeContext();    

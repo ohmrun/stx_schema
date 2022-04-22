@@ -140,11 +140,11 @@ class STypeCls{
   @:from static public function fromSTypeSum(self:STypeSum):SType{
     return lift(new STypeCls(self));
   }
-  static public function LeafType(name,pack):SType{
-    return _.LeafType(name,pack).toSType();
+  static public function LeafType(ident,ctype,meta,?validation):SType{
+    return _.LeafType(ident,ctype,meta,validation).toSType();
   }
-  static public function RecordType(name,pack,fields):SType{
-    return _.RecordType(name,pack,fields).toSType();
+  static public function RecordType(name,pack,fields,meta,?validation):SType{
+    return _.RecordType(name,pack,fields,meta,validation).toSType();
   }
   static public function AnonType(fields,anon):SType{
     return _.AnonType(fields).toSType();
@@ -179,12 +179,11 @@ class STypeLift{
       default       : None;
     }
   }
-  static public function is_terminal(self:SType){
+  static public function is_scalar(self:SType){
     return switch(self.data){
-      case STScalar(_) : true;
-      case STAnon(_) : true;
-      case STLazy(f) : is_terminal(f.pop().type);
-      default       : false;
+      case STScalar(_)  : true;
+      case STLazy(f)    : is_scalar(f.pop().type);
+      default           : false;
     }
   }
   static public function is_anon(self:SType){
@@ -205,11 +204,11 @@ class STypeLift{
       default        : None;
     }
   }
-  static public function LeafType(name,pack){
-    return stx.schema.type.LeafType.make(name,pack);
+  static public function LeafType(ident,ctype,meta,?validation){
+    return stx.schema.type.LeafType.make(ident,ctype,meta,validation);
   }
-  static public function RecordType(name,pack,fields){
-    return stx.schema.type.RecordType.make(name,pack,fields);
+  static public function RecordType(name,pack,fields,meta,?validation){
+    return stx.schema.type.RecordType.make0(name,pack,fields,meta,validation);
   }
   static public function AnonType(fields){
     return stx.schema.type.AnonType.make(fields,__.uuid("xxxxx"));
@@ -223,35 +222,35 @@ class STypeLift{
   static public function UnionType(name,pack,lhs,rhs){
     return stx.schema.type.UnionType.make(name,pack,lhs,rhs);
   }
-  static public function main(type:SType,state:GTypeContext):Void{
-    switch(type.data){
-      case STScalar(t)     :
-      case STRecord(t)   : t.pop().main(state);
-      case STGeneric(t)  : t.pop().main(state);
-      case STUnion(t)    : t.pop().main(state);
-      case STLink(t)     : t.pop().main(state);
-      case STEnum(t)     : t.pop().main(state);
-      case STLazy(f)     : main(f.pop().type,state);
-      case STAnon(t)     : t.pop().main(state);
-      case STMono        : 
-    }   
-  }
-  static public function leaf(self:SType,state:GTypeContext):Void{
-    switch(self.data){
-      case STScalar(t)     :
-      case STRecord(t)   : t.pop().leaf(state);
-      case STGeneric(t)  : t.pop().leaf(state);
-      case STUnion(t)    : t.pop().leaf(state);
-      case STLink(t)     : t.pop().leaf(state);
-      case STEnum(t)     : t.pop().leaf(state);
-      case STLazy(f)     : leaf(f.pop().type,state);
-      case STAnon(t)     : t.pop().leaf(state);
-      case STMono        : 
-    }   
-  }
+  // static public function main(type:SType,state:GTypeContext):Void{
+  //   switch(type.data){
+  //     case STScalar(t)     :
+  //     case STRecord(t)   : t.pop().main(state);
+  //     case STGeneric(t)  : t.pop().main(state);
+  //     case STUnion(t)    : t.pop().main(state);
+  //     case STLink(t)     : t.pop().main(state);
+  //     case STEnum(t)     : t.pop().main(state);
+  //     case STLazy(f)     : main(f.pop().type,state);
+  //     case STAnon(t)     : t.pop().main(state);
+  //     case STMono        : 
+  //   }   
+  // }
+  // static public function leaf(self:SType,state:GTypeContext):Void{
+  //   switch(self.data){
+  //     case STScalar(t)     :
+  //     case STRecord(t)   : t.pop().leaf(state);
+  //     case STGeneric(t)  : t.pop().leaf(state);
+  //     case STUnion(t)    : t.pop().leaf(state);
+  //     case STLink(t)     : t.pop().leaf(state);
+  //     case STEnum(t)     : t.pop().leaf(state);
+  //     case STLazy(f)     : leaf(f.pop().type,state);
+  //     case STAnon(t)     : t.pop().leaf(state);
+  //     case STMono        : 
+  //   }   
+  // }
   static public function getTypePath(self:SType){
     return switch(self.data){
-      case STScalar(t)     : Some(t.pop().toGTypePath());
+      case STScalar(t)   : Some(t.pop().toGTypePath());
       case STRecord(t)   : Some(t.pop().toGTypePath());
       case STGeneric(t)  : Some(t.pop().toGTypePath());
       case STUnion(t)    : Some(t.pop().toGTypePath());
@@ -278,7 +277,7 @@ class STypeLift{
               );
               default : __.g().ctype().fromString('stx.schema.ID');
             },
-            () -> return switch(getTypePath(field.type)){
+            () -> return switch(getTypePath(__.tracer()(field.type))){
               case Some(tpath) : tpath.toComplexType();
               default          : throw E_Schema_AttemptingToDefineUnsupportedType(field.type);
             }
@@ -290,15 +289,15 @@ class STypeLift{
   }
 }
 /**
-  switch(self){
-    case TData(t)     :
-    case TAnon(t)     :
-    case TRecord(t)   :
-    case TGeneric(t)  :
-    case TUnion(t)    :
+  switch(type){
+    case STScalar(t)     :
+    case STAnon(t)     :
+    case STRecord(t)   :
+    case STGeneric(t)  :
+    case STUnion(t)    :
     case STLink(t)     :
-    case TEnum(t)     :
-    case TLazy(f)     :
-    case TMono        :
+    case STEnum(t)     :
+    case STLazy(f)     :
+    case STMono        :
   }
 **/

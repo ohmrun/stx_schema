@@ -47,7 +47,7 @@ class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareS
           x   -> SchemaRef.fromSchema(x),
           ()  -> field.type.resolve(state)
         );
-        __.log().debug(_ -> _.thunk( () -> ref));
+        __.log().trace(_ -> _.thunk( () -> ref));
         return field.with_type(ref);
       }
     );

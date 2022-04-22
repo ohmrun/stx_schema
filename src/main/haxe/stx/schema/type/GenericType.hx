@@ -42,7 +42,6 @@ class GenericTypeCls extends ConcreteType implements GenericTypeApi{
     return next.toSType();
   }
   override public function get_identity(){
-    trace("HJERE");
     final result =  Identity.make(
       this.ident,
       __.option(this.type.identity),
