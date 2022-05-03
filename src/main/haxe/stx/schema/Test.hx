@@ -21,8 +21,8 @@ class Test{
     #else
       __.test(
         [ 
-          //new SchemaTest(),
-          new TableTypeTest(), 
+          new SchemaTest(),
+          //new TableTypeTest(), 
         ],
         []    
       );
@@ -34,7 +34,7 @@ class Test{
     __.test(
       [
         // new SchemaTest() ,
-        new DeclareEnumSchemaTest(),
+        //new DeclareEnumSchemaTest(),
       ],
       []    
     );

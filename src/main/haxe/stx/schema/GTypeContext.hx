@@ -19,7 +19,6 @@ class GTypeContext extends Clazz{
     this.definitions.set(id.toString(),None);
   }
   public function put(def:GTypeDefinition){
-    final identity = 
     this.definitions.set(Identity.fromIdent(def.ident()).toString(),Some(def));
   }
   public function get(id:Identity){

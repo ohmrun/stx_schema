@@ -9,6 +9,7 @@ enum SchemaFailureSum{
   E_Schema_Dynamic(e:Dynamic);
   E_Schema_WrongSchemaType(type:Schema);
   E_Schema_WrongType(type:stx.schema.SType);
+  E_Schema_TypeNotFound(type:stx.schema.SType);
   E_Schema_UnexpectedGeneric;
   E_Schema_UnexpectedType;
   E_Schema_IdentityUnresolved(identity:stx.schema.core.Identity);

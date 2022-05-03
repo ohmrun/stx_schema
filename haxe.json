@@ -9,7 +9,8 @@
     "-cp"  : "src/main/haxe",
     "unit" : {
       "--macro" : [
-        "include('stx.schema',true)"
+        "include('stx.schema',true)",
+        "include('stx.assert',true)"
       ]
     },
     "type_to_schema" : {

@@ -130,7 +130,7 @@ class SchemaLift{
     Creates a declaration that declares the Schema.
   **/
   static public inline function to_self_constructor(self:SchemaSum):GExpr{
-    var v = self.value();
+    var v = self.lift();
 
     return __.g().expr().New(
       _ -> 'stx.schema.Schema',

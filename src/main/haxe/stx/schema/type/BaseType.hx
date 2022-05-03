@@ -1,15 +1,17 @@
 package stx.schema.type;
 
 interface BaseTypeApi extends Has_getIdentityApi{
+  //deprecated
   public var debrujin(get,null):Null<Int>;
   private function get_debrujin():Null<Int>;
 
-  public var validation(get,null)       : Validations;
+  public var validation(get,null):Validations;
   private function get_validation():Validations;
 
-  public var status : TypeStatus; 
   public var meta   : PExpr<Primitive>;
 
+  //public var status : TypeStatus; 
+  
   public var identity(get,null):Identity;
   public function get_identity():Identity;
   

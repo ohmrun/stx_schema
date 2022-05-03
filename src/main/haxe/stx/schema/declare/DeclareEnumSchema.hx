@@ -46,28 +46,46 @@ class DeclareEnumSchemaLift{
   }
   static public var validation(get,null) : Validations;
   static public function get_validation(){
-    return Cluster.lift([ValidationExpr(check_constructor)]);
+    //ValidationExpr(check_constructor)
+    return Cluster.lift([]);
   } 
-  static private var check_constructor = Script.parser().parseString("
-    function (self:Dynamic,type:Schema){ 
-      return switch(type){
-        case SchEnum(def) : 
-          var ok = false;
-            for(v in def.constructors){
-              ok = v == self;
-              if(ok){
-                break;
-              }
-            }
-            if(ok){
-              __.report();
-            }else{
-              __.report(E_Schema_EnumValueError(def.constructors,self));
-            }
-        default :  __.report(E_Internal('Incorrect Type'));
-      }
-    }
-  ");
+  //TODO
+  // static private final check = __.g().expr().Function(
+  //   farg -> [
+  //     farg.Make('self',ctype -> ctype.fromString('Dynamic')),
+  //     farg.Make('type',ctype -> ctype.fromString('stx.schema.Schema')),
+  //   ],
+  //   null,
+  //   e -> e.Return(
+  //     e.Switch(
+  //       cases -> [
+  //         cases.Make(
+  //           [e]
+  //         )
+  //       ]
+  //     )
+  //   )
+  // )
+  // static private var check_constructor = Script.parser().parseString("
+  //   function (self:Dynamic,type:Schema){ 
+  //     return switch(type){
+  //       case SchEnum(def) : 
+  //         var ok = false;
+  //           for(v in def.constructors){
+  //             ok = v == self;
+  //             if(ok){
+  //               break;
+  //             }
+  //           }
+  //           if(ok){
+  //             __.report();
+  //           }else{
+  //             __.report(E_Schema_EnumValueError(def.constructors,self));
+  //           }
+  //       default :  __.report(E_Internal('Incorrect Type'));
+  //     }
+  //   }
+  // ");
   /**
     Creates a GTypeDeclaration that declares the structure of self:DeclareEnumSchema.
   **/

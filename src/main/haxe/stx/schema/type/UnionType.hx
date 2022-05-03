@@ -54,6 +54,7 @@ class UnionTypeCls extends ConcreteType implements UnionTypeApi {
   }
 }
 class UnionTypeLift{
+  //TODO create typedefinition of underlying enum
   static public function main(self:UnionType,state:GTypeContext){
     // final g     = __.g();
     // final expr  = g.expr();
@@ -126,10 +127,6 @@ class UnionTypeLift{
     //     return abstract_type;
     //   })
     // );
-    return throw UNIMPLEMENTED;
-  }
-  static public function leaf(self:UnionType,state:GTypeContext){
-   //.final type =  
     return throw UNIMPLEMENTED;
   }
 }

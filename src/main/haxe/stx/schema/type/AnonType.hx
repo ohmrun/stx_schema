@@ -64,20 +64,20 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   }
 }
 class AnonTypeLift{
-  static public function toGComplexType_with(self:AnonType,rest:SType->GComplexType){
-    return __.g().ctype().Anonymous(
-      f ->  self.fields.pop().map(
-        field -> f.Make(
-          field.name,
-          ftype -> ftype.Var(
-            _ -> rest(field.type)
-          ),
-          acc -> [acc.Public(),acc.Final()]
-        )
-      )
+  static public function toGComplexType_with(self:AnonType,rest:SType->Res<GComplexType,SchemaFailure>){
+    return Res.bind_fold(
+      self.fields.pop(),
+      (next:Field,memo:Cluster<GField>) -> 
+        rest(next.type).map(
+          ctype -> __.g().field().Make(
+            next.name,
+            ftype -> ftype.Var(ctype),
+            acc   -> [acc.Public(),acc.Final()]
+          )
+        ).map(memo.snoc)
+      ,[].imm()
+    ).map(
+      (fields) -> __.g().ctype().Anonymous(fields)
     );
   }
-  // static public function toMangledIdentity(self:AnonType):MangledIdentity{
-    
-  // }
 }

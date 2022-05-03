@@ -57,8 +57,8 @@ class SchemaTest extends TestCase{
         types.type();
     var context  = types.context;
     var register = @:privateAccess context.register;  
-    var context  = new stx.schema.core.GTypeContext(context,haxe.macro.Context.currentPos());
-    stx.schema.view.Main.apply(context);
+    var context  = new GTypeContext(context);
+    //stx.schema.view.Main.apply(context);
   }
   public function test(){
     is_true(true);

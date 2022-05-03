@@ -20,14 +20,14 @@ class TableTypeTest extends TestCase{
     for(type in types){
       switch(type.data){
         case STRecord(t) :
-          try{
-            final tdef = t.pop().getMainTypeDefinition();
-            trace(tdef.toSource());
-          }catch(e:haxe.Exception){
-            trace(e.stack);
-            __.log().fatal(e.toString());
-            __.crack(e);
-          }
+          // try{
+          //   final tdef = t.pop().getMainTypeDefinition();
+          //   trace(tdef.toSource());
+          // }catch(e:haxe.Exception){
+          //   trace(e.stack);
+          //   __.log().fatal(e.toString());
+          //   __.crack(e);
+          // }
         default : 
       }
     }
