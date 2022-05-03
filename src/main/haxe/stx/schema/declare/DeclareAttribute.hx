@@ -23,7 +23,7 @@ typedef DeclareAttributeDef = DeclarePropertyDef & {
       type        : ref
     });
   }
-  public function procure(name:String):ProcureProperty{
-    return ProcureProperty.make(name,this.type);
+  public function procure(name:String):ProcureAttribute{
+    return ProcureAttribute.make(name,this.type,this.relation,this.inverse,this.validation);
   }
 }
