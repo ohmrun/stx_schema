@@ -52,7 +52,7 @@ class ProcureLift{
   static public function with_type(self:Procure,type:SchemaRef){
     return fold(self,t -> Property(t.with_type(type)),t -> Attribute(t.with_type(type)));
   }
-  static public function to_self_constructor(self:Procure){
+  static public function denote(self:Procure){
     final e     = __.g().expr();
     final head  = 'stx.schema.Procure.ProcureSum'; 
     return e.Call(
@@ -64,8 +64,8 @@ class ProcureLift{
       ),
       [
         switch(self){
-          case Property(property)     : property.to_self_constructor();
-          case Attribute(attribute)   : attribute.to_self_constructor(); 
+          case Property(property)     : property.denote();
+          case Attribute(attribute)   : attribute.denote(); 
         }
       ]
     );

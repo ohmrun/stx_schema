@@ -4,17 +4,14 @@ class GTypeContext extends Clazz{
   static public var _(default,never) = GTypeContextLift;
   public final context      : TypeContext;
   public final definitions  : StringMap<Option<GTypeDefinition>>;
-  public final show         : haxe.macro.Printer; 
+  public final show         : stx.g.lang.Printer; 
 
   public function new(context){
     super();
     this.context      = context;
     this.definitions  = new StringMap();
-    this.show         = new haxe.macro.Printer();
+    this.show         = new stx.g.lang.Printer();
   }
-  // public function has(def:HTypeDefinition){
-  //   return definitions.exists(identity.toString());
-  // }
   public function mark(id:Identity){
     this.definitions.set(id.toString(),None);
   }

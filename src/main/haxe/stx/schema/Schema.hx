@@ -129,7 +129,7 @@ class SchemaLift{
   /**
     Creates a declaration that declares the Schema.
   **/
-  static public inline function to_self_constructor(self:SchemaSum):GExpr{
+  static public inline function denote(self:SchemaSum):GExpr{
     var v = self.lift();
 
     return __.g().expr().New(
@@ -142,12 +142,12 @@ class SchemaLift{
           ),
           args -> [
             switch(v.ctr()){
-              case "SchScalar"  : DeclareSchema._.to_self_constructor(v.params()[0]);
-              case "SchRecord"  : DeclareRecordSchema._.to_self_constructor(v.params()[0]);
-              case "SchEnum"    : DeclareEnumSchema._.to_self_constructor(v.params()[0]);
-              case "SchGeneric" : DeclareGenericSchema._.to_self_constructor(v.params()[0]);
-              case "SchUnion"   : DeclareUnionSchema._.to_self_constructor(v.params()[0]);
-              case "SchLazy"    : to_self_constructor(v.params()[0]());
+              case "SchScalar"  : DeclareSchema._.denote(v.params()[0]);
+              case "SchRecord"  : DeclareRecordSchema._.denote(v.params()[0]);
+              case "SchEnum"    : DeclareEnumSchema._.denote(v.params()[0]);
+              case "SchGeneric" : DeclareGenericSchema._.denote(v.params()[0]);
+              case "SchUnion"   : DeclareUnionSchema._.denote(v.params()[0]);
+              case "SchLazy"    : denote(v.params()[0]());
               case "SchType"    : throw E_Schema_SchemaTypeNotSupportedHere;
               case x            : throw E_Makro_EnumConstructorNotFound(v,x);
             }

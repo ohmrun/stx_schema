@@ -1,6 +1,6 @@
 package stx.schema.declare.term;
 
-abstract SchemaArray(DeclareGenericSchemaApi) from DeclareGenericSchemaApi to DeclareGenericSchemaApi{
+@:forward abstract SchemaArray(DeclareGenericSchemaApi) from DeclareGenericSchemaApi to DeclareGenericSchemaApi{
   static public var _(default,never) = SchemaArrayLift;
   @:noUsing static public function make(ref:SchemaRef){
     return new SchemaArray(

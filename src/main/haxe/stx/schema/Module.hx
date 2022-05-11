@@ -19,11 +19,11 @@ class Module extends Clazz{
   public function type(type){
     return SchType(type);
   }
-  public function property(type):DeclareProperty{
-    return DeclareProperty.make(type);
+  public function property(type,?meta):DeclareProperty{
+    return DeclareProperty.make(type,__.option(meta).defv(Empty));
   }
-  public function attribute(type,relation,?inverse){
-    return DeclareAttribute.make(type,relation,inverse);
+  public function attribute(type,relation,meta,?inverse,?validation){
+    return DeclareAttribute.make(type,relation,meta,inverse,validation);
   }
 }
 private class Type{

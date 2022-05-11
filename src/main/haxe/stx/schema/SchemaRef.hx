@@ -116,12 +116,12 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   }
 }
 class SchemaRefLift{
-  static public function to_self_constructor(self:SchemaRef):GExpr{
+  static public function denote(self:SchemaRef):GExpr{
     final e = __.g().expr();
     return e.Call(
       e.Path('stx.schema.SchemaRef.make'),
       [
-        Identity._.to_self_constructor({
+        Identity._.denote({
           name  : self.name,
           pack  : self.pack,
           lhs   : self.lhs,

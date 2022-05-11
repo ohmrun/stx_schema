@@ -67,7 +67,7 @@ class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareS
   }
 }
 class DeclareRecordSchemaLift{
-  static public function to_self_constructor(self:DeclareRecordSchema){
+  static public function denote(self:DeclareRecordSchema){
     final e = __.g().expr();
     return e.Call(
       e.Path('stx.schema.declare.DeclareRecordSchema.make'),
@@ -79,7 +79,7 @@ class DeclareRecordSchemaLift{
             e.ArrayDecl(__.option(self.id.pack).defv([]).prj().map(str -> e.Const(c -> c.String(str))))
           ]
         ),
-        self.fields.to_self_constructor()
+        self.fields.denote()
       ]
     );
   }

@@ -1,10 +1,11 @@
 package stx.schema;
 
 class TyperContextCls{
+  public var namespace    : Way;
   public final schemas    : StringMap<Schema>;
   public final context    : TypeContext; 
 
-  public function new(?schemas,?context){
+  public function new(?schemas,?context,?namespace){
     this.schemas = __.option(schemas).def(
       () -> {
         final map = new StringMap();
@@ -19,7 +20,14 @@ class TyperContextCls{
         return map;
       }
     );
-    this.context  = __.option(context).defv(@:privateAccess new TypeContext());
+    this.context    = __.option(context).defv(@:privateAccess new TypeContext());
+    this.namespace  = __.option(namespace).defv(Way.unit());
+  }
+  static public function make(schemas,context,namespace){
+    return new TyperContextCls(schemas,context,namespace);
+  }
+  static public function make0(?schemas,?context,?namespace){
+    return make(schemas,context,namespace);
   }
   public function get(key:Identity):Option<Schema>{
     return __.option(this.schemas.get(key.toString()));
@@ -44,12 +52,14 @@ class TyperContextCls{
       }      
     }
     __.log().debug("done");
-    __.log().debug(_ -> _.pure(this.context.register));
-    trace(this.context.register);
+    __.log().debug(_ -> _.pure(this.context.register.toString()));
     return this;
   }
   public function toString(){
     return Iter.lift(schemas).map(x -> x.toString()).toArray().join(",");
+  }
+  public function with_namespace(fn:Way->Way){
+    return make(this.schemas,this.context,fn(this.namespace));
   }
 }
 @:forward abstract TyperContext(TyperContextCls) from TyperContextCls to TyperContextCls {

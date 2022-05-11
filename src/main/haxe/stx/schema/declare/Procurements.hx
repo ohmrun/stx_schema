@@ -20,7 +20,9 @@ typedef ProcurementsDef = Cluster<Procure>;
     for(k => v in __.option(self.properties).defv(new Map())){
       var next : ProcurePropertyDef = {
         name :  k,
-        type : v.type
+        type : v.type,
+        meta : v.meta,
+        validation : v.validation
       }
       out.push(Property(next));
     }
@@ -29,6 +31,7 @@ typedef ProcurementsDef = Cluster<Procure>;
         name :  k,
         type        : v.type,
         validation  : v.validation,
+        meta        : v.meta,
         relation    : v.relation,
         inverse     : v.inverse
       }
@@ -41,10 +44,10 @@ typedef ProcurementsDef = Cluster<Procure>;
   }
 }
 class ProcurementsLift{
-  static public function to_self_constructor(self:Procurements){
+  static public function denote(self:Procurements){
     final e = __.g().expr();
     return e.ArrayDecl(
-      self.map( p -> p.to_self_constructor() )
+      self.map( p -> p.denote() )
     );
   }
 }

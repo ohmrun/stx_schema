@@ -6,7 +6,7 @@ class DeclareEnumSchemaTest extends TestCase{
       Ident.make('TestEnum',["some","pack"]),
       ['fst','snd','thd']
     );
-    final ctr  = e.to_self_constructor();
+    final ctr  = e.denote();
     final expr = ctr.toSource();
     trace(expr);
   }

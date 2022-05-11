@@ -79,9 +79,8 @@ class DeclareUnionSchemaLift{
     return Cluster.unit();
   }
   //TODO
-  static public inline function to_self_constructor(self:DeclareUnionSchema){
+  static public inline function denote(self:DeclareUnionSchema){
     final e = __.g().expr();
-    return 
     return throw UNIMPLEMENTED;
   }
 }

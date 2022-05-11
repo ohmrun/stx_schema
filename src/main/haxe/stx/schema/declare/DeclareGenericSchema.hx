@@ -70,7 +70,7 @@ class DeclareGenericSchemaLift{
   static public function get_validation(){
     return Cluster.unit();
   } 
-  static public function to_self_constructor(self:DeclareGenericSchema){
+  static public function denote(self:DeclareGenericSchema){
     final e = __.g().expr();
     return e.Call(
       e.Path('stx.schema.declare.DeclareGenericSchema.make'),
@@ -83,7 +83,7 @@ class DeclareGenericSchemaLift{
             )
           )
         ),
-        SchemaRef._.to_self_constructor(self.type)
+        SchemaRef._.denote(self.type)
       ]
     );
   }

@@ -5,8 +5,7 @@ class TypeContext extends Clazz{
     return new TypeContext();
   }
   public final register : StringMap<SType>;
-  
-  private var index    : Int;
+  private var index     : Int;
   
   private function new(){
     super();   

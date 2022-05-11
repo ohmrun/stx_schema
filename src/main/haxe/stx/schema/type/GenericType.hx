@@ -65,10 +65,5 @@ class GenericTypeCls extends ConcreteType implements GenericTypeApi{
   }
 }
 class GenericTypeLift{
-  static public function main(self:GenericType,state:GTypeContext){
-    return throw UNIMPLEMENTED;
-  }
-  static public function leaf(self:GenericType,state:GTypeContext){
-    return throw UNIMPLEMENTED;
-  }
+  
 }

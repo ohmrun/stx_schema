@@ -51,7 +51,7 @@ typedef IdentityDef = IdentDef & {
   }
 }
 class IdentityLift{
-  static public function to_self_constructor(self:Identity):GExpr{
+  static public function denote(self:Identity):GExpr{
     final e = __.g().expr();
     return e.Call(
       e.Path('stx.schema.core.Identity.make'),
@@ -67,8 +67,8 @@ class IdentityLift{
             )
           ]
         ),
-        self.lhs.map(to_self_constructor).def(() -> e.Path('stx.pico.Option.None')),
-        self.rhs.map(to_self_constructor).def(() -> e.Path('stx.pico.Option.None'))
+        self.lhs.map(denote).def(() -> e.Path('stx.pico.Option.None')),
+        self.rhs.map(denote).def(() -> e.Path('stx.pico.Option.None'))
       ]
     );
   }

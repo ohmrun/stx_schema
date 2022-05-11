@@ -8,8 +8,8 @@ typedef DeclareAttributeDef = DeclarePropertyDef & {
 @:forward abstract DeclareAttribute(DeclareAttributeDef) from DeclareAttributeDef to DeclareAttributeDef{
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclareAttributeDef):DeclareAttribute return new DeclareAttribute(self);
-  @:noUsing static public function make(type,relation,?inverse){
-    return lift({ type : type,relation : relation,inverse : inverse  });
+  @:noUsing static public function make(type,relation,meta,?inverse,?validation){
+    return lift({ type : type,relation : relation,meta : meta, validation : validation, inverse : inverse  });
   }
   public function prj():DeclareAttributeDef return this;
   private var self(get,never):DeclareAttribute;
@@ -20,10 +20,11 @@ typedef DeclareAttributeDef = DeclarePropertyDef & {
       validation  : this.validation,
       relation    : this.relation,
       inverse     : this.inverse,
+      meta        : this.meta,
       type        : ref
     });
   }
   public function procure(name:String):ProcureAttribute{
-    return ProcureAttribute.make(name,this.type,this.relation,this.inverse,this.validation);
+    return ProcureAttribute.make(name,this.type,this.relation,this.inverse,this.meta,this.validation);
   }
 }

@@ -60,7 +60,7 @@ abstract class DeclareSchemaConcrete extends DeclareSchemaCls{
   }
 }
 class DeclareSchemaLift{
-  static public inline function to_self_constructor(self:DeclareSchema):GExpr{
+  static public inline function denote(self:DeclareSchema):GExpr{
     return throw UNIMPLEMENTED;
   }
 }
