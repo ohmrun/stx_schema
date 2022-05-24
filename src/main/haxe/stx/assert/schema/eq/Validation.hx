@@ -1,4 +1,4 @@
-package stx.assert.schema.type.eq;
+package stx.assert.schema.eq;
 
 import stx.schema.Validation as TValidation;
 

@@ -1,13 +1,12 @@
 package stx.schema;
 
 enum SchemaSum{
+  SchLazy(fn:Void->Schema);
   SchScalar(def:DeclareScalarSchema);
   SchRecord(def:DeclareRecordSchema);
   SchEnum(def:DeclareEnumSchema);
   SchGeneric(def:DeclareGenericSchema);
   SchUnion(def:DeclareUnionSchema);
-  SchLazy(fn:Void->Schema);
-  SchType(type:SType);
 }
 @:using(stx.schema.Schema.SchemaLift)
 abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
@@ -27,7 +26,6 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.validation,
       x -> x.validation,
       x -> x.validation,
-      x -> x.validation,
       x -> x.validation
     );
   }
@@ -35,7 +33,6 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   private function get_identity():Identity{
     return _.fold(
       this,
-      x -> x.identity,
       x -> x.identity,
       x -> x.identity,
       x -> x.identity,
@@ -50,8 +47,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.resolve(state),
       x -> DeclareEnumSchema._.resolve(x,state),
       x -> x.resolve(state),
-      x -> x.resolve(state),
-      x -> SchType(x)
+      x -> x.resolve(state)
     );
   }
   @:from static public function fromRecordObject(self:{ name : String, ?pack : Array<String>, ?meta : PExpr<Primitive>, fields : { ?properties : Map<String,DeclareProperty> , ?attributes : Map<String,DeclareAttribute> }, ?validation : Validations}){
@@ -109,21 +105,19 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.toString(),
       x -> x.toString(),
       x -> x.toString(),
-      x -> x.toString(),
       x -> x.toString()
     );
   }
 }
 class SchemaLift{
-  static public inline function fold<Z>(self:SchemaSum,scalar : DeclareScalarSchema -> Z, record : DeclareRecordSchema  -> Z, enm : DeclareEnumSchema -> Z, generic : DeclareGenericSchema -> Z, union : DeclareUnionSchema -> Z, type : SType -> Z) : Z {
+  static public inline function fold<Z>(self:SchemaSum,scalar : DeclareScalarSchema -> Z, record : DeclareRecordSchema  -> Z, enm : DeclareEnumSchema -> Z, generic : DeclareGenericSchema -> Z, union : DeclareUnionSchema -> Z) : Z {
     return switch(self){
       case SchScalar(def)   : scalar(def);
       case SchRecord(def)   : record(def);
       case SchEnum(def)     : enm(def);
       case SchGeneric(def)  : generic(def);
       case SchUnion(def)    : union(def);
-      case SchLazy(f)       : fold(f(),scalar,record,enm,generic,union,type); 
-      case SchType(def)     : type(def);
+      case SchLazy(f)       : fold(f(),scalar,record,enm,generic,union);
     }
   }
   /**
@@ -148,7 +142,6 @@ class SchemaLift{
               case "SchGeneric" : DeclareGenericSchema._.denote(v.params()[0]);
               case "SchUnion"   : DeclareUnionSchema._.denote(v.params()[0]);
               case "SchLazy"    : denote(v.params()[0]());
-              case "SchType"    : throw E_Schema_SchemaTypeNotSupportedHere;
               case x            : throw E_Makro_EnumConstructorNotFound(v,x);
             }
           ] 

@@ -160,9 +160,6 @@ class LiftSchema_register{
         final schema = fn();
         __.log().debug('unlazy');
         fn().register(state);
-      case SchType(type)    : 
-        __.log().debug('register type');
-        type.register(state);
     }
   }
 }

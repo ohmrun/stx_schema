@@ -1,4 +1,4 @@
-package stx.assert.schema.type.ord;
+package stx.assert.schema.ord;
 
 import stx.schema.Validation as TValidation;
 

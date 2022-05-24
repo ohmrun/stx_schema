@@ -1,5 +1,6 @@
 package stx.schema.declare;
 
+//TODO consider narrowing ctype
 interface DeclareScalarSchemaApi extends DeclareSchemaApi{
   public final ctype:GComplexType;
 }

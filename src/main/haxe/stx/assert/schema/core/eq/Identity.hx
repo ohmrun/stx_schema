@@ -1,4 +1,4 @@
-package stx.assert.schema.type.eq;
+package stx.assert.schema.core.eq;
 
 import stx.schema.core.Identity as TIdentity;
 

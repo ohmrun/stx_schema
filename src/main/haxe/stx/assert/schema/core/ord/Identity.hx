@@ -1,4 +1,4 @@
-package stx.assert.schema.type.ord;
+package stx.assert.schema.core.ord;
 
 import stx.schema.core.Identity as TIdentity;
 

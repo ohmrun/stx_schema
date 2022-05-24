@@ -16,9 +16,6 @@ class Module extends Clazz{
   public function union(name,pack,type,lhs,rhs,?meta,?validation){
     return SchUnion(DeclareUnionSchema.make0(name,pack,lhs,rhs,validation));
   }
-  public function type(type){
-    return SchType(type);
-  }
   public function property(type,?meta):DeclareProperty{
     return DeclareProperty.make(type,__.option(meta).defv(PEmpty));
   }
