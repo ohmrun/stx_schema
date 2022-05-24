@@ -8,6 +8,6 @@ class Field implements ComparableApi<TField>{
     return new stx.assert.schema.ord.Field();
   }
   public function eq(){
-    return throw UNIMPLEMENTED;
+    return new stx.assert.schema.eq.Field();
   }
 }

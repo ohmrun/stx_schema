@@ -8,6 +8,6 @@ class SType implements ComparableApi<TSType>{
     return new stx.assert.schema.ord.SType();
   }
   public function eq(){
-    return throw UNIMPLEMENTED;
+    return new stx.assert.schema.eq.SType();
   }
 }
