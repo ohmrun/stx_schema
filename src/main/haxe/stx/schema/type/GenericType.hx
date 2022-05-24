@@ -15,7 +15,7 @@ class GenericTypeCls extends ConcreteType implements GenericTypeApi{
   public function toSType():SType{
     return SType.make(STGeneric(
       Ref.make(
-        () -> Identity.make(ident,Some(this.type.identity),None),
+        () -> Identity.make(ident,[this.type.identity]),
         () -> (this:GenericType)
       )
     ));
@@ -44,8 +44,7 @@ class GenericTypeCls extends ConcreteType implements GenericTypeApi{
   override public function get_identity(){
     final result =  Identity.make(
       this.ident,
-      __.option(this.type.identity),
-      None
+      [this.type.identity]
     );
     return result;
   }

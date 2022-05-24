@@ -6,7 +6,7 @@ abstract SchemaInt(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Declar
     return new SchemaInt(
       SchemaScalar.make0(
         'Int',['std'] ,
-        Empty,
+        PEmpty,
         ValidationType(_.validate())
       )
     );

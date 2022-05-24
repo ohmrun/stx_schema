@@ -40,15 +40,15 @@ abstract class DeclareSchemaConcrete extends DeclareSchemaCls{
   @:noUsing static public function lift(self:DeclareSchemaApi):DeclareSchema return new DeclareSchema(self);
 
 
-  @:noUsing static public function make(name,pack,lhs,rhs,?meta,?validation){
+  @:noUsing static public function make(name,pack,rest,?meta,?validation){
     return lift(new DeclareSchemaBase(
-      Identity.make(Ident.make(name,pack),lhs,rhs),
-      __.option(meta).defv(Empty),
+      Identity.make(Ident.make(name,pack),rest),
+      __.option(meta).defv(PEmpty),
       validation
     ));
   }
   @:noUsing static public function make0(name,pack,?meta,?validation){
-    return make(name,pack,None,None,meta,validation);
+    return make(name,pack,[],meta,validation);
   }
   public function prj():DeclareSchemaApi return this;
   private var self(get,never):DeclareSchema;

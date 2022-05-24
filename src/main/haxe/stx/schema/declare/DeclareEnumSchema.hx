@@ -23,7 +23,7 @@ class DeclareEnumSchemaCls implements DeclareEnumSchemaApi extends DeclareSchema
     return lift(new DeclareEnumSchemaCls(
       ident,
       constructors,
-      __.option(meta).defv(Empty),
+      __.option(meta).defv(PEmpty),
       _.validation.concat(__.option(validation).defv(Cluster.unit()))
     ));
   }

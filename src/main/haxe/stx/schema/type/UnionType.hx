@@ -1,22 +1,18 @@
 package stx.schema.type;
 
 interface UnionTypeApi extends DataTypeApi{
-  final lhs : SType;
-  final rhs : SType;
+  final rest : Cluster<SType>;
 }
 class UnionTypeCls extends ConcreteType implements UnionTypeApi {
-  public final lhs : SType;
-  public final rhs : SType;
-  public function new(ident,lhs,rhs,?meta,?validation){
+  public final rest : Cluster<SType>;
+  public function new(ident,rest,?meta,?validation){
     super(ident,meta,validation);
-    this.lhs = lhs;
-    this.rhs = rhs;
+    this.rest = rest;
   }
   override public function get_identity(){
     return Identity.make(
       this.ident,
-      Some(lhs.identity),
-      Some(rhs.identity)
+      __.option(this.rest).defv([]).map(x -> Identity.lift(x.identity))
     );
   }
   public function register(state:TypeContext):SType{
@@ -27,10 +23,9 @@ class UnionTypeCls extends ConcreteType implements UnionTypeApi {
     );
     state.put(STUnion(t));
 
-    final l   = state.get(lhs.identity).fudge(__.fault().of(E_Schema_IdentityUnresolved(lhs.identity)));
-    final r   = state.get(rhs.identity).fudge(__.fault().of(E_Schema_IdentityUnresolved(rhs.identity)));
-  
-    next = new UnionTypeCls(this.ident,l,r);
+    final rest = __.option(rest).defv([]).map(x -> state.get(x.identity).fudge(E_Schema_IdentityUnresolved(x.identity)));
+    
+    next = new UnionTypeCls(this.ident,rest);
     return STUnion(Ref.make(() -> this.identity,() -> next));
   }
   public function toSType():SType{
@@ -49,8 +44,8 @@ class UnionTypeCls extends ConcreteType implements UnionTypeApi {
   private var self(get,never):UnionType;
   private function get_self():UnionType return lift(this);
 
-  @:noUsing static public function make(ident,lhs,rhs,?meta,?validation){ 
-    return lift(new UnionTypeCls(ident,lhs,rhs,meta,validation));
+  @:noUsing static public function make(ident,rest,?meta,?validation){ 
+    return lift(new UnionTypeCls(ident,rest,meta,validation));
   }
 }
 class UnionTypeLift{

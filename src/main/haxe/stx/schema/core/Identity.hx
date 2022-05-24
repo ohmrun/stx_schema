@@ -1,8 +1,7 @@
 package stx.schema.core;
 
 typedef IdentityDef = IdentDef & {
-  final lhs   : Option<Identity>;
-  final rhs   : Option<Identity>;
+  final ?rest  : Cluster<Identity>;
 }
 @:using(stx.schema.core.Identity.IdentityLift)
 @:forward abstract Identity(IdentityDef) from IdentityDef to IdentityDef{
@@ -14,40 +13,23 @@ typedef IdentityDef = IdentDef & {
   private var self(get,never):Identity;
   private function get_self():Identity return lift(this);
 
-  @:noUsing static public function make(ident:Ident,lhs:Option<Identity>,rhs:Option<Identity>){
+  @:noUsing static public function make(ident:Ident,rest:Cluster<Identity>){
     return lift({
       name : ident.name,
       pack : ident.pack,
-      lhs  : lhs,
-      rhs  : rhs
+      rest : rest
     });
   }
   public function toString():String{
     final code = (this:Ident).toIdentifier();
-    final rest =  switch([this.lhs,this.rhs]){
-      case [Some(l),Some(r)]  : '(${l.toString()},${r.toString()})';
-      case [Some(l),None]     : '(${l.toString()},_)';
-      case [None,Some(r)]     : '(_,${r.toString()})';
-      case [None,None]        : '(_,_)';
-    }
-    return '$code$rest';
+    final rest =  this.rest.map(x -> x.toString()).join(",");
+    return '$code($rest)';
   }
   @:from static public function fromIdent(self:Ident){
-    return make(self,None,None);
+    return make(self,[]);
   }
   public function toIdent_munged():Ident{
-    return switch([this.lhs,this.rhs]){
-      case [Some(l),Some(r)] : 
-        final ls = l.toIdent_munged().toString_underscored();
-        final rs = r.toIdent_munged().toString_underscored();
-        Ident.make('_H${this.name}WithBoth${ls}And${rs}',this.pack);
-      case [Some(t),None]    :
-        Ident.make('_H${this.name}With${t}',this.pack);
-      case [None,Some(t)]    :
-        Ident.make('_H${this.name}With${t}',this.pack);
-      case [None,None]  : 
-        Ident.make(this.name,this.pack);
-    }
+    return Munge.toIdent(this);
   }
 }
 class IdentityLift{
@@ -67,8 +49,7 @@ class IdentityLift{
             )
           ]
         ),
-        self.lhs.map(denote).def(() -> e.Path('stx.pico.Option.None')),
-        self.rhs.map(denote).def(() -> e.Path('stx.pico.Option.None'))
+        e.ArrayDecl(__.option(self.rest).defv([]).map(denote))
       ]
     );
   }

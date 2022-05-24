@@ -12,7 +12,6 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     super(meta,validation);
     this.uuid     = uuid;
     this.fields   = fields;
-    this.debrujin = 1;//Context.instance.next(); 
   }
   public function toString(){
     final arr = [];

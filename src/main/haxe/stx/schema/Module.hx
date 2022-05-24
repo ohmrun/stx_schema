@@ -2,7 +2,7 @@ package stx.schema;
 
 class Module extends Clazz{
   public function scalar(name,pack,ctype,meta,?validation){
-    return SchScalar(DeclareScalarSchema.make(Identity.make(Ident.make(name,pack),None,None),ctype,meta,validation));
+    return SchScalar(DeclareScalarSchema.make(Identity.make(Ident.make(name,pack),[]),ctype,meta,validation));
   }
   public function record(self:{ name : String, ?pack : Cluster<String>, fields : Procurements, ?meta : PExpr<Primitive> , ?validation : Validations }){
     return SchRecord(DeclareRecordSchema.make0(self.name,self.pack,self.fields,self.meta,self.validation));
@@ -20,7 +20,7 @@ class Module extends Clazz{
     return SchType(type);
   }
   public function property(type,?meta):DeclareProperty{
-    return DeclareProperty.make(type,__.option(meta).defv(Empty));
+    return DeclareProperty.make(type,__.option(meta).defv(PEmpty));
   }
   public function attribute(type,relation,meta,?inverse,?validation){
     return DeclareAttribute.make(type,relation,meta,inverse,validation);

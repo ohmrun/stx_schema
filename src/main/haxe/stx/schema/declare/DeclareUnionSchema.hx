@@ -2,19 +2,16 @@ package stx.schema.declare;
 
 interface DeclareUnionSchemaApi extends DeclareSchemaApi{
   final ident : Ident;
-  final lhs   : SchemaRef;
-  final rhs   : SchemaRef;
+  final rest  : Cluster<SchemaRef>;
 }
 class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareSchemaCls{
-  public final lhs   : SchemaRef;
-  public final rhs   : SchemaRef;
+  public final rest  : Cluster<SchemaRef>;
   public final ident : Ident;
 
-  public function new(ident:Ident,lhs,rhs,meta,validation){
+  public function new(ident:Ident,rest,meta,validation){
     super(meta); 
     this.ident      = ident;
-    this.lhs        = lhs;
-    this.rhs        = rhs;
+    this.rest       = rest;
     this.validation = validation;
   }
   public function get_id(){ 
@@ -23,8 +20,7 @@ class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareSche
         this.ident.name,
         this.ident.pack
       ),
-      Some(Identity.lift(this.lhs)),
-      Some(Identity.lift(this.rhs))
+      __.option(this.rest).defv([]).map(Identity.lift)
     );
   }
   public function get_validation(){ return this.validation; }  
@@ -34,34 +30,30 @@ class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareSche
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclareUnionSchemaApi):DeclareUnionSchema return new DeclareUnionSchema(self);
 
-  @:noUsing static public function make(ident:Ident,lhs,rhs,?meta,?validation){
+  @:noUsing static public function make(ident:Ident,rest,?meta,?validation){
     return lift(new DeclareUnionSchemaCls(
       ident,
-      lhs,
-      rhs,
-      __.option(meta).defv(Empty),
+      rest,
+      __.option(meta).defv(PEmpty),
       _.validation.concat(__.option(validation).defv(Cluster.unit()))
     ));
   }
-  @:noUsing static public function make0(name,pack,lhs,rhs,?meta,?validation){
+  @:noUsing static public function make0(name,pack,rest,?meta,?validation){
     return make(
       Ident.make(name,pack),
-      lhs,
-      rhs,
+      rest,
       meta,
       validation
     );
   }
   public function resolve(state:TyperContext){
-    var l = state.get(this.lhs.id).fold(
-      x   -> SchemaRef.fromSchema(x),
-      ()  -> this.lhs.resolve(state)
+    final rest = __.option(this.rest).defv([]).map(
+      x -> state.get(x.id).fold(
+        x   -> SchemaRef.fromSchema(x),
+        ()  -> x.resolve(state)
+      )
     );
-    var r = state.get(this.rhs.id).fold(
-      x   -> SchemaRef.fromSchema(x),
-      ()  -> this.lhs.resolve(state)
-    );
-    final result =  make0(this.id.name,this.id.pack,l,r,this.meta,this.validation);
+    final result =  make0(this.id.name,this.id.pack,rest,this.meta,this.validation);
     state.put(SchUnion(result));
     return SchUnion(result);
   }
@@ -78,9 +70,14 @@ class DeclareUnionSchemaLift{
   static public function get_validation(){
     return Cluster.unit();
   }
-  //TODO
   static public inline function denote(self:DeclareUnionSchema){
     final e = __.g().expr();
-    return throw UNIMPLEMENTED;
+    return e.Call(
+      e.Path('stx.schema.declare.DeclareUnionSchema.make'),
+      [
+        stx.schema.declare.IdentLift.denote(self.ident),
+        e.ArrayDecl(self.rest.map(x -> x.denote()))
+      ]
+    );
   }
 }

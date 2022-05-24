@@ -5,7 +5,7 @@ class TypeFloat extends LeafType{
 
   public function new(){
     final ident = Ident.make("Float",["std"]);
-    super(ident,__.g().ctype().Path(p -> p.fromIdent(ident)),Empty);
+    super(ident,__.g().ctype().Path(p -> p.fromIdent(ident)),PEmpty);
   }
   override public function get_validation(){
     return Cluster.pure(ValidationType(_.validate()));

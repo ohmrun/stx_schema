@@ -30,6 +30,10 @@
       "makro" : {
         "-D" : ["boot"],
         "--interp" : true
+      },
+      "munge" : {
+        "-main" : "stx.schema.test.MungeTest",
+        "--interp" : true
       }
     }
   },

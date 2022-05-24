@@ -57,13 +57,12 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
     return lift({
       name  : identity.name,
       pack  : identity.pack,
-      lhs   : identity.lhs,
-      rhs   : identity.rhs,
+      rest  : identity.rest,
       pop   : pop
     });
   }
-  @:noUsing static public function make0(name:String,pack:Cluster<String>,lhs:Option<Identity>,rhs:Option<Identity>,?pop){
-    return make(Identity.make(Ident.make(name,pack),lhs,rhs),pop);
+  @:noUsing static public function make0(name:String,pack:Cluster<String>,rest:Cluster<Identity>,?pop){
+    return make(Identity.make(Ident.make(name,pack),rest),pop);
   }
   @:from static inline public function fromSchemaSum(self:SchemaSum){
     final that : Schema = Schema.lift(self);
@@ -71,8 +70,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
       name  : that.id.name,
       pack  : that.id.pack,
       pop   : () -> that,
-      lhs   : that.id.lhs,
-      rhs   : that.id.rhs
+      rest  : that.id.rest
     });
   }
   @:from static inline public function fromSchema(self:Schema){
@@ -81,8 +79,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
       name  : identity.name,
       pack  : identity.pack,
       pop   : () -> self,
-      lhs   : identity.lhs,
-      rhs   : identity.rhs
+      rest  : identity.rest
     });
   }
   @:from static public inline function fromString(self:String){
@@ -91,10 +88,10 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
     return fromIdent(Ident.make(name,parts)); 
   }
   @:from static inline public function fromIdent(self:Ident){
-    return make0(self.name,self.pack,None,None);
+    return make0(self.name,self.pack,[]);
   }
   @:from static inline public function fromIdentity(self:Identity){
-    return make0(self.name,self.pack,self.lhs,self.rhs);
+    return make0(self.name,self.pack,self.rest);
   }
   @:from static inline public function fromDeclareScalarSchema(self:DeclareScalarSchemaApi){
     return fromSchemaSum(Schema.fromDeclareScalarSchema(self));
@@ -103,8 +100,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   public function get_id(){
     return Identity.make(
       Ident.make(this.name,this.pack),
-      this.lhs,
-      this.rhs
+      this.rest
     );
   }
   public function prj():SchemaRefDef return this;
@@ -112,7 +108,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   private function get_self():SchemaRef return lift(this);
 
   public function toString(){
-    return __.show({ name : this.name, pack : this.pack, lhs : this.lhs.map(x -> x.toString()).defv(null), rhs : this.rhs.map(x -> x.toString()).defv(null) });
+    return __.show({ name : this.name, pack : this.pack, rest : this.rest.map(x -> x.toString())});
   }
 }
 class SchemaRefLift{
@@ -124,8 +120,7 @@ class SchemaRefLift{
         Identity._.denote({
           name  : self.name,
           pack  : self.pack,
-          lhs   : self.lhs,
-          rhs   : self.rhs  
+          rest  : self.rest
         })
       ]
     );

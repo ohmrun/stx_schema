@@ -17,13 +17,13 @@ typedef DeclarePropertyDef = stx.schema.WithValidationDef & {
   @:from static public function fromDeclareScalarSchemaApi(self:DeclareScalarSchemaApi){
     return make(
       SchemaRef.fromDeclareScalarSchema(self),
-      Empty
+      PEmpty
     );
   }
   @:from static public function fromSchema(self:Schema){
     return make(
       SchemaRef.fromSchema(self),
-      Empty 
+      PEmpty 
     );
   }
   public function with_type(ref:SchemaRef){

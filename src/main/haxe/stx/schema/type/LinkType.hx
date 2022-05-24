@@ -49,8 +49,7 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
     final ident = Ident.make('${this.relation}',['link']);
     return Identity.make(
       ident,
-      __.option(this.into.identity),
-      None
+      [this.into.identity]
     );
   }
 }

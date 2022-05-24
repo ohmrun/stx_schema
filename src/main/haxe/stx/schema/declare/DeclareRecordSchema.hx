@@ -22,7 +22,7 @@ class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareS
     return lift(new DeclareRecordSchemaCls(
       ident,
       fields,
-      __.option(meta).defv(Empty),
+      __.option(meta).defv(PEmpty),
       validation
     ));
   }

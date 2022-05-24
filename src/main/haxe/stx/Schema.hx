@@ -183,9 +183,8 @@ class LiftDeclareSchema{
 }
 class LiftDeclareUnionSchema{
   static public function register(self:DeclareUnionSchema,state:TypeContext):SType{
-    final lhs   = self.lhs.register(state);
-    final rhs   = self.rhs.register(state);
-    final type  = UnionType.make(self.ident,lhs,rhs,self.meta,self.validation).toSType();
+    final rest  = self.rest.map(x -> x.register(state));
+    final type  = UnionType.make(self.ident,rest,self.meta,self.validation).toSType();
     state.put(type);
     return type;
   }
@@ -207,7 +206,7 @@ class LiftDeclareGenericSchema_register{
     }
     var type                  = STGeneric(
       Ref.make(
-        () -> Identity.make(self.ident,Some(Identity.lift(self.type)),None),
+        () -> Identity.make(self.ident,[Identity.lift(self.type)]),
         fn
       )
     );
@@ -264,7 +263,7 @@ class LiftDeclareRecordSchema_register{
           case Attribute(attr)  : 
             //__.tracer()(next.type.register(state));
             final type = state.get(attr.type.id).def(() -> attr.type.register(state));
-            final link = LinkType.make(type,attr.relation,attr.inverse,Empty,attr.validation);
+            final link = LinkType.make(type,attr.relation,attr.inverse,PEmpty,attr.validation);
             link.toSType().register(state);
         }
         //__.log().debug(_ -> _.pure(type));
@@ -280,8 +279,7 @@ class LiftDeclareRecordSchema_register{
 }
 class LiftGComplexTypeCtrIdentityToGComplexType{
   static public function fromIdentity(ctr:GComplexTypeCtr,self:Identity){
-    final lhs = self.lhs.map(fromIdentity.bind(ctr)).map(GTPType).map(x -> [x]).defv([]);
-    final rhs = self.rhs.map(fromIdentity.bind(ctr)).map(GTPType).map(x -> [x]).defv([]);
-    return GTypePath.__.Make(self.name,self.pack,null,lhs.concat(rhs));
+    final rest = __.option(self.rest).defv([]).map(fromIdentity.bind(ctr)).map(GTPType);
+    return GTypePath.__.Make(self.name,self.pack,null,rest);
   }
 }

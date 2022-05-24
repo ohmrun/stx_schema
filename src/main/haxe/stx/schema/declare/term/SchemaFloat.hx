@@ -6,7 +6,7 @@ abstract SchemaFloat(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Decl
     return new SchemaFloat(
       SchemaScalar.make0(
         'Float',['std'],
-        Empty,
+        PEmpty,
         ValidationType(_.validate())
       )
     );

@@ -46,21 +46,6 @@ class STypeCls{
       ()  -> Validations.unit()
     );
   }
-  public var debrujin(get,never) : Int;
-  public function get_debrujin(){
-    return SType._.fold(
-      data,
-      t   -> t.debrujin,
-      t   -> t.debrujin,
-      t   -> t.debrujin,
-      t   -> t.debrujin,
-      t   -> t.debrujin,
-      t   -> t.debrujin,
-      t   -> t.debrujin,
-      t   -> t.debrujin,
-      ()  -> -1
-    );
-  }
   public function register(state:TypeContext):SType{
     return switch(data){
       case STScalar(t)       : t.pop().register(state); 

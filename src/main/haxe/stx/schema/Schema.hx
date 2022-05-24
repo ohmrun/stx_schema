@@ -65,7 +65,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   @:from static public function fromScalarObject(self:{ name : String, ?pack : Array<String>, ?meta : PExpr<Primitive>, ?ctype : GComplexType, ?validation : Validations}){
     final ident = Ident.make(self.name,self.pack);
     final ctype = __.option(self.ctype).def(() -> __.g().ctype().Path(p -> p.fromIdent(ident)));
-    final meta  = __.option(self.meta).defv(Empty);
+    final meta  = __.option(self.meta).defv(PEmpty);
     return fromDeclareScalarSchema(
         DeclareScalarSchema.make(
           Identity.fromIdent(ident),

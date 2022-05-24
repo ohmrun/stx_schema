@@ -17,8 +17,7 @@ class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends Declare
         this.ident.name,
         this.ident.pack
       ),
-      Some(Identity.lift(this.type)),
-      None
+      [Identity.lift(this.type)]
     );
   }
   public function get_validation(){ return this.validation; }
@@ -33,7 +32,7 @@ class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends Declare
     return lift(new DeclareGenericSchemaCls(
       ident,
       type,
-      __.option(meta).defv(Empty),
+      __.option(meta).defv(PEmpty),
       _.validation.concat(__.option(validation).defv(Cluster.unit()))
     ));
   }
@@ -41,7 +40,7 @@ class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends Declare
     return lift(new DeclareGenericSchemaCls(
       Ident.make(name,pack),
       type,
-      __.option(meta).defv(Empty),
+      __.option(meta).defv(PEmpty),
       _.validation.concat(__.option(validation).defv(Cluster.unit()))
     ));
   }

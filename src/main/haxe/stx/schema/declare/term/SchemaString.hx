@@ -6,7 +6,7 @@ abstract SchemaString(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Dec
     return new SchemaString(
       SchemaScalar.make0(
         'String',['std'],
-        Empty,
+        PEmpty,
         ValidationType(_.validate())
       )
     );

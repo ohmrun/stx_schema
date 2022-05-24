@@ -4,7 +4,7 @@ class TypeInt extends LeafType{
   static public var _(default,never) = TypeIntLift;
   public function new(){
     final ident = Ident.make("Int",["std"]);
-    super(ident,__.g().ctype().Path(p -> p.fromIdent(ident)),Empty);
+    super(ident,__.g().ctype().Path(p -> p.fromIdent(ident)),PEmpty);
   }
   override public function get_validation(){
     return Cluster.pure(ValidationType(_.validate()));

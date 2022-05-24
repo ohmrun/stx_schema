@@ -14,11 +14,13 @@ class TestTypes{
           "articles" => {
             inverse   : "author",
             type      : __.way().into("Article"),
-            relation  : HAS_MANY
+            relation  : HAS_MANY,
+            meta      : PEmpty
           },
           "key" => {
-            type : __.way().into("Key"),
-            relation : HAS_ONE
+            type      : __.way().into("Key"),
+            relation  : HAS_ONE,
+            meta      : PEmpty
           }
         ]
       }
@@ -33,7 +35,8 @@ class TestTypes{
           "author" => {
             inverse   : "article",
             type      : __.way().into("User"),
-            relation  : HAS_ONE
+            relation  : HAS_ONE,
+            meta      : PEmpty
           }
         ]
       }
