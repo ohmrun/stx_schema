@@ -3,14 +3,14 @@ package stx.schema.type;
 interface LinkTypeApi extends BaseTypeApi{
   public final into      : SType;
   public final relation  : RelationType;
-  public final inverse   : String;
+  public final inverse   : Null<String>;
 }
 class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   public final into      : SType;
   public final relation  : RelationType;
-  public final inverse   : String;
+  public final inverse   : Null<String>;
 
-  public function new(into,relation,inverse,?meta,?validation){
+  public function new(into,relation,?inverse,?meta,?validation){
     super(meta,validation);
     this.into       = into;
     this.relation   = relation;
@@ -46,10 +46,11 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
     return STLink(t);
   }
   public function get_identity(){
-    final ident = Ident.make('${this.relation}',['link']);
+    final ident   = Ident.make('${this.relation}',['link']);
+    final reverse = __.option(this.inverse).map(x -> Ident.make(x)).map(x -> []).defv([]);
     return Identity.make(
       ident,
-      [this.into.identity]
+      [this.into.identity].concat(reverse)
     );
   }
 }

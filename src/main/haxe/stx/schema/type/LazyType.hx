@@ -14,7 +14,6 @@ class LazyType extends BaseTypeCls{
   
   public function new(lookup,ctx,?meta,?validations){
     super(meta,validations);
-    
     this.ctx    = ctx;
     this.lookup = lookup;
   }

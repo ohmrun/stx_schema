@@ -2,15 +2,15 @@ package stx.schema;
 
 @:using(stx.schema.SType.STypeLift)
 enum STypeSum{
+  STMono;
+  STLazy(f:Ref<LazyType>);
   STScalar(t:Ref<ScalarType>);
+  STEnum(t:Ref<EnumType>);
   STAnon(t:Ref<AnonType>);
   STRecord(t:Ref<RecordType>);
   STGeneric(t:Ref<GenericType>);
   STUnion(t:Ref<UnionType>);
   STLink(t:Ref<LinkType>);
-  STEnum(t:Ref<EnumType>);
-  STLazy(f:Ref<LazyType>);
-  STMono;
 }
 @:using(stx.schema.SType.STypeLift)
 class STypeCls{
@@ -131,8 +131,8 @@ class STypeCls{
   static public function RecordType(name,pack,fields,meta,?validation):SType{
     return _.RecordType(name,pack,fields,meta,validation).toSType();
   }
-  static public function AnonType(fields,anon):SType{
-    return _.AnonType(fields).toSType();
+  static public function AnonType(fields,meta,?validation):SType{
+    return _.AnonType(fields,meta,validation).toSType();
   }
   static public function GenericType(name,pack,inner):SType{
     return _.GenericType(name,pack,inner).toSType();
@@ -195,11 +195,11 @@ class STypeLift{
   static public function RecordType(name,pack,fields,meta,?validation){
     return stx.schema.type.RecordType.make0(name,pack,fields,meta,validation);
   }
-  static public function AnonType(fields){
-    return stx.schema.type.AnonType.make(fields,__.uuid("xxxxx"));
+  static public function AnonType(fields,meta,?validation){
+    return stx.schema.type.AnonType.make(fields,meta,validation);
   }
-  static public function GenericType(name,pack,inner){
-    return stx.schema.type.GenericType.make(name,pack,inner);
+  static public function GenericType(ident,inner,meta,?validation){
+    return stx.schema.type.GenericType.make(ident,inner,meta,validation);
   }
   static public function LinkType(into,relation,from){
     return stx.schema.type.LinkType.make(into,relation,from);
