@@ -35,7 +35,7 @@ class DeclareEnumSchemaCls implements DeclareEnumSchemaApi extends DeclareSchema
   private function get_self():DeclareEnumSchema return lift(this);
 
   public function toString(){
-    final thiz = this.id.toString();
+    final thiz = this.identity.toString();
     return '$thiz(${this.constructors.join(",")})';
   }
 } 
@@ -97,9 +97,9 @@ class DeclareEnumSchemaLift{
         e.Call(
           e.Path('stx.nano.Ident.make'),
           [
-            e.Const(c -> c.String(self.id.name)),
+            e.Const(c -> c.String(self.identity.name)),
             e.ArrayDecl(
-              __.option(self.id.pack).defv(Way.unit()).prj().map(
+              __.option(self.identity.pack).defv(Way.unit()).prj().map(
                 str -> e.Const( c -> c.String(str))
               )
             )

@@ -24,16 +24,16 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
        },
        () -> {
           return make(
-            id,
-            () -> state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)))
+            identity,
+            () -> state.get(identity).fudge(__.fault().of(E_Schema_IdentityUnresolved(identity)))
           );
        }
      ) 
    );
   }
   public function register(state:TypeContext):SType{
-    __.log().debug('register ref: ${id}');
-    return state.get(id).def(
+    __.log().debug('register ref: ${identity}');
+    return state.get(identity).def(
       () -> {
         __.log().trace(_ -> _.pure(this.pop));
         return __.option(this.pop).fold(
@@ -44,8 +44,8 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
             schema.register(state);
           },
           () -> {
-            __.log().trace(_ -> _.pure(id));
-            final val = LazyType.make(id,state).toSType();
+            __.log().trace(_ -> _.pure(identity ));
+            final val = LazyType.make(identity,state).toSType();
             state.put(val);
             return val;
           }
@@ -67,14 +67,14 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   @:from static inline public function fromSchemaSum(self:SchemaSum){
     final that : Schema = Schema.lift(self);
     return lift({
-      name  : that.id.name,
-      pack  : that.id.pack,
+      name  : that.identity.name,
+      pack  : that.identity.pack,
       pop   : () -> that,
-      rest  : that.id.rest
+      rest  : that.identity.rest
     });
   }
   @:from static inline public function fromSchema(self:Schema){
-    final identity = self.id;
+    final identity = self.identity;
     return lift({
       name  : identity.name,
       pack  : identity.pack,
@@ -96,8 +96,8 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   @:from static inline public function fromDeclareScalarSchema(self:DeclareScalarSchemaApi){
     return fromSchemaSum(Schema.fromDeclareScalarSchema(self));
   }
-  public var id(get,never) : Identity;
-  public function get_id(){
+  public var identity(get,never) : Identity;
+  public function get_identity(){
     return Identity.make(
       Ident.make(this.name,this.pack),
       this.rest

@@ -21,7 +21,7 @@ class DeclareScalarSchemaCls implements DeclareScalarSchemaApi extends DeclareSc
     return SchScalar(this); 
   } 
   public function toString(){
-    return this.id.toString();
+    return this.identity.toString();
   }
   public function prj():DeclareScalarSchemaApi return this;
   private var self(get,never):DeclareScalarSchema;

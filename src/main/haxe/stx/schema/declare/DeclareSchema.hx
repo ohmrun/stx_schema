@@ -1,26 +1,26 @@
 package stx.schema.declare;
 
 interface DeclareSchemaApi extends WithValidationApi{
-  public final meta          : PExpr<Primitive>;
-  public var id(get,null)    : stx.schema.core.Identity;
-  public function get_id():Identity;
+  public final meta                 : PExpr<Primitive>;
+  public var identity(get,null)     : stx.schema.core.Identity;
+  public function get_identity():Identity;
 }
 abstract class DeclareSchemaCls implements DeclareSchemaApi extends WithValidationCls{
   public function new(meta){
     super();
     this.meta = meta;
   }
-  public final meta          : PExpr<Primitive>;
-  public var id(get,null)    : stx.schema.core.Identity;
-  abstract public function get_id():Identity;
+  public final meta                 : PExpr<Primitive>;
+  public var identity(get,null)     : stx.schema.core.Identity;
+  abstract public function get_identity():Identity;
 }
 class DeclareSchemaBase extends DeclareSchemaCls{
-  public function new(id,meta,?validation){
-    this.id         = id;
+  public function new(identity,meta,?validation){
+    this.identity         = identity;
     this.validation = validation;
     super(meta);
   }
-  public function get_id(){ return this.id; }
+  public function get_identity(){ return this.identity; }
   public function get_validation(){ return this.validation; }  
 }
 abstract class DeclareSchemaConcrete extends DeclareSchemaCls{
@@ -29,7 +29,7 @@ abstract class DeclareSchemaConcrete extends DeclareSchemaCls{
     this.ident = ident;
     super(meta);
   }
-  public function get_id(){
+  public function get_identity(){
     return Identity.fromIdent(ident);
   }
 }
@@ -56,7 +56,7 @@ abstract class DeclareSchemaConcrete extends DeclareSchemaCls{
 
   
   public function toString(){
-    return this.id.toString();
+    return this.identity.toString();
   }
 }
 class DeclareSchemaLift{

@@ -168,10 +168,10 @@ class LiftSchema_register{
 }
 class LiftDeclareSchema{
   static public function register(self:DeclareScalarSchema,state:TypeContext){
-    return state.get(self.id).fold(
+    return state.get(self.identity).fold(
       ok -> ok,
       () -> {
-        final ident = Ident.make(self.id.name,self.id.pack);
+        final ident = Ident.make(self.identity.name,self.identity.pack);
         final ref   = () -> Identity.fromIdent(ident);
         final inner = LeafType.make(ident,self.ctype,self.meta,self.validation);
         final type  = STScalar(Ref.make(ref,() -> (inner:ScalarType)));
@@ -200,9 +200,9 @@ class LiftDeclareGenericSchema_register{
   static public function register(self:DeclareGenericSchema,state:TypeContext):SType{
     var next : GenericType    = null;
     final fn = function(){
-      __.log().debug(self.id.toString());
+      __.log().debug(self.identity.toString());
       trace(next);
-      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.id));
+      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.identity));
     }
     var type                  = STGeneric(
       Ref.make(
@@ -210,7 +210,7 @@ class LiftDeclareGenericSchema_register{
         fn
       )
     );
-    trace(self.type.id);
+    trace(self.type.identity);
     try{
       state.put(type);
     }catch(e:haxe.Exception){
@@ -218,9 +218,9 @@ class LiftDeclareGenericSchema_register{
       throw(e);
     }
     
-    trace(self.type.id);
+    trace(self.type.identity);
 
-    next = state.get(self.type.id).fold(
+    next = state.get(self.type.identity).fold(
       (ok:SType) -> {
         final next = GenericType.make(self.ident,ok,self.meta,self.validation);
         return next;
@@ -248,21 +248,21 @@ class LiftDeclareRecordSchema_register{
   static public function register(self:DeclareRecordSchema,state:TypeContext):SType{
     var next : RecordType     = null;
     var fn                    = function(){
-      //__.log().debug(self.id.toString());
-      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.id));
+      //__.log().debug(self.identity.toString());
+      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.identity));
     }
     var type                  = STRecord(Ref.make(() -> Identity.fromIdent(self.ident),fn));
 
     final fs = self.fields.lfold(
       function (next:Procure,memo:Cluster<stx.schema.core.Field>):Cluster<stx.schema.core.Field> {
-        final id    = next.type.id;
-        __.log().debug('$id');
+        final identity    = next.type.identity;
+        __.log().debug('$identity');
         final type : SType = switch(next){
           case Property(prop)   : 
             next.type.register(state);
           case Attribute(attr)  : 
             //__.tracer()(next.type.register(state));
-            final type = state.get(attr.type.id).def(() -> attr.type.register(state));
+            final type = state.get(attr.type.identity).def(() -> attr.type.register(state));
             final link = LinkType.make(type,attr.relation,attr.inverse,PEmpty,attr.validation);
             link.toSType().register(state);
         }
@@ -272,7 +272,7 @@ class LiftDeclareRecordSchema_register{
       Cluster.unit()
     );
     
-    next = new RecordTypeCls(Ident.make(self.id.name,self.id.pack),fs,self.meta,self.validation);
+    next = new RecordTypeCls(Ident.make(self.identity.name,self.identity.pack),fs,self.meta,self.validation);
     state.put(type);
     return type;
   }

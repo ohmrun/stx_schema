@@ -19,7 +19,7 @@ package stx.schema.declare.term;
     return DeclareGenericSchema.lift(this);
   }
   public function resolve(state:TyperContext):Schema{  
-    final result =  SchGeneric(state.get(this.type.id).fold(
+    final result =  SchGeneric(state.get(this.type.identity).fold(
       x  -> SchemaArray.make(x),
       () -> {
         final next = this.type.resolve(state); 

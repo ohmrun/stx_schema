@@ -31,15 +31,15 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.validation
     );
   }
-  public var id(get,never):Identity;
-  private function get_id():Identity{
+  public var identity(get,never):Identity;
+  private function get_identity():Identity{
     return _.fold(
       this,
-      x -> x.id,
-      x -> x.id,
-      x -> x.id,
-      x -> x.id,
-      x -> x.id,
+      x -> x.identity,
+      x -> x.identity,
+      x -> x.identity,
+      x -> x.identity,
+      x -> x.identity,
       x -> x.identity
     );
   }

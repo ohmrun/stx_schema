@@ -43,7 +43,7 @@ class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareS
     final fieldsI = this.fields.map(
       (field:Procure) -> {
         __.log().debug(_ -> _.thunk( () -> field));
-        final ref = state.get(field.type.id).fold(
+        final ref = state.get(field.type.identity).fold(
           x   -> SchemaRef.fromSchema(x),
           ()  -> field.type.resolve(state)
         );
@@ -51,12 +51,12 @@ class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareS
         return field.with_type(ref);
       }
     );
-    final result = make(Ident.make(this.id.name,this.id.pack),fieldsI,this.validation);
+    final result = make(Ident.make(this.identity.name,this.identity.pack),fieldsI,this.validation);
     state.put(SchRecord(result));
     return SchRecord(result);
   }
   public function toString(){
-    final thiz = this.id.toString();
+    final thiz = this.identity.toString();
     final rest = @:privateAccess this.fields.map(
       procurement -> procurement.toString()      
     ).prj().join(",");
@@ -75,8 +75,8 @@ class DeclareRecordSchemaLift{
         e.Call(
           e.Path('stx.Ident.make'),
           [
-            e.Const(c -> c.String(self.id.name)),
-            e.ArrayDecl(__.option(self.id.pack).defv([]).prj().map(str -> e.Const(c -> c.String(str))))
+            e.Const(c -> c.String(self.identity.name)),
+            e.ArrayDecl(__.option(self.identity.pack).defv([]).prj().map(str -> e.Const(c -> c.String(str))))
           ]
         ),
         self.fields.denote()

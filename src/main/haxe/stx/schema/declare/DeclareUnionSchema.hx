@@ -14,7 +14,7 @@ class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareSche
     this.rest       = rest;
     this.validation = validation;
   }
-  public function get_id(){ 
+  public function get_identity(){ 
     return Identity.make(
       Ident.make(
         this.ident.name,
@@ -48,12 +48,12 @@ class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareSche
   }
   public function resolve(state:TyperContext){
     final rest = __.option(this.rest).defv([]).map(
-      x -> state.get(x.id).fold(
+      x -> state.get(x.identity).fold(
         x   -> SchemaRef.fromSchema(x),
         ()  -> x.resolve(state)
       )
     );
-    final result =  make0(this.id.name,this.id.pack,rest,this.meta,this.validation);
+    final result =  make0(this.identity.name,this.identity.pack,rest,this.meta,this.validation);
     state.put(SchUnion(result));
     return SchUnion(result);
   }
@@ -62,7 +62,7 @@ class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareSche
   private function get_self():DeclareUnionSchema return lift(this);
 
   public function toString(){
-    return this.id.toString();
+    return this.identity.toString();
   }
 } 
 class DeclareUnionSchemaLift{

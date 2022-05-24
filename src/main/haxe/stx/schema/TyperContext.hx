@@ -10,7 +10,7 @@ class TyperContextCls{
       () -> {
         final map = new StringMap();
         final map_put = (schema:Schema)->{
-          map.set(schema.id.toString(),schema);
+          map.set(schema.identity.toString(),schema);
         }
         map_put(SchScalar(stx.schema.declare.term.SchemaBool.make()));
         map_put(SchScalar(stx.schema.declare.term.SchemaFloat.make()));
@@ -33,7 +33,7 @@ class TyperContextCls{
     return __.option(this.schemas.get(key.toString()));
   }
   public function put(data:Schema){
-    this.schemas.set(data.id.toString(),data);
+    this.schemas.set(data.identity.toString(),data);
   }
   public function type(){
     for(type in this.schemas){
@@ -42,7 +42,7 @@ class TyperContextCls{
     }
     __.log().trace(_ -> _.pure(context));
     for(schema in this.schemas){
-      __.log().debug(schema.id.toString());
+      __.log().debug(schema.identity.toString());
       try{
         schema.register(this.context);
       }catch(e:haxe.Exception){

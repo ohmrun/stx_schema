@@ -11,7 +11,7 @@ class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends Declare
     this.validation = validation;
     super(ident,meta);
   }
-  override public function get_id(){ 
+  override public function get_identity(){ 
     return Identity.make(
       Ident.make(
         this.ident.name,
@@ -27,7 +27,7 @@ class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends Declare
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclareGenericSchemaApi):DeclareGenericSchema return new DeclareGenericSchema(self);
 
-  //Identity.make(Ident.make(name,pack),Some(type.id),None)
+  //Identity.make(Ident.make(name,pack),Some(type.identity),None)
   @:noUsing static public function make(ident:Ident,type:SchemaRef,?meta:PExpr<Primitive>,?validation:Validations):DeclareGenericSchema{
     return lift(new DeclareGenericSchemaCls(
       ident,
@@ -45,10 +45,10 @@ class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends Declare
     ));
   }
   public function resolve(state:TyperContext){
-    final typeI   = state.get(this.type.id).map(SchemaRef.fromSchema).def(
+    final typeI   = state.get(this.type.identity).map(SchemaRef.fromSchema).def(
       () -> this.type.resolve(state)
     );
-    final result  = SchGeneric(make0(this.id.name,this.id.pack,typeI,this.validation));
+    final result  = SchGeneric(make0(this.identity.name,this.identity.pack,typeI,this.validation));
     state.put(result);
     return result; 
   }
@@ -60,7 +60,7 @@ class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends Declare
     return SchGeneric(this);
   }
   public function toString(){
-    final thiz = this.id.toString();
+    final thiz = this.identity.toString();
     return thiz;
   }
 } 
@@ -74,9 +74,9 @@ class DeclareGenericSchemaLift{
     return e.Call(
       e.Path('stx.schema.declare.DeclareGenericSchema.make'),
       [
-        e.Const( c -> c.String(self.id.name)),
+        e.Const( c -> c.String(self.identity.name)),
         e.ArrayDecl(
-          __.option(self.id.pack).defv([]).prj().map(
+          __.option(self.identity.pack).defv([]).prj().map(
             str -> e.Const(
               c -> c.String(str)
             )
