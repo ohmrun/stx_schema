@@ -30,8 +30,7 @@ class SchemaTest extends TestCase{
           "article" => {
             inverse   : "author",
             type      : __.way().into("Article"),
-            relation  : HAS_MANY,
-            meta      : PEmpty
+            relation  : HAS_MANY
           }
         ]
       }

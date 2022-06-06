@@ -13,12 +13,12 @@ class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareS
   public final fields : Procurements;
   public function get_validation(){ return this.validation; }
 }
-@:forward abstract DeclareRecordSchema(DeclareRecordSchemaApi) from DeclareRecordSchemaApi to DeclareRecordSchemaApi{
+@:transitive @:forward abstract DeclareRecordSchema(DeclareRecordSchemaApi) from DeclareRecordSchemaApi to DeclareRecordSchemaApi{
   public function new(self) this = self;
   static public var _(default,never) = DeclareRecordSchemaLift;
   @:noUsing static public function lift(self:DeclareRecordSchemaApi):DeclareRecordSchema return new DeclareRecordSchema(self);
 
-  @:noUsing static public function make(ident:Ident,fields:Procurements,?meta,?validation:Validations){
+  @:noUsing static public function make(ident:Ident,fields:Procurements,?meta:PExpr<Primitive>,?validation:Validations):DeclareRecordSchema{
     return lift(new DeclareRecordSchemaCls(
       ident,
       fields,
@@ -26,7 +26,7 @@ class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareS
       validation
     ));
   }
-  @:noUsing static public function make0(name:String,pack,fields:Procurements,?meta,?validation){
+  @:noUsing static public function make0(name:String,pack:Way,fields:Procurements,?meta:PExpr<Primitive>,?validation:Validations):DeclareRecordSchema{
     return make(
       Ident.make(name,pack),
       fields,

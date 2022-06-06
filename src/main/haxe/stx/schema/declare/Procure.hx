@@ -5,7 +5,7 @@ enum ProcureSum{
   Attribute(def:ProcureAttribute);
 }
 @:using(stx.schema.declare.Procure.ProcureLift)
-@:forward abstract Procure(ProcureSum) from ProcureSum to ProcureSum{
+@:transitive @:forward abstract Procure(ProcureSum) from ProcureSum to ProcureSum{
   static public var _(default,never) = ProcureLift;
   public function new(self) this = self;
   @:noUsing static public function lift(self:ProcureSum):Procure return new Procure(self);

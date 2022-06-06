@@ -5,7 +5,7 @@ import haxe.ds.Map;
 typedef ProcurementsDef = Cluster<Procure>;
 
 @:using(stx.schema.declare.Procurements.ProcurementsLift)
-@:forward(lfold,map) abstract Procurements(ProcurementsDef) from ProcurementsDef to ProcurementsDef{
+@:transitive @:forward(lfold,map) abstract Procurements(ProcurementsDef) from ProcurementsDef to ProcurementsDef{
   static public var _(default,never) = ProcurementsLift;
   public function new(self) this = self;
   @:noUsing static public function lift(self:ProcurementsDef):Procurements return new Procurements(self);
@@ -38,6 +38,30 @@ typedef ProcurementsDef = Cluster<Procure>;
       out.push(Attribute(next));
     }
     return lift(Cluster.lift(out));
+  }
+  @:from static public function fromObjectI(self:{ ?properties : Map<String,Schema>, ?attributes : Map<String,DeclareAttribute> }){
+    return fromObject({ 
+      properties  : __.option(self.properties).defv(new Map()).map_into(DeclareProperty.fromSchema,new Map()), 
+      attributes  : __.option(self.attributes).defv(new Map())
+    });
+  }
+  @:from static public function fromObjectII(self:{ ?properties : Map<String,Schema>, ?attributes : Map<String,DeclareAttribute> }){
+    return fromObject({ 
+      properties  : __.option(self.properties).defv(new Map()).map_into(DeclareProperty.fromSchema,new Map()), 
+      attributes  : __.option(self.attributes).defv(new Map())
+    });
+  }
+  @:from static public function fromObjectIII(self:{ ?properties : Map<String,Schema>, ?attributes : Map<String,DeclareAttributeDef> }){
+    return fromObject({ 
+      properties  : __.option(self.properties).defv(new Map()).map_into(DeclareProperty.fromSchema,new Map()), 
+      attributes  : __.option(self.attributes).defv(new Map())
+    });
+  }
+  @:from static public function fromObjectIV(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, attributes : haxe.ds.Map<String, { ?validation : Validations, type : stx.Ident, relation : stx.schema.RelationType, ?meta : PExpr<Primitive>, ?inverse : String }> }){
+    return fromObject({ 
+      properties  : __.option(self.properties).defv(new Map()).map_into(DeclareProperty.fromSchema,new Map()), 
+      attributes  : __.option(self.attributes).defv(new Map()).map_into((x) -> DeclareAttribute.fromObjectII(x),new Map())
+    });
   }
   public function toString(){
     return this.map(x -> x.toString()).join(",");

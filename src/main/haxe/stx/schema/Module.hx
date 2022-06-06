@@ -4,22 +4,22 @@ class Module extends Clazz{
   public function scalar(name,pack,ctype,meta,?validation){
     return SchScalar(DeclareScalarSchema.make(Identity.make(Ident.make(name,pack),[]),ctype,meta,validation));
   }
-  public function record(self:{ name : String, ?pack : Cluster<String>, fields : Procurements, ?meta : PExpr<Primitive> , ?validation : Validations }){
+  public function record(self:{ name : String, ?pack : Cluster<String>, fields : Procurements, ?meta : PExpr<Primitive> , ?validation : Validations }):Schema{
     return SchRecord(DeclareRecordSchema.make0(self.name,self.pack,self.fields,self.meta,self.validation));
   }
-  public function enumeration(name,pack,constructors,?meta,?validation){
+  public function enumeration(name,pack,constructors,?meta,?validation):Schema{
     return SchEnum(DeclareEnumSchema.make0(name,pack,constructors,meta,validation));
   }
-  public function generic(name,pack,type:SchemaRef,?meta,?validation){
+  public function generic(name,pack,type:SchemaRef,?meta,?validation):Schema{
     return SchGeneric(DeclareGenericSchema.make0(name,pack,type,meta,validation));
   }
-  public function union(name,pack,type,lhs,rhs,?meta,?validation){
+  public function union(name,pack,type,lhs,rhs,?meta,?validation):Schema{
     return SchUnion(DeclareUnionSchema.make0(name,pack,lhs,rhs,validation));
   }
   public function property(type,?meta):DeclareProperty{
     return DeclareProperty.make(type,__.option(meta).defv(PEmpty));
   }
-  public function attribute(type,relation,meta,?inverse,?validation){
+  public function attribute(type,relation,meta,?inverse,?validation):DeclareAttribute{
     return DeclareAttribute.make(type,relation,meta,inverse,validation);
   }
 }

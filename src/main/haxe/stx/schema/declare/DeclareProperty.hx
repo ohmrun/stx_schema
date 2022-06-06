@@ -1,10 +1,11 @@
 package stx.schema.declare;
 
 typedef DeclarePropertyDef = stx.schema.WithValidationDef & {
-  public final type        : SchemaRef;
-  public final meta        : PExpr<Primitive>;
+  public final type         : SchemaRef;
+  public final ?meta        : PExpr<Primitive>;
 }
-@:forward abstract DeclareProperty(DeclarePropertyDef) from DeclarePropertyDef to DeclarePropertyDef{
+@:transitive @:forward abstract DeclareProperty(DeclarePropertyDef) from DeclarePropertyDef to DeclarePropertyDef{
+  //static public var _(default,never) = DeclarePropertyLift;
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclarePropertyDef):DeclareProperty return new DeclareProperty(self);
   @:noUsing static public function make(type:SchemaRef,meta){
@@ -20,7 +21,7 @@ typedef DeclarePropertyDef = stx.schema.WithValidationDef & {
       PEmpty
     );
   }
-  @:from static public function fromSchema(self:Schema){
+  @:from static public function fromSchema(self:stx.schema.Schema){
     return make(
       SchemaRef.fromSchema(self),
       PEmpty 
