@@ -5,17 +5,16 @@ class LazyType extends BaseTypeCls{
   public var type(get,null) :Null<SType>;
   public final lookup : Identity;
 
-  public function get_type(){
+  public function get_type():Null<SType>{
     //throw "here";
-    __.log().trace('lazy: ${ctx.get(this.lookup)}');
-    return ctx.get(this.lookup).defv(null);
+    return ctx();
   }
-  private final ctx : TypeContext;
+  private final ctx : () -> Null<SType>;
   
-  public function new(lookup,ctx,?meta,?validations){
-    super(meta,validations);
-    this.ctx    = ctx;
+  public function new(id,lookup,ctx,?meta,?validations){
+    super(id,meta,validations);
     this.lookup = lookup;
+    this.ctx    = ctx;
   }
   private function get_type_option(){
     return type == null ? None : Some(type);
@@ -23,10 +22,10 @@ class LazyType extends BaseTypeCls{
   override function get_validation():Validations{
     return get_type_option().map((x:SType) -> x.validation).defv([].imm());
   }
-  public function register(state:TypeContext){
-    //state.put(this.StoSType());
-    return this.toSType();
-  }
+  // public function register(state:TypeContext){
+  //   //state.put(this.StoSType());
+  //   return this.toSType();
+  // }
   public function toSType():SType{
     return STLazy(
       Ref.make(
@@ -38,8 +37,8 @@ class LazyType extends BaseTypeCls{
   public function toString(){
     return identity.toString();
   }
-  @:noUsing static public function make(id,context){
-    return new LazyType(id,context);
+  @:noUsing static public function make(id,context,ctx){
+    return new LazyType(id,context,ctx);
   }
   public function get_identity(){
     return __.option(this.type).map(x -> x.identity).defv(this.lookup);

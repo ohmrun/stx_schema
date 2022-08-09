@@ -5,8 +5,8 @@ interface GenericTypeApi extends DataTypeApi{
 }
 class GenericTypeCls extends ConcreteType implements GenericTypeApi{
   public final type : SType;
-  public function new(ident,type,?meta,?validation){
-    super(ident,meta,validation);
+  public function new(id,ident,type,?meta,?validation){
+    super(id,ident,meta,validation);
     this.type     = type;
   }
   public function toString(){
@@ -20,27 +20,28 @@ class GenericTypeCls extends ConcreteType implements GenericTypeApi{
       )
     ));
   }
-  public function register(state:TypeContext):SType{
-    var next : GenericType     = null;
-    var t               = Ref.make(
-      () -> this.identity,
-      () -> next
-    );
-    state.put(STGeneric(t));
-    var tI              = 
-      state
-        .get(this.type.identity)
-        .fold(
-          ok -> __.option(ok),
-          () -> this.type.is_anon().if_else(
-            () -> __.option(this.type.register(state)),
-            () -> state.get(this.type.identity)
-          )
-        ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity)));
+  // public function register(state:TypeContext):SType{
+  //   // var next : GenericType     = null;
+  //   // var t               = Ref.make(
+  //   //   () -> this.identity,
+  //   //   () -> next
+  //   // );
+  //   // state.put(STGeneric(t));
+  //   // var tI              = 
+  //   //   state
+  //   //     .get(this.type.identity)
+  //   //     .fold(
+  //   //       ok -> __.option(ok),
+  //   //       () -> this.type.is_anon().if_else(
+  //   //         () -> __.option(this.type.register(state)),
+  //   //         () -> state.get(this.type.identity)
+  //   //       )
+  //   //     ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity)));
 
-    next = new GenericTypeCls(this.ident,tI);
-    return next.toSType();
-  }
+  //   // next = new GenericTypeCls(this.ident,tI);
+  //   // return next.toSType();
+  //   return throw UNIMPLEMENTED;
+  // }
   override public function get_identity(){
     final result =  Identity.make(
       this.ident,
@@ -59,8 +60,8 @@ class GenericTypeCls extends ConcreteType implements GenericTypeApi{
   private var self(get,never):GenericType;
   private function get_self():GenericType return lift(this);
 
-  @:noUsing static public function make(ident:Ident,inner,?meta,?validation){ 
-    return lift(new GenericTypeCls(ident,inner,meta,validation));
+  @:noUsing static public function make(id,ident:Ident,inner,?meta,?validation){ 
+    return lift(new GenericTypeCls(id,ident,inner,meta,validation));
   }
 }
 class GenericTypeLift{

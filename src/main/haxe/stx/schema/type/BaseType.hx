@@ -1,16 +1,18 @@
 package stx.schema.type;
 
 interface BaseTypeApi extends Has_getIdentityApi{
+  final id:Register;
+
+  public var identity(get,null):Identity;
+  public function get_identity():Identity;
+
   public var validation(get,null):Validations;
   private function get_validation():Validations;
 
   public var meta   : PExpr<Primitive>;
 
-  public var identity(get,null):Identity;
-  public function get_identity():Identity;
-  
   public function toSType():SType;
-  public function register(state:TypeContext):SType;
+  //public function register(state:TypeContext):SType;
 
   public function toGTypePath():GTypePath;
 
@@ -19,11 +21,13 @@ interface BaseTypeApi extends Has_getIdentityApi{
 @:using(stx.schema.type.BaseType.BaseTypeLift)
 abstract class BaseTypeCls extends Has_getIdentityCls implements BaseTypeApi{
 
-  public function new(meta,validation){
+  public function new(id,meta,validation){
     super();
+    this.id         = id;
     this.meta       = __.option(meta).defv(PEmpty);
     this.validation = validation;
   }
+  public final id   : Register;
   public var meta   : PExpr<Primitive>;
   public var status : TypeStatus;
   
@@ -38,7 +42,7 @@ abstract class BaseTypeCls extends Has_getIdentityCls implements BaseTypeApi{
     return this.identity;
   }
   abstract public function toSType():SType;
-  abstract public function register(state:TypeContext):SType;
+  //abstract public function register(state:TypeContext):SType;
 
   public function toGTypePath():GTypePath{
     final munged                               = this.identity.toIdent_munged();

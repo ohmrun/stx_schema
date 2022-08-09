@@ -19,10 +19,11 @@ class Test{
     #if boot
       boot();
     #else
-      __.test(
+      __.test().run(
         [ 
-          new SchemaTest(),
+          //new SchemaTest(),
           //new TableTypeTest(), 
+          new HalvaContextTest()
         ],
         []    
       );
@@ -31,7 +32,7 @@ class Test{
   private static macro function boot(){
     final log = __.log().global;
     //log.includes.push("**/*");
-    __.test(
+    __.test().run(
       [
         // new SchemaTest() ,
         //new DeclareEnumSchemaTest(),

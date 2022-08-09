@@ -1,0 +1,68 @@
+package stx.schema;
+
+class TypeContext extends Clazz{
+  @:noUsing static public function make(registry,identities){
+    return new TypeContext();
+  }
+  public final registry   : Accretion<SType>;
+  public final identities : eu.ohmrun.halva.ds.map.term.StringRegisterMap;
+  
+  private function new(registry,identities){
+    super();   
+    this.registry   = registry;
+    this.identities = identities;
+    throw "";
+    // this.put(new stx.schema.type.term.TypeBool().toSType());
+    // this.put(new stx.schema.type.term.TypeFloat().toSType());
+    // this.put(new stx.schema.type.term.TypeInt().toSType());
+    // this.put(new stx.schema.type.term.TypeString().toSType());
+    // this.trigger  = Signal.trigger();
+  }
+  public function put(type:SType){
+    this.register.set(type.identity.toString(),type);
+  }
+  public function get(identity:Identity):Option<SType>{
+    __.log().trace(identity.toString());
+    return __.option(register.get(identity.toString()));
+  }
+  public function has(type:SType){
+    return register.exists(type.identity.toString());
+  }
+  public function hasIdentity(identity:Identity){
+    return register.exists(identity.toString());
+  }
+  static public function unit(){
+    return new TypeContext();    
+  }
+  public function toString(){
+    return Iter.lift(this.register).map(
+      x -> x.toString()
+    ).toArray().join(",");
+  }
+}
+// private class SchemaDeclarationAccretion extends Accretion<Schema>{
+//   public function new(){
+
+//   }
+// }
+// private class SchemaDeclarationAccretionSatisfies extends SatisfiesCls<Schema>{
+//   public function lub(){
+//     return throw UNIMPLEMENTED;
+//   }
+// }
+// /**
+//   New value on the left
+// **/
+// private class SchemaDeclarationAccretionLub extends SemiGroupCls<LVar<Schema>>{
+//   public function plus(lhs:LVar<T>,rhs:LVar<T>){
+//     // return lhs.is_defined().if_else(
+//     //   () -> lhs.zip(rhs).flat_map(
+//     //     __.decouple(
+//     //       (l,r) -> 
+//     //     )
+//     //   ),
+//     //   () -> rhs
+//     // );
+//     return throw UNIMPLEMENTED;
+//   }
+// }

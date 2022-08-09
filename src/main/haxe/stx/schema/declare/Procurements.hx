@@ -2,10 +2,10 @@ package stx.schema.declare;
 
 import haxe.ds.Map;
 
-typedef ProcurementsDef = Cluster<Procure>;
+typedef ProcurementsDef = RedBlackSet<stx.schema.declare.Procure>;
 
 @:using(stx.schema.declare.Procurements.ProcurementsLift)
-@:transitive @:forward(lfold,map) abstract Procurements(ProcurementsDef) from ProcurementsDef to ProcurementsDef{
+@:transitive @:forward(lfold,map,toIter,toCluster) abstract Procurements(ProcurementsDef) from ProcurementsDef to ProcurementsDef{
   static public var _(default,never) = ProcurementsLift;
   public function new(self) this = self;
   @:noUsing static public function lift(self:ProcurementsDef):Procurements return new Procurements(self);
@@ -15,7 +15,8 @@ typedef ProcurementsDef = Cluster<Procure>;
   private function get_self():Procurements return lift(this);
 
   @:from static public function fromObject(self:{ ?properties : Map<String,DeclareProperty>, ?attributes : Map<String,DeclareAttribute> }){
-    final out = [];
+    var out : RedBlackSet<stx.schema.declare.Procure> = 
+      stx.ds.RedBlackSet.make(new stx.assert.schema.declare.comparable.Procure());
 
     for(k => v in __.option(self.properties).defv(new Map())){
       var next : ProcurePropertyDef = {
@@ -24,20 +25,20 @@ typedef ProcurementsDef = Cluster<Procure>;
         meta : v.meta,
         validation : v.validation
       }
-      out.push(Property(next));
+      out = out.put(stx.schema.declare.Procure.lift(Property(next)));
     }
     for(k => v in __.option(self.attributes).defv(new Map())){
       var next : ProcureAttributeDef = {
-        name :  k,
+        name        :  k,
         type        : v.type,
         validation  : v.validation,
         meta        : v.meta,
         relation    : v.relation,
         inverse     : v.inverse
       }
-      out.push(Attribute(next));
+      out = out.put(stx.schema.declare.Procure.lift(Attribute(next)));
     }
-    return lift(Cluster.lift(out));
+    return lift(out);
   }
   @:from static public function fromObjectI(self:{ ?properties : Map<String,Schema>, ?attributes : Map<String,DeclareAttribute> }){
     return fromObject({ 
@@ -63,15 +64,27 @@ typedef ProcurementsDef = Cluster<Procure>;
       attributes  : __.option(self.attributes).defv(new Map()).map_into((x) -> DeclareAttribute.fromObjectII(x),new Map())
     });
   }
+  @:from static public function fromObjectV(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, attributes : haxe.ds.Map<String, { type : stx.Ident, relation : stx.schema.RelationType, ?meta : Null<eu.ohmrun.PExpr<stx.Primitive>>, ?inverse : String }> } ):Procurements{
+    return fromObject({ 
+      properties  : __.option(self.properties).defv(new Map()).map_into(DeclareProperty.fromSchema,new Map()), 
+      attributes  : __.option(self.attributes).defv(new Map()).map_into((x) -> DeclareAttribute.fromObjectIV(x),new Map())
+    });
+  }
+  @:from static public function fromObjectVI(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, ?attributes : haxe.ds.Map<String, { type : stx.Ident, relation : stx.schema.RelationType, ?meta : eu.ohmrun.pml.PExpr.PExprDef<PrimitiveDef>, ?inverse : String }> }):Procurements{
+    return fromObject({ 
+      properties  : __.option(self.properties).defv(new Map()).map_into(DeclareProperty.fromSchema,new Map()), 
+      attributes  : __.option(self.attributes).defv(new Map()).map_into((x) -> DeclareAttribute.fromObjectIV(x),new Map())
+    });
+  }
   public function toString(){
-    return this.map(x -> x.toString()).join(",");
+    return this.toCluster().map(x -> x.toString()).join(",");
   }
 }
 class ProcurementsLift{
   static public function denote(self:Procurements){
     final e = __.g().expr();
     return e.ArrayDecl(
-      self.map( p -> p.denote() )
+      self.toCluster().map( p -> p.denote() )
     );
   }
 }

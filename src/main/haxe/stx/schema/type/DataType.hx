@@ -4,13 +4,11 @@ interface DataTypeApi extends BaseTypeApi{
 
 }
 abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
-  public function new(?meta,?validation){
-    super(meta,validation);
+  public function new(id,?meta,?validation){
+    super(id,meta,validation);
   }
 }
-// abstract class DataTypeBase extends DataTypeCls{
 
-// }
 @:using(stx.schema.type.DataType.DataTypeLift)
 @:forward abstract DataType(DataTypeApi) from DataTypeApi to DataTypeApi{
   static public var _(default,never) = DataTypeLift;

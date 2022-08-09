@@ -38,28 +38,30 @@ class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareS
   private var self(get,never):DeclareRecordSchema;
   private function get_self():DeclareRecordSchema return lift(this);
 
-  public function resolve(state:TyperContext):Schema{
-    __.log().debug('resolve record');
-    final fieldsI = this.fields.map(
-      (field:Procure) -> {
-        __.log().debug(_ -> _.thunk( () -> field));
-        final ref = state.get(field.type.identity).fold(
-          x   -> SchemaRef.fromSchema(x),
-          ()  -> field.type.resolve(state)
-        );
-        __.log().trace(_ -> _.thunk( () -> ref));
-        return field.with_type(ref);
-      }
-    );
-    final result = make(Ident.make(this.identity.name,this.identity.pack),fieldsI,this.validation);
-    state.put(SchRecord(result));
-    return SchRecord(result);
-  }
+  // public function resolve(state:TyperContext):Future<LVar<Schema>>{
+  //   // __.log().debug('resolve record');
+  //   // final fieldsI = this.fields.map(
+  //   //   (field:Procure) -> {
+  //   //     __.log().debug(_ -> _.thunk( () -> field));
+  //   //     final ref = state.get(field.type.identity).fold(
+  //   //       x   -> SchemaRef.fromSchema(x),
+  //   //       ()  -> field.type.resolve(state)
+  //   //     );
+  //   //     __.log().trace(_ -> _.thunk( () -> ref));
+  //   //     return field.with_type(ref);
+  //   //   }
+  //   // );
+  //   // final result = make(Ident.make(this.identity.name,this.identity.pack),fieldsI,this.validation);
+  //   // state.put(SchRecord(result));
+  //   // return SchRecord(result);
+  //   return throw UNIMPLEMENTED;
+  // }
   public function toString(){
     final thiz = this.identity.toString();
-    final rest = @:privateAccess this.fields.map(
+    final rest = @:privateAccess this.fields.toIter().map(
       procurement -> procurement.toString()      
-    ).prj().join(",");
+    ).lfold1((m,n) -> "$m,$n");
+
     return '$thiz($rest)';
   }
   public function toSchema(){

@@ -5,7 +5,7 @@ class TestTypes{
     final _       = __.schema();
     final user    = _.record({
       name   : "User",
-      fields : {
+      fields : ({
         properties : [
           "username" => Schema.String(),
           "age"      => Schema.Int()
@@ -18,16 +18,17 @@ class TestTypes{
             meta      : PEmpty
           },
           "key" => {
+            inverse   : null,
             type      : __.way().into("Key"),
             relation  : HAS_ONE,
             meta      : PEmpty
           }
         ]
-      }
+      }:Procurements)
     });
     final article   = _.record({
       name    : "Article",
-      fields  : {
+      fields  : ({
         "properties" : [
           "title" => Schema.String()
         ],
@@ -39,7 +40,7 @@ class TestTypes{
             meta      : PEmpty
           }
         ]
-      }
+      }:Procurements)
     });
     final key = _.record({
       name : "Key",

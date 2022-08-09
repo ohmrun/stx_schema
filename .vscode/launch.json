@@ -5,6 +5,12 @@
 			"name": "Haxe Interpreter",
 			"type": "haxe-eval",
 			"request": "launch"
+		},
+		{
+			"name": "unit",
+			"type": "f5anything",
+			"request": "launch",
+			"command": "just unit"
 		}
 	]
 }

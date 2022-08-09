@@ -46,17 +46,18 @@ class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareSche
       validation
     );
   }
-  public function resolve(state:TyperContext){
-    final rest = __.option(this.rest).defv([]).map(
-      x -> state.get(x.identity).fold(
-        x   -> SchemaRef.fromSchema(x),
-        ()  -> x.resolve(state)
-      )
-    );
-    final result =  make0(this.identity.name,this.identity.pack,rest,this.meta,this.validation);
-    state.put(SchUnion(result));
-    return SchUnion(result);
-  }
+  // public function resolve(state:TyperContext){
+  //   // final rest = __.option(this.rest).defv([]).map(
+  //   //   x -> state.get(x.identity).fold(
+  //   //     x   -> SchemaRef.fromSchema(x),
+  //   //     ()  -> x.resolve(state)
+  //   //   )
+  //   // );
+  //   // final result =  make0(this.identity.name,this.identity.pack,rest,this.meta,this.validation);
+  //   // state.put(SchUnion(result));
+  //   // return SchUnion(result);
+  //   return throw UNIMPLEMENTED;
+  // }
   public function prj():DeclareUnionSchemaApi return this;
   private var self(get,never):DeclareUnionSchema;
   private function get_self():DeclareUnionSchema return lift(this);

@@ -10,10 +10,10 @@ class EnumTypeCls extends ConcreteType implements EnumTypeApi{
     super(ident,meta,validation);
     this.constructors = constructors;
   }
-  public function register(state:TypeContext){
-    state.put(this.toSType());
-    return this.toSType();
-  }
+  // public function register(state:TypeContext){
+  //   state.put(this.toSType());
+  //   return this.toSType();
+  // }
   public function toSType():SType{
     return STEnum(Ref.make(() -> this.identity, () -> EnumType.lift(this)));
   }
@@ -34,12 +34,6 @@ class EnumTypeCls extends ConcreteType implements EnumTypeApi{
   }
 }
 class EnumTypeLift{
-  static public function leaf(self:EnumType,state:GTypeContext){
-    return throw UNIMPLEMENTED;
-  }
-  static public function main(self:EnumType,state:GTypeContext){
-    return throw UNIMPLEMENTED;
-  }
   static public function getTypeDefinition(self:EnumType){
     return __.g().type().Make(
       self.ident.name,

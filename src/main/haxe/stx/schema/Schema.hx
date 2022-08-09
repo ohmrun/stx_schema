@@ -40,16 +40,16 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.identity
     );
   }
-  public function resolve(state:TyperContext):Schema{
-    return _.fold(
-      this,
-      x -> x.resolve(state),
-      x -> x.resolve(state),
-      x -> DeclareEnumSchema._.resolve(x,state),
-      x -> x.resolve(state),
-      x -> x.resolve(state)
-    );
-  }
+  // public function resolve(state:TyperContext):Future<LVar<Schema>>{
+  //   return _.fold(
+  //     this,
+  //     x -> x.resolve(state),
+  //     x -> x.resolve(state),
+  //     x -> DeclareEnumSchema._.resolve(x,state),
+  //     x -> x.resolve(state),
+  //     x -> x.resolve(state)
+  //   );
+  // }
   @:from static public function fromRecordObject(self:{ name : String, ?pack : Array<String>, ?meta : PExpr<Primitive>, fields : { ?properties : Map<String,DeclareProperty> , ?attributes : Map<String,DeclareAttribute> }, ?validation : Validations}){
     return stx.schema.declare.DeclareRecordSchema.make0(
         self.name,self.pack,

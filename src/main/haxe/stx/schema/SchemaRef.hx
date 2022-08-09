@@ -11,48 +11,50 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   public function new(self) this = self;
   @:noUsing static public function lift(self:SchemaRefDef):SchemaRef return new SchemaRef(self);
 
-  public function resolve(state:TyperContext):SchemaRef{
-    __.log().debug('resolve ref');
-   return state.get(Identity.lift(this)).fold(
-     x  -> fromSchema(x),
-     () -> __.that().exists().apply(this.pop).is_ok().if_else(
-       () -> {
-         final val  = this.pop();
-         final next = val.resolve(state);
-         state.put(next);
-         return fromSchema(next);
-       },
-       () -> {
-          return make(
-            identity,
-            () -> state.get(identity).fudge(__.fault().of(E_Schema_IdentityUnresolved(identity)))
-          );
-       }
-     ) 
-   );
-  }
-  public function register(state:TypeContext):SType{
-    __.log().debug('register ref: ${identity}');
-    return state.get(identity).def(
-      () -> {
-        __.log().trace(_ -> _.pure(this.pop));
-        return __.option(this.pop).fold(
-          ok -> {
-            __.log().trace('pulling');
-            final schema = ok();
-            __.log().debug('$schema');
-            schema.register(state);
-          },
-          () -> {
-            __.log().trace(_ -> _.pure(identity ));
-            final val = LazyType.make(identity,state).toSType();
-            state.put(val);
-            return val;
-          }
-        );
-      }
-    );
-  }
+  // public function resolve(state:TyperContext):Future<LVar<SchemaRef>>{
+  //   __.log().trace('resolve ref');
+  // //  return state.get(Identity.lift(this)).fold(
+  // //    x  -> fromSchema(x),
+  // //    () -> __.that().exists().apply(this.pop).is_ok().if_else(
+  // //      () -> {
+  // //        final val  = this.pop();
+  // //        final next = val.resolve(state);
+  // //        state.put(next);
+  // //        return fromSchema(next);
+  // //      },
+  // //      () -> {
+  // //         return make(
+  // //           identity,
+  // //           () -> state.get(identity).fudge(__.fault().of(E_Schema_IdentityUnresolved(identity)))
+  // //         );
+  // //      }
+  // //    ) 
+  // //  );
+  //   return throw UNIMPLEMENTED;
+  // }
+  // public function register(state:TypeContext):SType{
+  //   // __.log().debug('register ref: ${identity}');
+  //   // return state.get(identity).def(
+  //   //   () -> {
+  //   //     __.log().trace(_ -> _.pure(this.pop));
+  //   //     return __.option(this.pop).fold(
+  //   //       ok -> {
+  //   //         __.log().trace('pulling');
+  //   //         final schema = ok();
+  //   //         __.log().debug('$schema');
+  //   //         schema.register(state);
+  //   //       },
+  //   //       () -> {
+  //   //         __.log().trace(_ -> _.pure(identity ));
+  //   //         final val = LazyType.make(identity,() -> state.get(identity).fudge()).toSType();
+  //   //         state.put(val);
+  //   //         return val;
+  //   //       }
+  //   //     );
+  //   //   }
+  //   // );
+  //   return throw UNIMPLEMENTED;
+  // }
   @:noUsing static public function make(identity:Identity,?pop){
     return lift({
       name  : identity.name,

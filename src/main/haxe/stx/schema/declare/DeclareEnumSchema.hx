@@ -40,10 +40,11 @@ class DeclareEnumSchemaCls implements DeclareEnumSchemaApi extends DeclareSchema
   }
 } 
 class DeclareEnumSchemaLift{
-  static public function resolve(self:DeclareEnumSchema,state:TyperContext):Schema{
-    state.put(SchEnum(self));
-    return SchEnum(self);
-  }
+  // static public function resolve(self:DeclareEnumSchema,state:TyperContext):Schema{
+  //   // state.put(SchEnum(self));
+  //   // return SchEnum(self);
+  //   return throw UNIMPLEMENTED;
+  // }
   static public var validation(get,null) : Validations;
   static public function get_validation(){
     //ValidationExpr(check_constructor)

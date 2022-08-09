@@ -3,9 +3,9 @@ package stx.schema.type.term;
 class TypeFloat extends LeafType{
   static public var _(default,never) = TypeFloatLift;
 
-  public function new(){
+  public function new(id){
     final ident = Ident.make("Float",["std"]);
-    super(ident,__.g().ctype().Path(p -> p.fromIdent(ident)),PEmpty);
+    super(id,ident,__.g().ctype().Path(p -> p.fromIdent(ident)),PEmpty);
   }
   override public function get_validation(){
     return Cluster.pure(ValidationType(_.validate()));

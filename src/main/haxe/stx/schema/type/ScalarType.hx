@@ -5,10 +5,12 @@ interface ScalarTypeApi extends DataTypeApi{
   final ident : Ident;
 }
 abstract class ScalarTypeCls extends DataTypeCls implements ScalarTypeApi{
-  public function new(ident,ctype,meta,?validation){
+  public final ctype : GComplexType;
+  public final ident : Ident;
+  public function new(id,ident,ctype,meta,?validation){
+    super(id,meta,validation);
     this.ident = ident;
     this.ctype = ctype;
-    super(meta,validation);
   }
   public function toSType(){
     return SType.make(STScalar(Ref.make(() -> this.identity,() -> (this:ScalarType))));

@@ -3,7 +3,7 @@ package stx.schema.test;
 import stx.schema.Munge;
 class MungeTest extends TestCase{
   static public function main(){
-    __.test([new MungeTest()],[]);
+    __.test().run([new MungeTest()],[]);
   }
   public function test(){
     final identifier = Identity.make(

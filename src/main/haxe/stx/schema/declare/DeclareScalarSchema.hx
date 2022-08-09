@@ -17,10 +17,11 @@ class DeclareScalarSchemaCls implements DeclareScalarSchemaApi extends DeclareSc
   @:noUsing static public function make(id,ctype,meta,?validation){
     return lift(new DeclareScalarSchemaCls(id,ctype,meta,validation));
   }
-  public function resolve(state:TyperContext):Schema{
-    state.put(this);
-    return SchScalar(this); 
-  } 
+  // public function resolve(state:TyperContext):Schema{
+  //   // state.put(this);
+  //   // return SchScalar(this); 
+  //   return throw UNIMPLEMENTED;
+  // } 
   public function toString(){
     return this.identity.toString();
   }

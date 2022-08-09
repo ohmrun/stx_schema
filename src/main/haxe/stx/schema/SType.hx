@@ -46,33 +46,33 @@ class STypeCls{
       ()  -> Validations.unit()
     );
   }
-  public function register(state:TypeContext):SType{
-    return switch(data){
-      case STScalar(t)       : t.pop().register(state); 
-      case STAnon(t)       : t.pop().register(state);
-      case STRecord(t)     : t.pop().register(state);
-      case STGeneric(t)    : t.pop().register(state);
-      case STUnion(t)      : t.pop().register(state);
-      case STLink(t)       : t.pop().register(state);
-      case STEnum(t)       : t.pop().register(state);
-      case STLazy(t)       : t.pop().register(state);
-      case STMono          :
-        //__.log().trace("PPPPPL"); 
-        new STypeCls(STMono);
-    }
-  }
+  // public function register(state:TypeContext):SType{
+  //   return switch(data){
+  //     case STScalar(t)     : t.pop().register(state); 
+  //     case STAnon(t)       : t.pop().register(state);
+  //     case STRecord(t)     : t.pop().register(state);
+  //     case STGeneric(t)    : t.pop().register(state);
+  //     case STUnion(t)      : t.pop().register(state);
+  //     case STLink(t)       : t.pop().register(state);
+  //     case STEnum(t)       : t.pop().register(state);
+  //     case STLazy(t)       : t.pop().register(state);
+  //     case STMono          :
+  //       //__.log().trace("PPPPPL"); 
+  //       new STypeCls(STMono);
+  //   }
+  // }
   public var identity(get,never) : Identity;
   public function get_identity():Identity{
     return switch(data){
-      case STScalar(t)       : t.getIdentity(); 
-      case STAnon(t)       : t.getIdentity();
-      case STRecord(t)     : t.getIdentity();
-      case STGeneric(t)    : t.getIdentity();
-      case STUnion(t)      : t.getIdentity();
-      case STLink(t)       : t.getIdentity();
-      case STEnum(t)       : t.getIdentity();
-      case STLazy(t)       : t.getIdentity();
-      case STMono          :
+      case STScalar(t)        : t.getIdentity(); 
+      case STAnon(t)          : t.getIdentity();
+      case STRecord(t)        : t.getIdentity();
+      case STGeneric(t)       : t.getIdentity();
+      case STUnion(t)         : t.getIdentity();
+      case STLink(t)          : t.getIdentity();
+      case STEnum(t)          : t.getIdentity();
+      case STLazy(t)          : t.getIdentity();
+      case STMono             :
         //throw 'abstract identity'; 
         Identity.fromIdent(Ident.make('TMono'));
     }
@@ -98,23 +98,23 @@ class STypeCls{
   private var self(get,never):SType;
   private function get_self():SType return lift(this);
 
-  static public function Array(self:SType):SType{
-    return stx.schema.type.term.TypeArray.make(self).toSType();
+  static public function Array(id,self:SType):SType{
+    return stx.schema.type.term.TypeArray.make(id,self).toSType();
   } 
-  static public function Bool():SType{
-    return new stx.schema.type.term.TypeBool().toSType();
+  static public function Bool(id):SType{
+    return new stx.schema.type.term.TypeBool(id).toSType();
   }
-  static public function Float():SType{
-    return new stx.schema.type.term.TypeFloat().toSType();
+  static public function Float(id):SType{
+    return new stx.schema.type.term.TypeFloat(id).toSType();
   }
-  static public function Int():SType{
-    return new stx.schema.type.term.TypeInt().toSType();
+  static public function Int(id):SType{
+    return new stx.schema.type.term.TypeInt(id).toSType();
   }
-  static public function String():SType{
-    return new stx.schema.type.term.TypeString().toSType();
+  static public function String(id):SType{
+    return new stx.schema.type.term.TypeString(id).toSType();
   }
-  static public function Null(self:SType):SType{
-    return stx.schema.type.term.TypeNull.make(self).toSType();
+  static public function Null(id,self:SType):SType{
+    return stx.schema.type.term.TypeNull.make(id,self).toSType();
   }
   static public function Mono():SType{
     return STMono;

@@ -4,7 +4,7 @@
     "-lib" : [
       "hscript",
       "tink_typecrawler",
-      "stx_pico","stx_show","stx_nano","stx_om","stx_bake","stx_show","fletcher","stx_makro","stx_coroutine","stx_makro","pml","halva"
+      "stx_pico","stx_show","stx_nano","stx_om","stx_bake","stx_show","fletcher","stx_makro","stx_coroutine","stx_makro","pml","halva","stx_test"
     ],
     "-cp"  : "src/main/haxe",
     "unit" : {

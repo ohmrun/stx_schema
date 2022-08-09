@@ -44,14 +44,15 @@ class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends Declare
       _.validation.concat(__.option(validation).defv(Cluster.unit()))
     ));
   }
-  public function resolve(state:TyperContext){
-    final typeI   = state.get(this.type.identity).map(SchemaRef.fromSchema).def(
-      () -> this.type.resolve(state)
-    );
-    final result  = SchGeneric(make0(this.identity.name,this.identity.pack,typeI,this.validation));
-    state.put(result);
-    return result; 
-  }
+  // public function resolve(state:TyperContext){
+  //   // final typeI   = state.get(this.type.identity).map(SchemaRef.fromSchema).def(
+  //   //   () -> this.type.resolve(state)
+  //   // );
+  //   // final result  = SchGeneric(make0(this.identity.name,this.identity.pack,typeI,this.validation));
+  //   // state.put(result);
+  //   // return result; 
+  //   return throw UNIMPLEMENTED;
+  // }
   public function prj():DeclareGenericSchemaApi return this;
   private var self(get,never):DeclareGenericSchema;
   private function get_self():DeclareGenericSchema return lift(this);

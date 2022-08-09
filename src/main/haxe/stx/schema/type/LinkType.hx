@@ -10,8 +10,8 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   public final relation  : RelationType;
   public final inverse   : Null<String>;
 
-  public function new(into,relation,?inverse,?meta,?validation){
-    super(meta,validation);
+  public function new(id,into,relation,?inverse,?meta,?validation){
+    super(id,meta,validation);
     this.into       = into;
     this.relation   = relation;
     this.inverse    = inverse;
@@ -23,28 +23,29 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   public function toString(){
     return '$relation $into $inverse';
   }
-  public function register(state:TypeContext):SType{
-    var next : LinkType     = null;
-    var t                   = Ref.make(
-      () -> this.identity,
-      function():LinkType{
-        final inner = state.get(this.into.identity).def(() -> this.into.register(state));
-        var tI              = 
-          state
-            .get(this.into.identity)
-            .fold(
-              ok -> __.option(ok),
-              () -> this.into.is_anon().if_else(//TODO: this shouldn't be a thing
-                () -> __.option(state.get(this.into.identity).def(() ->this.into.register(state))),
-                () -> __.option(null)
-              )
-            ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity)));
-        return new LinkTypeCls(tI,relation,inverse);
-      }
-    );
+  // public function register(state:TypeContext):SType{
+  //   // var next : LinkType     = null;
+  //   // var t                   = Ref.make(
+  //   //   () -> this.identity,
+  //   //   function():LinkType{
+  //   //     final inner = state.get(this.into.identity).def(() -> this.into.register(state));
+  //   //     var tI              = 
+  //   //       state
+  //   //         .get(this.into.identity)
+  //   //         .fold(
+  //   //           ok -> __.option(ok),
+  //   //           () -> this.into.is_anon().if_else(//TODO: this shouldn't be a thing
+  //   //             () -> __.option(state.get(this.into.identity).def(() ->this.into.register(state))),
+  //   //             () -> __.option(null)
+  //   //           )
+  //   //         ).fudge(__.fault().of(E_Schema_IdentityUnresolved(this.identity)));
+  //   //     return new LinkTypeCls(tI,relation,inverse);
+  //   //   }
+  //   // );
     
-    return STLink(t);
-  }
+  //   // return STLink(t);
+  //   return throw UNIMPLEMENTED;
+  // }
   public function get_identity(){
     final ident   = Ident.make('${this.relation}',['link']);
     final reverse = __.option(this.inverse).map(x -> Ident.make(x)).map(x -> []).defv([]);
@@ -68,13 +69,6 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   }
 }
 class LinkTypeLift{
-  
-  static public function leaf(self:LinkType,state:GTypeContext){
-    return throw UNIMPLEMENTED;
-  }
-  static public function main(self:LinkType,state:GTypeContext){
-    return throw UNIMPLEMENTED;
-  }
   static public function lookup(self:LinkType):Option<SType>{
     return self.into.fields.search(
       kv -> {
@@ -85,16 +79,4 @@ class LinkTypeLift{
       x -> x.type
     );
   }
-  // static public function getLeafComplexType(self:LinkType):GComplexType{
-  //   return switch(self.relation){
-  //     case HAS_MANY : new TypeArray(new TypeID()).getLeafComplexType(); 
-  //     default       : __.g().ctype().fromString('stx.schema.ID');
-  //   }
-  // }
-  // static public function getMainComplexType(self:LinkType):GComplexType{
-  //   return switch(self.relation){
-  //     case HAS_MANY : new TypeArray(self.into).getLeafComplexType(); 
-  //     default       : self.into.getLeafComplexType();
-  //   }
-  // }
 }

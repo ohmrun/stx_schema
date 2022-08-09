@@ -7,8 +7,8 @@ interface AnonTypeApi extends BaseTypeApi{
 }
 class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   public final fields  : Cell<Cluster<Field>>;
-  public function new(fields,?meta,?validation){
-    super(meta,validation);
+  public function new(id,fields,?meta,?validation){
+    super(id,meta,validation);
     this.fields   = fields;
   }
   public function toString(){
@@ -24,25 +24,26 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   public function toSType(){
     return SType.make(STAnon(Ref.make(() -> this.identity,() -> (this:AnonType))));
   }
-  public function register(state:TypeContext):SType{
-    var next : AnonType     = null;
-    var type                = Ref.make(
-      () -> this.identity,
-      () -> next
-    );
-    state.put(STAnon(type));
-    final fs = (this.fields.pop().toIter()).lfold(
-      (next:Field,memo:Cluster<Field>) -> {
-        final id    = next.type.identity;
-        final type  = state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)));
-        return memo.snoc(Field.make(next.name,type));
-      },
-      Cluster.unit()
-    );
+  // public function register(state:TypeContext):SType{
+  //   // var next : AnonType     = null;
+  //   // var type                = Ref.make(
+  //   //   () -> this.identity,
+  //   //   () -> next
+  //   // );
+  //   // state.put(STAnon(type));
+  //   // final fs = (this.fields.pop().toIter()).lfold(
+  //   //   (next:Field,memo:Cluster<Field>) -> {
+  //   //     final id    = next.type.identity;
+  //   //     final type  = state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)));
+  //   //     return memo.snoc(Field.make(next.name,type));
+  //   //   },
+  //   //   Cluster.unit()
+  //   // );
     
-    next = new AnonTypeCls(Cell.pure(fs));
-    return next.toSType();
-  }
+  //   // next = new AnonTypeCls(Cell.pure(fs));
+  //   // return next.toSType();
+  //   return throw UNIMPLEMENTED;
+  // }
   public function get_identity():Identity{
     final ident            = Ident.make('Anon');
     final field_identities = this.fields.pop().map(

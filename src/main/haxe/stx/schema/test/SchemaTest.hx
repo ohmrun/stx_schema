@@ -54,11 +54,11 @@ class SchemaTest extends TestCase{
     return [user,article];
   }
   public function test_this(){
-    var types = TyperContext.make(types());
-        types.type();
-    var context  = types.context;
-    var register = @:privateAccess context.register;  
-    var context  = new GTypeContext(context);
+    // var types = TyperContext.make(types());
+    //     types.type();
+    // var context  = types.context;
+    // var register = @:privateAccess context.register;  
+    // var context  = new GTypeContext(context);
     //stx.schema.view.Main.apply(context);
   }
   public function test(){

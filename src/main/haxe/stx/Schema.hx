@@ -69,8 +69,8 @@ typedef Validation                                = stx.schema.Validation;
 typedef Validations                               = stx.schema.Validations;
 typedef WithValidationDef                         = stx.schema.WithValidationDef;
 
-typedef TyperContext                              = stx.schema.TyperContext;
-typedef TyperContextCls                           = stx.schema.TyperContext.TyperContextCls;
+//typedef TyperContext                              = stx.schema.TyperContext;
+//typedef TyperContextCls                           = stx.schema.TyperContext.TyperContextCls;
 typedef ValidationComplyApi                       = ComplyApi<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
 typedef ValidationComplyCls                       = ComplyCls<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
 
@@ -126,8 +126,8 @@ typedef WithValidationApi                         = stx.schema.WithValidation.Wi
 typedef LeafType                                  = stx.schema.type.LeafType;
 typedef LazyType                                  = stx.schema.type.LazyType;
 
-typedef GTypeContext                              = stx.schema.GTypeContext;
-typedef TypeContext                               = stx.schema.TypeContext;
+//typedef GTypeContext                              = stx.schema.GTypeContext;
+//typedef TypeContext                               = stx.schema.TypeContext;
 
 // typedef LinkTypeDef                            = stx.schema.type.LinkType.LinkTypeDef;
 // typedef LinkType                               = stx.schema.type.LinkType
@@ -138,141 +138,131 @@ typedef TypeContext                               = stx.schema.TypeContext;
 // typedef SchemaNull                             = stx.schema.type.term.SchemaNull;
 
 class LiftSchema_register{
-  static public function register(self:Schema,state:TypeContext){
-    return switch(self){
-      case SchScalar(def)   :
-        __.log().debug('register scalar'); 
-        def.register(state); 
-      case SchRecord(def)   : 
-        __.log().debug('register record');
-        def.register(state);
-      case SchEnum(def)     :
-        __.log().debug('register enum'); 
-        def.register(state);
-      case SchGeneric(def)  : 
-        __.log().debug('register generic');
-        LiftDeclareGenericSchema_register.register(def,state);
-      case SchUnion(def)    :
-        __.log().debug('register union'); 
-        def.register(state);
-      case SchLazy(fn)      : 
-        __.log().debug('register lazy');
-        final schema = fn();
-        __.log().debug('unlazy');
-        fn().register(state);
-    }
-  }
+  // static public function register(self:Schema,state:TypeContext){
+  //   return switch(self){
+  //     case SchScalar(def)   :
+  //       __.log().debug('register scalar'); 
+  //       def.register(state); 
+  //     case SchRecord(def)   : 
+  //       __.log().debug('register record');
+  //       def.register(state);
+  //     case SchEnum(def)     :
+  //       __.log().debug('register enum'); 
+  //       def.register(state);
+  //     case SchGeneric(def)  : 
+  //       __.log().debug('register generic');
+  //       LiftDeclareGenericSchema_register.register(def,state);
+  //     case SchUnion(def)    :
+  //       __.log().debug('register union'); 
+  //       def.register(state);
+  //     case SchLazy(fn)      : 
+  //       __.log().debug('register lazy');
+  //       final schema = fn();
+  //       __.log().debug('unlazy');
+  //       fn().register(state);
+  //   }
+  // }
 }
 class LiftDeclareSchema{
-  static public function register(self:DeclareScalarSchema,state:TypeContext){
-    return state.get(self.identity).fold(
-      ok -> ok,
-      () -> {
-        final ident = Ident.make(self.identity.name,self.identity.pack);
-        final ref   = () -> Identity.fromIdent(ident);
-        final inner = LeafType.make(ident,self.ctype,self.meta,self.validation);
-        final type  = STScalar(Ref.make(ref,() -> (inner:ScalarType)));
-        state.put(type);
-        return type;
-      }
-    );
-  }
+  // static public function register(self:DeclareScalarSchema,state:TypeContext){
+  //   // return state.get(self.identity).fold(
+  //   //   ok -> ok,
+  //   //   () -> {
+  //   //     final ident = Ident.make(self.identity.name,self.identity.pack);
+  //   //     final ref   = () -> Identity.fromIdent(ident);
+  //   //     final inner = LeafType.make(ident,self.ctype,self.meta,self.validation);
+  //   //     final type  = STScalar(Ref.make(ref,() -> (inner:ScalarType)));
+  //   //     state.put(type);
+  //   //     return type;
+  //   //   }
+  //   // );
+  //   return throw UNIMPLEMENTED;
+  // }
 }
 class LiftDeclareUnionSchema{
-  static public function register(self:DeclareUnionSchema,state:TypeContext):SType{
-    final rest  = self.rest.map(x -> x.register(state));
-    final type  = UnionType.make(self.ident,rest,self.meta,self.validation).toSType();
-    state.put(type);
-    return type;
-  }
+  // static public function register(self:DeclareUnionSchema,state:TypeContext):SType{
+  //   // final rest  = self.rest.map(x -> x.register(state));
+  //   // final type  = UnionType.make(self.ident,rest,self.meta,self.validation).toSType();
+  //   // state.put(type);
+  //   // return type;
+  //   return throw UNIMPLEMENTED;
+  // }
 }
 class LiftDeclareEnumSchema_register{
-  static public function register(self:DeclareEnumSchema,state:TypeContext):SType{
-    final type = EnumType.make(self.ident,self.constructors,self.meta,self.validation).toSType();
-    state.put(type);
-    return type;
-  }
+  // static public function register(self:DeclareEnumSchema,state:TypeContext):SType{
+  //   // final type = EnumType.make(self.ident,self.constructors,self.meta,self.validation).toSType();
+  //   // state.put(type);
+  //   // return type;
+  //   return throw UNIMPLEMENTED;
+  // }
 }
 class LiftDeclareGenericSchema_register{
-  static public function register(self:DeclareGenericSchema,state:TypeContext):SType{
-    var next : GenericType    = null;
-    final fn = function(){
-      __.log().debug(self.identity.toString());
-      trace(next);
-      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.identity));
-    }
-    var type                  = STGeneric(
-      Ref.make(
-        () -> Identity.make(self.ident,[Identity.lift(self.type)]),
-        fn
-      )
-    );
-    trace(self.type.identity);
-    try{
-      state.put(type);
-    }catch(e:haxe.Exception){
-      trace(e);
-      throw(e);
-    }
+  
+  // }catch(e:haxe.Exception){
+    //   trace(e);
+    //   throw(e);
+    // }
     
-    trace(self.type.identity);
+    // trace(self.type.identity);
 
-    next = state.get(self.type.identity).fold(
-      (ok:SType) -> {
-        final next = GenericType.make(self.ident,ok,self.meta,self.validation);
-        return next;
-      },
-      () -> {
-        return __.option(self.type.pop).fold(
-          ok -> {
-            final subtype = ok().register(state);
-            final next    = GenericType.make(self.ident,subtype,self.meta,self.validation);
-            return next;
-          },
-          () -> {
-            __.log().trace("HERERERER");
-            return GenericType.make(self.ident,STMono,self.meta,self.validation);
-          }
-        );
-      }
-    );
-    trace(next);
-    state.put(type);
-    return type;
-  }
+    // next = state.get(self.type.identity).fold(
+    //   (ok:SType) -> {
+    //     final next = GenericType.make(self.ident,ok,self.meta,self.validation);
+    //     return next;
+    //   },
+    //   () -> {
+    //     return __.option(self.type.pop).fold(
+    //       ok -> {
+    //         final subtype = ok().register(state);
+    //         final next    = GenericType.make(self.ident,subtype,self.meta,self.validation);
+    //         return next;
+    //       },
+    //       () -> {
+    //         __.log().trace("HERERERER");
+    //         return GenericType.make(self.ident,STMono,self.meta,self.validation);
+    //       }
+    //     );
+    //   }
+    // );
+    // trace(next);
+    // state.put(type);
+    // return type;
+  //   return throw UNIMPLEMENTED;
+  // }
 }
 class LiftDeclareRecordSchema_register{
-  static public function register(self:DeclareRecordSchema,state:TypeContext):SType{
-    var next : RecordType     = null;
-    var fn                    = function(){
-      //__.log().debug(self.identity.toString());
-      return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.identity));
-    }
-    var type                  = STRecord(Ref.make(() -> Identity.fromIdent(self.ident),fn));
+  // static public function register(self:DeclareRecordSchema,state:TypeContext):SType{
+  // //   var next : RecordType     = null;
+  // //   var fn                    = function(){
+  // //     //__.log().debug(self.identity.toString());
+  // //     return __.option(next).def(() ->throw E_Schema_IdentityUnresolved(self.identity));
+  // //   }
+  // //   var type                  = STRecord(Ref.make(() -> Identity.fromIdent(self.ident),fn));
 
-    final fs = self.fields.lfold(
-      function (next:Procure,memo:Cluster<stx.schema.core.Field>):Cluster<stx.schema.core.Field> {
-        final identity    = next.type.identity;
-        __.log().debug('$identity');
-        final type : SType = switch(next){
-          case Property(prop)   : 
-            next.type.register(state);
-          case Attribute(attr)  : 
-            //__.tracer()(next.type.register(state));
-            final type = state.get(attr.type.identity).def(() -> attr.type.register(state));
-            final link = LinkType.make(type,attr.relation,attr.inverse,PEmpty,attr.validation);
-            link.toSType().register(state);
-        }
-        //__.log().debug(_ -> _.pure(type));
-        return memo.snoc(stx.schema.core.Field.make(next.name,type));
-      },
-      Cluster.unit()
-    );
+  // //   final fs = self.fields.lfold(
+  // //     function (next:Procure,memo:Cluster<stx.schema.core.Field>):Cluster<stx.schema.core.Field> {
+  // //       final identity    = next.type.identity;
+  // //       __.log().debug('$identity');
+  // //       final type : SType = switch(next){
+  // //         case Property(prop)   : 
+  // //           next.type.register(state);
+  // //         case Attribute(attr)  : 
+  // //           //__.tracer()(next.type.register(state));
+  // //           final type = state.get(attr.type.identity).def(() -> attr.type.register(state));
+  // //           final link = LinkType.make(type,attr.relation,attr.inverse,PEmpty,attr.validation);
+  // //           link.toSType().register(state);
+  // //       }
+  // //       //__.log().debug(_ -> _.pure(type));
+  // //       return memo.snoc(stx.schema.core.Field.make(next.name,type));
+  // //     },
+  // //     Cluster.unit()
+  // //   );
     
-    next = new RecordTypeCls(Ident.make(self.identity.name,self.identity.pack),fs,self.meta,self.validation);
-    state.put(type);
-    return type;
-  }
+  // //   next = new RecordTypeCls(Ident.make(self.identity.name,self.identity.pack),fs,self.meta,self.validation);
+  // //   state.put(type);
+  // //   return type;
+  // return throw UNIMPLEMENTED;
+  // }
 }
 class LiftGComplexTypeCtrIdentityToGComplexType{
   static public function fromIdentity(ctr:GComplexTypeCtr,self:Identity){
