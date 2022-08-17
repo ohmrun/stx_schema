@@ -4,9 +4,8 @@ abstract SchemaBool(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Decla
   static public var _(default,never) = SchemaBoolLift;
   @:noUsing static public function make(){
     return new SchemaBool(
-      SchemaScalar.make0(
+      __.schema().scalar(
         'Bool',['std'],
-        PEmpty,
         ValidationType(_.validate())
       )
     );

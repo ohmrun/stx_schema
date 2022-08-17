@@ -4,10 +4,10 @@ interface EnumTypeApi extends DataTypeApi  {
   final constructors : Cluster<String>;
   final ident        : Ident;
 }
-class EnumTypeCls extends ConcreteType implements EnumTypeApi{
+class EnumTypeCls extends NominativeTypeCls implements EnumTypeApi{
   public final constructors : Cluster<String>;
-  public function new(ident,constructors,?meta,?validation){
-    super(ident,meta,validation);
+  public function new(ident,constructors,?validation,?meta){
+    super(ident,validation,meta);
     this.constructors = constructors;
   }
   // public function register(state:TypeContext){
@@ -15,9 +15,9 @@ class EnumTypeCls extends ConcreteType implements EnumTypeApi{
   //   return this.toSType();
   // }
   public function toSType():SType{
-    return STEnum(Ref.make(() -> this.identity, () -> EnumType.lift(this)));
+    return STEnum(Ref.wrap((this:EnumType)));
   }
-  public function toString(){
+  public function toString(){ 
     return this.identity.toString();
   }
 }

@@ -4,9 +4,8 @@ abstract SchemaFloat(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Decl
   static public var _(default,never) = SchemaFloatLift;
   @:noUsing static public function make(){
     return new SchemaFloat(
-      SchemaScalar.make0(
+      __.schema().scalar(
         'Float',['std'],
-        PEmpty,
         ValidationType(_.validate())
       )
     );

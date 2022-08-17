@@ -11,8 +11,8 @@ class LazyType extends BaseTypeCls{
   }
   private final ctx : () -> Null<SType>;
   
-  public function new(id,lookup,ctx,?meta,?validations){
-    super(id,meta,validations);
+  public function new(id,lookup,ctx,?validation,?metas){
+    super(id,validation,metas);
     this.lookup = lookup;
     this.ctx    = ctx;
   }
@@ -29,7 +29,7 @@ class LazyType extends BaseTypeCls{
   public function toSType():SType{
     return STLazy(
       Ref.make(
-        () -> lookup,
+        lookup,
         () -> this
       )
     );

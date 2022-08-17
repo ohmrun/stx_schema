@@ -1,31 +1,14 @@
 package stx.schema.core;
 
-typedef FieldDef = Has_getIdentityDef & {
-  final type : SType;
-  final name : String;
-}
-@:using(stx.schema.core.Field.FieldLift)
-@:forward abstract Field(FieldDef) from FieldDef to FieldDef{
-  public function new(self) this = self;
-  @:noUsing static public function lift(self:FieldDef):Field return new Field(self);
-  @:noUsing static public function make(name:String,type:SType):Field{
-    return lift({
-      name          : name,
-      type          : type, 
-      getIdentity   : () -> type.identity
-    });
-  }
-  public function prj():FieldDef return this;
-  private var self(get,never):Field;
-  private function get_self():Field return lift(this);
+class Field extends WithIdentityCls{
+  public final name : String;
+  public final type : SType;
 
-  // @:from static public function fromString(self:String){
-  //   return lift({ type : Context.instance.defer(Ident.fromIdentifier(Identifier.lift(self))), toString : () -> self });
-  // }
-  public function toString():String{
-    return this.type.toString();
+  public function new(name,type){
+    this.name = name;
+    this.type = type;
   }
-}
-class FieldLift{
-  
+  public function get_identity(){
+    return type.identity;
+  }
 }

@@ -3,10 +3,10 @@ package stx.schema.type;
 interface UnionTypeApi extends DataTypeApi{
   final rest : Cluster<SType>;
 }
-class UnionTypeCls extends ConcreteType implements UnionTypeApi {
+class UnionTypeCls extends NominativeTypeCls implements UnionTypeApi {
   public final rest : Cluster<SType>;
-  public function new(ident,rest,?meta,?validation){
-    super(ident,meta,validation);
+  public function new(ident,rest,?validation,?meta){
+    super(ident,validation,meta);
     this.rest = rest;
   }
   override public function get_identity(){
@@ -45,8 +45,8 @@ class UnionTypeCls extends ConcreteType implements UnionTypeApi {
   private var self(get,never):UnionType;
   private function get_self():UnionType return lift(this);
 
-  @:noUsing static public function make(ident,rest,?meta,?validation){ 
-    return lift(new UnionTypeCls(ident,rest,meta,validation));
+  @:noUsing static public function make(ident,rest,?validation,?meta){ 
+    return lift(new UnionTypeCls(ident,rest,validation,meta));
   }
 }
 class UnionTypeLift{

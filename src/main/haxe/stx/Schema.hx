@@ -11,12 +11,21 @@ typedef SchemaFailureSum                          = stx.fail.SchemaFailure.Schem
 typedef DeclareSchema                             = stx.schema.declare.DeclareSchema;
 typedef DeclareSchemaApi                          = stx.schema.declare.DeclareSchema.DeclareSchemaApi;
 typedef DeclareSchemaCls                          = stx.schema.declare.DeclareSchema.DeclareSchemaCls;
-typedef DeclareSchemaBase                         = stx.schema.declare.DeclareSchema.DeclareSchemaBase;
-typedef DeclareSchemaConcrete                     = stx.schema.declare.DeclareSchema.DeclareSchemaConcrete;
 
 typedef DeclareScalarSchema                       = stx.schema.declare.DeclareScalarSchema;
 typedef DeclareScalarSchemaApi                    = stx.schema.declare.DeclareScalarSchema.DeclareScalarSchemaApi;
 typedef DeclareScalarSchemaCls                    = stx.schema.declare.DeclareScalarSchema.DeclareScalarSchemaCls;
+
+typedef DeclareNominativeSchemaApi                = stx.schema.declare.DeclareNominativeSchema.DeclareNominativeSchemaApi;
+typedef DeclareNominativeSchemaCls                = stx.schema.declare.DeclareNominativeSchema.DeclareNominativeSchemaCls;
+
+typedef DeclareIdentifiableSchemaApi              = stx.schema.declare.DeclareIdentifiableSchema.DeclareIdentifiableSchemaApi;
+typedef DeclareIdentifiableSchemaCls              = stx.schema.declare.DeclareIdentifiableSchema.DeclareIdentifiableSchemaCls;
+
+typedef DeclareAnonSchema                         = stx.schema.declare.DeclareAnonSchema;
+typedef DeclareAnonSchemaApi                      = stx.schema.declare.DeclareAnonSchema.DeclareAnonSchemaApi;
+typedef DeclareAnonSchemaCls                      = stx.schema.declare.DeclareAnonSchema.DeclareAnonSchemaCls;
+
 
 typedef DeclareRecordSchema                       = stx.schema.declare.DeclareRecordSchema;
 typedef DeclareRecordSchemaCls                    = stx.schema.declare.DeclareRecordSchema.DeclareRecordSchemaCls;
@@ -33,6 +42,7 @@ typedef DeclareUnionSchemaCls                     = stx.schema.declare.DeclareUn
 typedef DeclareEnumSchema                         = stx.schema.declare.DeclareEnumSchema;
 typedef DeclareEnumSchemaApi                      = stx.schema.declare.DeclareEnumSchema.DeclareEnumSchemaApi;
 typedef DeclareEnumSchemaCls                      = stx.schema.declare.DeclareEnumSchema.DeclareEnumSchemaCls;
+
 
 typedef Procure                                   = stx.schema.declare.Procure;
 typedef ProcureSum                                = stx.schema.declare.Procure.ProcureSum;
@@ -52,7 +62,8 @@ typedef ProcureAttribute                          = stx.schema.declare.ProcureAt
 typedef ProcurePropertyDef                        = stx.schema.declare.ProcureProperty.ProcurePropertyDef;
 typedef ProcureProperty                           = stx.schema.declare.ProcureProperty; 
 
-
+typedef WithIdentityApi                           = stx.schema.WithIdentity.WithIdentityApi;
+typedef WithIdentityCls                           = stx.schema.WithIdentity.WithIdentityCls;
 // typedef SchemaAnonDeclaration                     = stx.schema.SchemaAnonDeclaration;
 // typedef SchemaAnonDeclarationDef                  = stx.schema.SchemaAnonDeclaration.SchemaAnonDeclarationDef;
 
@@ -117,14 +128,18 @@ typedef EnumTypeApi                               = stx.schema.type.EnumType.Enu
 typedef EnumTypeCls                               = stx.schema.type.EnumType.EnumTypeCls;
 typedef EnumType                                  = stx.schema.type.EnumType;
 
-typedef Has_getIdentityDef                        = stx.schema.type.Has_getIdentityDef;
-typedef Has_getIdentityApi                        = stx.schema.type.Has_getIdentity.Has_getIdentityApi;
-typedef Has_getIdentityCls                        = stx.schema.type.Has_getIdentity.Has_getIdentityCls;
 typedef WithValidationCls                         = stx.schema.WithValidation.WithValidationCls;
 typedef WithValidationApi                         = stx.schema.WithValidation.WithValidationApi;
 
 typedef LeafType                                  = stx.schema.type.LeafType;
 typedef LazyType                                  = stx.schema.type.LazyType;
+
+typedef NominativeTypeApi                         = stx.schema.type.NominativeType.NominativeTypeApi;
+typedef NominativeTypeCls                         = stx.schema.type.NominativeType.NominativeTypeCls;
+//typedef NominativeType                            = stx.schema.type.NominativeType;
+
+typedef Context                                   = stx.schema.Context;
+typedef State                                     = stx.schema.State;
 
 //typedef GTypeContext                              = stx.schema.GTypeContext;
 //typedef TypeContext                               = stx.schema.TypeContext;

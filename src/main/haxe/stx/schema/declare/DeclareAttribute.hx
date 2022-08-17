@@ -8,7 +8,7 @@ typedef DeclareAttributeDef = DeclarePropertyDef & {
 @:forward abstract DeclareAttribute(DeclareAttributeDef) from DeclareAttributeDef to DeclareAttributeDef{
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclareAttributeDef):DeclareAttribute return new DeclareAttribute(self);
-  @:noUsing static public function make(type,relation,?meta,?inverse,?validation){
+  @:noUsing static public function make(type,relation,?inverse,?validation,?meta){
     return lift({ type : type,relation : relation,meta : meta, validation : validation, inverse : inverse  });
   }
   public function prj():DeclareAttributeDef return this;
@@ -25,7 +25,7 @@ typedef DeclareAttributeDef = DeclarePropertyDef & {
     });
   }
   public function procure(name:String):ProcureAttribute{
-    return ProcureAttribute.make(name,this.type,this.relation,this.inverse,this.meta,this.validation);
+    return ProcureAttribute.make(name,this.type,this.relation,this.inverse,this.validation,this.meta);
   }
   @:from static public function fromObject(self:{ type : SchemaRef, ?meta : PExpr<Primitive>, ?validation : Validations, relation : RelationType, ?inverse : String }){
     return return lift({
@@ -72,4 +72,4 @@ typedef DeclareAttributeDef = DeclarePropertyDef & {
       type        : self.type
     });
   } 
-}
+} 

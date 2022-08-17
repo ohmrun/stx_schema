@@ -1,0 +1,13 @@
+-main stx.schema.makro.TypeToSchema
+-cp src/main/haxe
+-lib hscript
+-lib tink_typecrawler
+-lib stx_pico
+-lib stx_nano
+-lib stx_om
+-lib stx_bake
+-lib stx_show
+-lib fletcher
+-lib stx_makro
+-D no-deprecation-warnings
+--interp

@@ -10,7 +10,7 @@ typedef ProcurePropertyDef = stx.schema.WithValidationDef & {
   static public var _(default,never) = ProcurePropertyLift;
   public function new(self) this = self;
   @:noUsing static public function lift(self:ProcurePropertyDef):ProcureProperty return new ProcureProperty(self);
-  @:noUsing static public function make(name,type,meta,?validation){
+  @:noUsing static public function make(name,type,?validation,?meta){
     return lift({
       name : name,
       type : type,

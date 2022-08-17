@@ -11,6 +11,12 @@
 			"type": "f5anything",
 			"request": "launch",
 			"command": "just unit"
+		},
+		{
+			"name": "test-interp",
+			"type": "f5anything",
+			"request": "launch",
+			"command": "just test-interp"
 		}
 	]
 }

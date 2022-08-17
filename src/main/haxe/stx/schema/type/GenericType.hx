@@ -3,10 +3,10 @@ package stx.schema.type;
 interface GenericTypeApi extends DataTypeApi{
   public final type : SType;
 }
-class GenericTypeCls extends ConcreteType implements GenericTypeApi{
+class GenericTypeCls extends NominativeTypeCls implements GenericTypeApi{
   public final type : SType;
-  public function new(id,ident,type,?meta,?validation){
-    super(id,ident,meta,validation);
+  public function new(id,ident,type,?validation,?meta){
+    super(id,ident,validation,meta);
     this.type     = type;
   }
   public function toString(){
@@ -15,7 +15,7 @@ class GenericTypeCls extends ConcreteType implements GenericTypeApi{
   public function toSType():SType{
     return SType.make(STGeneric(
       Ref.make(
-        () -> Identity.make(ident,[this.type.identity]),
+        Identity.make(ident,[this.type.identity]),
         () -> (this:GenericType)
       )
     ));
@@ -60,8 +60,8 @@ class GenericTypeCls extends ConcreteType implements GenericTypeApi{
   private var self(get,never):GenericType;
   private function get_self():GenericType return lift(this);
 
-  @:noUsing static public function make(id,ident:Ident,inner,?meta,?validation){ 
-    return lift(new GenericTypeCls(id,ident,inner,meta,validation));
+  @:noUsing static public function make(id,ident:Ident,inner,?validation,?meta){ 
+    return lift(new GenericTypeCls(id,ident,inner,validation,meta));
   }
 }
 class GenericTypeLift{

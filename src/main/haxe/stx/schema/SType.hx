@@ -14,6 +14,9 @@ enum STypeSum{
 }
 @:using(stx.schema.SType.STypeLift)
 class STypeCls{
+  public function get_data(){
+    return this.data;
+  }
   public final data : STypeSum;
   public function new(data){
     this.data = data;
@@ -46,32 +49,17 @@ class STypeCls{
       ()  -> Validations.unit()
     );
   }
-  // public function register(state:TypeContext):SType{
-  //   return switch(data){
-  //     case STScalar(t)     : t.pop().register(state); 
-  //     case STAnon(t)       : t.pop().register(state);
-  //     case STRecord(t)     : t.pop().register(state);
-  //     case STGeneric(t)    : t.pop().register(state);
-  //     case STUnion(t)      : t.pop().register(state);
-  //     case STLink(t)       : t.pop().register(state);
-  //     case STEnum(t)       : t.pop().register(state);
-  //     case STLazy(t)       : t.pop().register(state);
-  //     case STMono          :
-  //       //__.log().trace("PPPPPL"); 
-  //       new STypeCls(STMono);
-  //   }
-  // }
   public var identity(get,never) : Identity;
   public function get_identity():Identity{
     return switch(data){
-      case STScalar(t)        : t.getIdentity(); 
-      case STAnon(t)          : t.getIdentity();
-      case STRecord(t)        : t.getIdentity();
-      case STGeneric(t)       : t.getIdentity();
-      case STUnion(t)         : t.getIdentity();
-      case STLink(t)          : t.getIdentity();
-      case STEnum(t)          : t.getIdentity();
-      case STLazy(t)          : t.getIdentity();
+      case STScalar(t)        : t.identity; 
+      case STAnon(t)          : t.identity;
+      case STRecord(t)        : t.identity;
+      case STGeneric(t)       : t.identity;
+      case STUnion(t)         : t.identity;
+      case STLink(t)          : t.identity;
+      case STEnum(t)          : t.identity;
+      case STLazy(t)          : t.identity;
       case STMono             :
         //throw 'abstract identity'; 
         Identity.fromIdent(Ident.make('TMono'));
@@ -98,23 +86,23 @@ class STypeCls{
   private var self(get,never):SType;
   private function get_self():SType return lift(this);
 
-  static public function Array(id,self:SType):SType{
-    return stx.schema.type.term.TypeArray.make(id,self).toSType();
+  static public function Array(register,self:SType):SType{
+    return stx.schema.type.term.TypeArray.make(register,self).toSType();
   } 
-  static public function Bool(id):SType{
-    return new stx.schema.type.term.TypeBool(id).toSType();
+  static public function Bool(register):SType{
+    return new stx.schema.type.term.TypeBool(register).toSType();
   }
-  static public function Float(id):SType{
-    return new stx.schema.type.term.TypeFloat(id).toSType();
+  static public function Float(register):SType{
+    return new stx.schema.type.term.TypeFloat(register).toSType();
   }
-  static public function Int(id):SType{
-    return new stx.schema.type.term.TypeInt(id).toSType();
+  static public function Int(register):SType{
+    return new stx.schema.type.term.TypeInt(register).toSType();
   }
-  static public function String(id):SType{
-    return new stx.schema.type.term.TypeString(id).toSType();
+  static public function String(register):SType{
+    return new stx.schema.type.term.TypeString(register).toSType();
   }
-  static public function Null(id,self:SType):SType{
-    return stx.schema.type.term.TypeNull.make(id,self).toSType();
+  static public function Null(register,self:SType):SType{
+    return stx.schema.type.term.TypeNull.make(register,self).toSType();
   }
   static public function Mono():SType{
     return STMono;
@@ -125,14 +113,14 @@ class STypeCls{
   @:from static public function fromSTypeSum(self:STypeSum):SType{
     return lift(new STypeCls(self));
   }
-  static public function LeafType(ident,ctype,meta,?validation):SType{
-    return _.LeafType(ident,ctype,meta,validation).toSType();
+  static public function LeafType(ident,ctype,?validation,?meta):SType{
+    return _.LeafType(ident,ctype,validation,meta).toSType();
   }
-  static public function RecordType(name,pack,fields,meta,?validation):SType{
-    return _.RecordType(name,pack,fields,meta,validation).toSType();
+  static public function RecordType(name,pack,fields,?validation,?meta):SType{
+    return _.RecordType(name,pack,fields,validation,meta).toSType();
   }
-  static public function AnonType(fields,meta,?validation):SType{
-    return _.AnonType(fields,meta,validation).toSType();
+  static public function AnonType(fields,?validation,?meta):SType{
+    return _.AnonType(fields,validation,meta).toSType();
   }
   static public function GenericType(name,pack,inner):SType{
     return _.GenericType(name,pack,inner).toSType();
@@ -142,6 +130,9 @@ class STypeCls{
   }
   static public function UnionType(name,pack,lhs,rhs):SType{
     return _.UnionType(name,pack,lhs,rhs).toSType();
+  }
+  public function get_enum_value_index(){
+    return EnumValue.lift(this.data).index;
   }
 }
 class STypeLift{
@@ -189,17 +180,17 @@ class STypeLift{
       default        : None;
     }
   }
-  static public function LeafType(ident,ctype,meta,?validation){
-    return stx.schema.type.LeafType.make(ident,ctype,meta,validation);
+  static public function LeafType(ident,ctype,?validation,?meta){
+    return stx.schema.type.LeafType.make(ident,ctype,validation,meta);
   }
-  static public function RecordType(name,pack,fields,meta,?validation){
-    return stx.schema.type.RecordType.make0(name,pack,fields,meta,validation);
+  static public function RecordType(name,pack,fields,?validation,?meta){
+    return stx.schema.type.RecordType.make0(name,pack,fields,validation,meta);
   }
-  static public function AnonType(fields,meta,?validation){
-    return stx.schema.type.AnonType.make(fields,meta,validation);
+  static public function AnonType(fields,?validation,?meta){
+    return stx.schema.type.AnonType.make(fields,validation,meta);
   }
-  static public function GenericType(ident,inner,meta,?validation){
-    return stx.schema.type.GenericType.make(ident,inner,meta,validation);
+  static public function GenericType(ident,inner,?validation,?meta){
+    return stx.schema.type.GenericType.make(ident,inner,validation,meta);
   }
   static public function LinkType(into,relation,from){
     return stx.schema.type.LinkType.make(into,relation,from);
@@ -207,32 +198,6 @@ class STypeLift{
   static public function UnionType(name,pack,lhs,rhs){
     return stx.schema.type.UnionType.make(name,pack,lhs,rhs);
   }
-  // static public function main(type:SType,state:GTypeContext):Void{
-  //   switch(type.data){
-  //     case STScalar(t)     :
-  //     case STRecord(t)   : t.pop().main(state);
-  //     case STGeneric(t)  : t.pop().main(state);
-  //     case STUnion(t)    : t.pop().main(state);
-  //     case STLink(t)     : t.pop().main(state);
-  //     case STEnum(t)     : t.pop().main(state);
-  //     case STLazy(f)     : main(f.pop().type,state);
-  //     case STAnon(t)     : t.pop().main(state);
-  //     case STMono        : 
-  //   }   
-  // }
-  // static public function leaf(self:SType,state:GTypeContext):Void{
-  //   switch(self.data){
-  //     case STScalar(t)     :
-  //     case STRecord(t)   : t.pop().leaf(state);
-  //     case STGeneric(t)  : t.pop().leaf(state);
-  //     case STUnion(t)    : t.pop().leaf(state);
-  //     case STLink(t)     : t.pop().leaf(state);
-  //     case STEnum(t)     : t.pop().leaf(state);
-  //     case STLazy(f)     : leaf(f.pop().type,state);
-  //     case STAnon(t)     : t.pop().leaf(state);
-  //     case STMono        : 
-  //   }   
-  // }
   static public function getTypePath(self:SType){
     return switch(self.data){
       case STScalar(t)   : Some(t.pop().toGTypePath());

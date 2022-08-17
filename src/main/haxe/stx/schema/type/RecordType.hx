@@ -5,17 +5,17 @@ interface RecordTypeApi extends DataTypeApi{
   public final ident   : Ident;
   public function toRecordTypeApi():RecordTypeApi;
 }
-class RecordTypeCls extends ConcreteType implements RecordTypeApi{
+class RecordTypeCls extends NominativeTypeCls implements RecordTypeApi{
   public final fields  : Cell<Cluster<stx.schema.core.Field>>;
-  public function new(id,ident,fields,meta,?validation){
-    super(id,ident,meta,validation);
+  public function new(id,ident,fields,?validation,?meta){
+    super(id,ident,validation,meta);
     this.fields   = fields;
   }
   override public function get_validation(){
     return Cluster.unit();
   }
   public function toSType():SType{
-    return STRecord(Ref.make(() -> this.identity,() -> this.toRecordTypeApi()));
+    return STRecord(Ref.wrap((this:RecordType)));
   }
   public function toString(){
     return this.identity.toString();
@@ -36,7 +36,7 @@ class RecordTypeCls extends ConcreteType implements RecordTypeApi{
   //     Cluster.unit()
   //   );
     
-  //   next = new RecordTypeCls(this.id,this.ident,fs,meta,validation);
+  //   next = new RecordTypeCls(this.id,this.ident,fs,validation,meta);
    
   //   return next.toSType();
   // }
@@ -53,11 +53,11 @@ class RecordTypeCls extends ConcreteType implements RecordTypeApi{
   private var self(get,never):RecordType;
   private function get_self():RecordType return lift(this);
 
-  @:noUsing static public function make(id,ident,fields,meta,?validation){ 
-    return lift(new RecordTypeCls(id,ident,fields,meta,validation));
+  @:noUsing static public function make(id,ident,fields,?validation,?meta){ 
+    return lift(new RecordTypeCls(id,ident,fields,validation,meta));
   }
-  @:noUsing static public function make0(id,name,pack,fields,meta,?validation){ 
-    return make(id,Ident.make(name,pack),fields,meta,validation);
+  @:noUsing static public function make0(id,name,pack,fields,?validation,?meta){ 
+    return make(id,Ident.make(name,pack),fields,validation,meta);
   }
 
 }

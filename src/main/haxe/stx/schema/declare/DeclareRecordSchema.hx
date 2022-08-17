@@ -1,14 +1,12 @@
 package stx.schema.declare;
 
-interface DeclareRecordSchemaApi extends DeclareSchemaApi{
+interface DeclareRecordSchemaApi extends DeclareNominativeSchemaApi{
   public final fields : Procurements;
-  public final ident  : Ident;
 }
-class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareSchemaConcrete{
-  public function new(ident,fields,meta,validation){
+class DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareNominativeSchemaCls{
+  public function new(ident,fields,validation,meta){
     this.fields     = fields;
-    this.validation = validation;
-    super(ident,meta);
+    super(ident,validation,meta);
   }
   public final fields : Procurements;
   public function get_validation(){ return this.validation; }
@@ -18,20 +16,20 @@ class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareS
   static public var _(default,never) = DeclareRecordSchemaLift;
   @:noUsing static public function lift(self:DeclareRecordSchemaApi):DeclareRecordSchema return new DeclareRecordSchema(self);
 
-  @:noUsing static public function make(ident:Ident,fields:Procurements,?meta:PExpr<Primitive>,?validation:Validations):DeclareRecordSchema{
+  @:noUsing static public function make(ident:Ident,fields:Procurements,?validation:Validations,?meta:PExpr<Primitive>):DeclareRecordSchema{
     return lift(new DeclareRecordSchemaCls(
       ident,
       fields,
-      __.option(meta).defv(PEmpty),
-      validation
+      validation,
+      meta    
     ));
   }
   @:noUsing static public function make0(name:String,pack:Way,fields:Procurements,?meta:PExpr<Primitive>,?validation:Validations):DeclareRecordSchema{
     return make(
       Ident.make(name,pack),
       fields,
-      meta,
-      validation
+      validation,
+      meta
     );
   }
   public function prj():DeclareRecordSchemaApi return this;
@@ -70,19 +68,20 @@ class  DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareS
 }
 class DeclareRecordSchemaLift{
   static public function denote(self:DeclareRecordSchema){
-    final e = __.g().expr();
-    return e.Call(
-      e.Path('stx.schema.declare.DeclareRecordSchema.make'),
-      [
-        e.Call(
-          e.Path('stx.Ident.make'),
-          [
-            e.Const(c -> c.String(self.identity.name)),
-            e.ArrayDecl(__.option(self.identity.pack).defv([]).prj().map(str -> e.Const(c -> c.String(str))))
-          ]
-        ),
-        self.fields.denote()
-      ]
-    );
+    // final e = __.g().expr();
+    // return e.Call(
+    //   e.Path('stx.schema.declare.DeclareRecordSchema.make'),
+    //   [
+    //     e.Call(
+    //       e.Path('stx.Ident.make'),
+    //       [
+    //         e.Const(c -> c.String(self.identity.name)),
+    //         e.ArrayDecl(__.option(self.identity.pack).defv([]).prj().map(str -> e.Const(c -> c.String(str))))
+    //       ]
+    //     ),
+    //     self.fields.denote()
+    //   ]
+    // );
+    return throw UNIMPLEMENTED;
   }
 }

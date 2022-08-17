@@ -1,8 +1,9 @@
 package stx.schema;
 
-typedef Ref<T:stx.schema.type.Has_getIdentityDef>       = stx.schema.core.Ref<T>;
-typedef RefDef<T:stx.schema.type.Has_getIdentityDef>    = stx.schema.core.Ref.RefDef<T>;
+typedef Ref<T>                                          = stx.schema.core.Ref<T>;
+typedef RefCls<T>                                       = stx.schema.core.Ref.RefCls<T>;
+typedef RefWrap<T:WithIdentityApi>                      = stx.schema.core.Ref.RefWrap<T>;
+typedef RefApi<T>                                       = stx.schema.core.Ref.RefApi<T>;
 
 typedef Identity                                        = stx.schema.core.Identity;
-typedef FieldDef                                        = stx.schema.core.Field.FieldDef;
 typedef Field                                           = stx.schema.core.Field;

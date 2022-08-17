@@ -10,15 +10,15 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   public final relation  : RelationType;
   public final inverse   : Null<String>;
 
-  public function new(id,into,relation,?inverse,?meta,?validation){
-    super(id,meta,validation);
+  public function new(register,into,relation,?inverse,?validation,?meta){
+    super(register,validation,meta);
     this.into       = into;
     this.relation   = relation;
     this.inverse    = inverse;
     this.validation = validation;
   }
   public function toSType():SType{
-    return STLink(Ref.make(() -> this.identity,() -> (this:LinkType)));
+    return STLink(Ref.wrap((this:LinkType)));
   }
   public function toString(){
     return '$relation $into $inverse';
@@ -64,8 +64,8 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   private var self(get,never):LinkType;
   private function get_self():LinkType return lift(this);
 
-  @:noUsing static public function make(into,relation,inverse,?meta,?validation){ 
-    return lift(new LinkTypeCls(into,relation,inverse,meta,validation));
+  @:noUsing static public function make(register,into,relation,inverse,?validation,?meta){ 
+    return lift(new LinkTypeCls(register,into,relation,inverse,validation,meta));
   }
 }
 class LinkTypeLift{

@@ -3,7 +3,7 @@ package stx.schema.test;
 import stx.schema.Core;
 
 class SchemaTest extends TestCase{
-  public function _test_property_declaration(){
+  public function test_property_declaration(){
     final _       = __.schema();
     trace("OK");
     final thing   = _.record({
@@ -66,9 +66,7 @@ class SchemaTest extends TestCase{
   }
   #if macro
   public function test_make_gtypes(){
-    var types = TyperContext.make(types());
-        types.type();
-    trace(types);
+    
   }
   #end
 }

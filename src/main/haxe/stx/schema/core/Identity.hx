@@ -31,6 +31,15 @@ typedef IdentityDef = IdentDef & {
   public function toIdent_munged():Ident{
     return Munge.toIdent(this);
   }
+  public function canonical(){
+    return toString();
+  }
+  public function mod(f:Ident -> Ident):Identity{
+    return make(f(Ident.make(this.name,this.pack)),this.rest);
+  }
+  public function equals(that:Identity){
+    return new stx.assert.schema.eq.Identity().comply(this,that).is_equal();
+  }
 }
 class IdentityLift{
   static public function denote(self:Identity):GExpr{

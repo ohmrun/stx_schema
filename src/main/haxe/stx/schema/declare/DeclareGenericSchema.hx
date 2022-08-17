@@ -1,17 +1,17 @@
 package stx.schema.declare;
 
-interface DeclareGenericSchemaApi extends DeclareSchemaApi{
+interface DeclareGenericSchemaApi extends DeclareNominativeSchemaApi{
   final type  : SchemaRef;
   final ident : Ident;
 }
-class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends DeclareSchemaConcrete{
+class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends DeclareNominativeSchemaCls{
   public final type : SchemaRef;
-  public function new(ident,type,meta,?validation){
+  public function new(ident,type,?validation,?meta){
+    super(ident,validation,meta);
     this.type       = type;
-    this.validation = validation;
-    super(ident,meta);
   }
-  override public function get_identity(){ 
+  public var identity(get,null):Identity;
+  public function get_identity(){ 
     return Identity.make(
       Ident.make(
         this.ident.name,
@@ -28,31 +28,14 @@ class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends Declare
   @:noUsing static public function lift(self:DeclareGenericSchemaApi):DeclareGenericSchema return new DeclareGenericSchema(self);
 
   //Identity.make(Ident.make(name,pack),Some(type.identity),None)
-  @:noUsing static public function make(ident:Ident,type:SchemaRef,?meta:PExpr<Primitive>,?validation:Validations):DeclareGenericSchema{
+  @:noUsing static public function make(ident:Ident,type:SchemaRef,?validation:Validations,?meta:PExpr<Primitive>):DeclareGenericSchema{
     return lift(new DeclareGenericSchemaCls(
       ident,
       type,
-      __.option(meta).defv(PEmpty),
-      _.validation.concat(__.option(validation).defv(Cluster.unit()))
+      validation,
+      meta
     ));
   }
-  @:noUsing static public function make0(name,pack,type:SchemaRef,?meta:PExpr<Primitive>,?validation:Validations):DeclareGenericSchema{
-    return lift(new DeclareGenericSchemaCls(
-      Ident.make(name,pack),
-      type,
-      __.option(meta).defv(PEmpty),
-      _.validation.concat(__.option(validation).defv(Cluster.unit()))
-    ));
-  }
-  // public function resolve(state:TyperContext){
-  //   // final typeI   = state.get(this.type.identity).map(SchemaRef.fromSchema).def(
-  //   //   () -> this.type.resolve(state)
-  //   // );
-  //   // final result  = SchGeneric(make0(this.identity.name,this.identity.pack,typeI,this.validation));
-  //   // state.put(result);
-  //   // return result; 
-  //   return throw UNIMPLEMENTED;
-  // }
   public function prj():DeclareGenericSchemaApi return this;
   private var self(get,never):DeclareGenericSchema;
   private function get_self():DeclareGenericSchema return lift(this);
@@ -71,20 +54,21 @@ class DeclareGenericSchemaLift{
     return Cluster.unit();
   } 
   static public function denote(self:DeclareGenericSchema){
-    final e = __.g().expr();
-    return e.Call(
-      e.Path('stx.schema.declare.DeclareGenericSchema.make'),
-      [
-        e.Const( c -> c.String(self.identity.name)),
-        e.ArrayDecl(
-          __.option(self.identity.pack).defv([]).prj().map(
-            str -> e.Const(
-              c -> c.String(str)
-            )
-          )
-        ),
-        SchemaRef._.denote(self.type)
-      ]
-    );
+    // final e = __.g().expr();
+    // return e.Call(
+    //   e.Path('stx.schema.declare.DeclareGenericSchema.make'),
+    //   [
+    //     e.Const( c -> c.String(self.identity.name)),
+    //     e.ArrayDecl(
+    //       __.option(self.identity.pack).defv([]).prj().map(
+    //         str -> e.Const(
+    //           c -> c.String(str)
+    //         )
+    //       )
+    //     ),
+    //     SchemaRef._.denote(self.type)
+    //   ]
+    // );
+    return throw UNIMPLEMENTED;
   }
 }

@@ -1,19 +1,19 @@
 package stx.schema.type;
 
-interface ScalarTypeApi extends DataTypeApi{
+interface ScalarTypeApi extends NominativeTypeApi{
   final ctype : GComplexType;
-  final ident : Ident;
 }
-abstract class ScalarTypeCls extends DataTypeCls implements ScalarTypeApi{
+class ScalarTypeCls extends NominativeTypeCls implements ScalarTypeApi{
   public final ctype : GComplexType;
-  public final ident : Ident;
-  public function new(id,ident,ctype,meta,?validation){
-    super(id,meta,validation);
-    this.ident = ident;
+  static public function make(register,ident,ctype,?validation,?meta){
+    return new ScalarTypeCls(register,ident,ctype,validation,meta);
+  }
+  public function new(register,ident,ctype,?validation,?meta){
+    super(register,ident,validation,meta);
     this.ctype = ctype;
   }
   public function toSType(){
-    return SType.make(STScalar(Ref.make(() -> this.identity,() -> (this:ScalarType))));
+    return SType.make(STScalar(Ref.wrap((this:ScalarType))));
   }
 }
 // abstract class ScalarTypeBase extends ScalarTypeCls{
@@ -25,6 +25,9 @@ abstract class ScalarTypeCls extends DataTypeCls implements ScalarTypeApi{
   public function new(self) this = self;
   @:noUsing static public function lift(self:ScalarTypeApi):ScalarType return new ScalarType(self);
 
+  @:noUsing static public function make(register,ident,ctype,?validation,?meta){
+    return lift(new ScalarTypeCls(register,ident,ctype,validation,meta));
+  }
   public function prj():ScalarTypeApi return this;
   private var self(get,never):ScalarType;
   private function get_self():ScalarType return lift(this);

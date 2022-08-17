@@ -1,7 +1,7 @@
 package stx.schema.test;
 
 class TableTypeTest extends TestCase{
-  public function _test_type(){
+  public function test_type(){
     final schema      = TestTypes.one();
     // final typer       = TyperContext.make(schema);
     // try{

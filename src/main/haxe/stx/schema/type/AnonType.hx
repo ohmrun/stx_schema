@@ -7,8 +7,8 @@ interface AnonTypeApi extends BaseTypeApi{
 }
 class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   public final fields  : Cell<Cluster<Field>>;
-  public function new(id,fields,?meta,?validation){
-    super(id,meta,validation);
+  public function new(register,fields,?validation,?meta){
+    super(register,validation,meta);
     this.fields   = fields;
   }
   public function toString(){
@@ -22,7 +22,7 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     return Cluster.unit();
   }
   public function toSType(){
-    return SType.make(STAnon(Ref.make(() -> this.identity,() -> (this:AnonType))));
+    return SType.make(STAnon(Ref.wrap((this:AnonType))));
   }
   // public function register(state:TypeContext):SType{
   //   // var next : AnonType     = null;
@@ -44,10 +44,17 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   //   // return next.toSType();
   //   return throw UNIMPLEMENTED;
   // }
+  
   public function get_identity():Identity{
-    final ident            = Ident.make('Anon');
-    final field_identities = this.fields.pop().map(
-      field -> Identity.make(Ident.make('Anon_${field.name}'),[field.type.identity])
+    final ident             = Ident.make('Anon');
+    //put in order
+    var fieldsI             = RedBlackMap.make(Comparable.String());
+
+    for(field in this.fields){
+      fieldsI = fieldsI.set(field.name,field);
+    }
+    final field_identities  = fieldsI.map(
+      kv -> Identity.make(Ident.make('${kv.val.name}'),[kv.val.type.identity])
     );
     return Identity.make(ident,field_identities);
   }
@@ -61,8 +68,8 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   private var self(get,never):AnonType;
   private function get_self():AnonType return lift(this);
 
-  @:noUsing static public function make(fields,meta,?validation){ 
-    return new AnonTypeCls(fields,meta,validation);
+  @:noUsing static public function make(register,fields,?validation,?meta){ 
+    return new AnonTypeCls(register,fields,validation,meta);
   }
 }
 class AnonTypeLift{

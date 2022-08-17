@@ -1,19 +1,17 @@
 package stx.schema.declare;
 
-interface DeclareUnionSchemaApi extends DeclareSchemaApi{
-  final ident : Ident;
+interface DeclareUnionSchemaApi extends DeclareNominativeSchemaApi extends WithIdentityApi{
   final rest  : Cluster<SchemaRef>;
 }
-class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareSchemaCls{
+class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareNominativeSchemaCls{
   public final rest  : Cluster<SchemaRef>;
-  public final ident : Ident;
 
-  public function new(ident:Ident,rest,meta,validation){
-    super(meta); 
-    this.ident      = ident;
+  public function new(ident:Ident,rest,validation,meta){
+    super(ident,validation,meta); 
     this.rest       = rest;
-    this.validation = validation;
+    
   }
+  public var identity(get,null):Identity;
   public function get_identity(){ 
     return Identity.make(
       Ident.make(
@@ -30,21 +28,13 @@ class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareSche
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclareUnionSchemaApi):DeclareUnionSchema return new DeclareUnionSchema(self);
 
-  @:noUsing static public function make(ident:Ident,rest,?meta,?validation){
+  @:noUsing static public function make(ident:Ident,rest,?validation,?meta){
     return lift(new DeclareUnionSchemaCls(
       ident,
       rest,
-      __.option(meta).defv(PEmpty),
-      _.validation.concat(__.option(validation).defv(Cluster.unit()))
+      validation,
+      meta
     ));
-  }
-  @:noUsing static public function make0(name,pack,rest,?meta,?validation){
-    return make(
-      Ident.make(name,pack),
-      rest,
-      meta,
-      validation
-    );
   }
   // public function resolve(state:TyperContext){
   //   // final rest = __.option(this.rest).defv([]).map(
@@ -72,13 +62,14 @@ class DeclareUnionSchemaLift{
     return Cluster.unit();
   }
   static public inline function denote(self:DeclareUnionSchema){
-    final e = __.g().expr();
-    return e.Call(
-      e.Path('stx.schema.declare.DeclareUnionSchema.make'),
-      [
-        stx.schema.declare.IdentLift.denote(self.ident),
-        e.ArrayDecl(self.rest.map(x -> x.denote()))
-      ]
-    );
+    // final e = __.g().expr();
+    // return e.Call(
+    //   e.Path('stx.schema.declare.DeclareUnionSchema.make'),
+    //   [
+    //     stx.schema.declare.IdentLift.denote(self.ident),
+    //     e.ArrayDecl(self.rest.map(x -> x.denote()))
+    //   ]
+    // );
+    return throw UNIMPLEMENTED;
   }
 }

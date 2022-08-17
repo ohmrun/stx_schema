@@ -3,6 +3,7 @@ package stx.schema;
 enum SchemaSum{
   SchLazy(fn:Void->Schema);
   SchScalar(def:DeclareScalarSchema);
+  SchAnon(def:DeclareAnonSchema);
   SchRecord(def:DeclareRecordSchema);
   SchEnum(def:DeclareEnumSchema);
   SchGeneric(def:DeclareGenericSchema);
@@ -26,6 +27,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.validation,
       x -> x.validation,
       x -> x.validation,
+      x -> x.validation,
       x -> x.validation
     );
   }
@@ -33,6 +35,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   private function get_identity():Identity{
     return _.fold(
       this,
+      x -> x.identity,
       x -> x.identity,
       x -> x.identity,
       x -> x.identity,
@@ -66,8 +69,8 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
         DeclareScalarSchema.make(
           Identity.fromIdent(ident),
           ctype,
-          meta,
-          self.validation
+          self.validation,
+          meta
       )
     );
   }
@@ -105,19 +108,21 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
       x -> x.toString(),
       x -> x.toString(),
       x -> x.toString(),
+      x -> x.toString(),
       x -> x.toString()
     );
   }
 }
 class SchemaLift{
-  static public inline function fold<Z>(self:SchemaSum,scalar : DeclareScalarSchema -> Z, record : DeclareRecordSchema  -> Z, enm : DeclareEnumSchema -> Z, generic : DeclareGenericSchema -> Z, union : DeclareUnionSchema -> Z) : Z {
+  static public inline function fold<Z>(self:SchemaSum,scalar : DeclareScalarSchema -> Z, anon : DeclareAnonSchema -> Z, record : DeclareRecordSchema  -> Z, enm : DeclareEnumSchema -> Z, generic : DeclareGenericSchema -> Z, union : DeclareUnionSchema -> Z) : Z {
     return switch(self){
+      case SchLazy(f)       : fold(f(),scalar,record,enm,generic,union);
       case SchScalar(def)   : scalar(def);
+      case SchAnon(def)     : anon(def);
       case SchRecord(def)   : record(def);
       case SchEnum(def)     : enm(def);
       case SchGeneric(def)  : generic(def);
       case SchUnion(def)    : union(def);
-      case SchLazy(f)       : fold(f(),scalar,record,enm,generic,union);
     }
   }
   /**

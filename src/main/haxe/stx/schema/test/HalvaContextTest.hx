@@ -55,35 +55,7 @@ class HalvaContextTest extends TestCase{
     // }
   }
 }
-private class Lub extends SemiGroupCls<LVar<SType>>{
-  final comparable : Comparable<LVar<SType>>;
-  public function new(){
-    super();
-    this.comparable = new stx.assert.halva.comparable.LVar(new stx.assert.schema.type.comparable.SType());
-  }
-  public function plus(lhs:LVar<SType>,rhs:LVar<SType>){
-    // final result = switch([lhs.prj(),rhs.prj()]){
-    //   case [HAS(_,true),HAS(_,false)]                                 : TOP;
-    //   case [TOP, _ ]                                                  : TOP;
-    //   case [_, { frozen : _, value : TOP}]                            : Memo.pure(TOP);
-    //   case [{value : l, frozen : _}, {value : r, frozen : b}]         :
-    //     var result = switch([l,r]){
-    //       case [HAS({ data : STMono }),HAS({ data : t })]             : Memo.pure(HAS(SType.make(t)));
-    //       case [HAS(({ data : STLazy(tI) })),HAS({ data : tII })]     : Memo.pure(HAS(SType.make(tII)));//TODO more error checking
-    //       case [BOT,BOT]                                              : Memo.pure(BOT);
-    //       case [BOT,HAS({ data : t })]                                : Memo.pure(HAS(SType.make(t)));
-    //       default                                                     : Memo.pure(TOP);
-    //     }
-    //     if(b){
-    //       result = result.freeze();
-    //     }
-    //     result;
-    //   default : null;
-    // }
-    // return result;
-    return throw UNIMPLEMENTED;
-  }
-}
+
 private class Lookup{
   // static public function lookup(self:Accretion<SType>,identity:Identity):Signal<LVar<SType>>{
   //   return self.redeem()
