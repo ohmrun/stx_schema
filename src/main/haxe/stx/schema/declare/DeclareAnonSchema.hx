@@ -4,7 +4,6 @@ interface DeclareAnonSchemaApi extends DeclareIdentifiableSchemaApi{
   public final fields : Procurements;
 }
 class DeclareAnonSchemaCls implements DeclareAnonSchemaApi extends DeclareSchemaCls implements DeclareIdentifiableSchemaApi{
-  public function get_validation() return this.validation;
   public function new(fields,?validation,?meta){
     super(validation,meta);
     this.fields     = fields;
@@ -14,9 +13,9 @@ class DeclareAnonSchemaCls implements DeclareAnonSchemaApi extends DeclareSchema
   public function get_identity(){
     return Identity.make(
       Ident.make("Anon"),
-      this.fields.map(
+      this.fields.toIter().map(
         x -> Identity.make(Ident.make(x.name),[x.type.identity])
-      )
+      ).toCluster()
     );
   }
   public final fields : Procurements;

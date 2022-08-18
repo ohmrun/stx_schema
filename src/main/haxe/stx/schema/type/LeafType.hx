@@ -14,7 +14,4 @@ class LeafType extends ScalarTypeCls{
   public function toString(){
     return this.identity.toString();
   }
-  public function get_identity(){
-    return Identity.fromIdent(this.ident);
-  }
 } 

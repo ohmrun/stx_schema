@@ -16,7 +16,6 @@ interface BaseTypeApi extends WithIdentityApi{
 abstract class BaseTypeCls extends WithIdentityCls implements BaseTypeApi{
 
   public function new(register,?validation,?meta){
-    super();
     this.register   = register;
     this.validation = __.option(validation).defv(Validations.unit());
     this.meta       = __.option(meta).defv(PEmpty);

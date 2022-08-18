@@ -23,7 +23,7 @@ typedef ProcurePropertyDef = stx.schema.WithValidationDef & {
   private function get_self():ProcureProperty return lift(this);
 
   public function with_type(type:SchemaRef){
-    return make(this.name,type,this.meta,this.validation);
+    return make(this.name,type,this.validation,this.meta);
   }
   public function toString(){
     return __.show({ name : this.name, meta : this.meta, type : this.type.toString() });

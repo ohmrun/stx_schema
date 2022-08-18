@@ -1,6 +1,6 @@
 package stx.schema.declare;
 
-interface DeclareRecordSchemaApi extends DeclareNominativeSchemaApi{
+interface DeclareRecordSchemaApi extends DeclareNominativeSchemaApi extends DeclareIdentifiableSchemaApi{
   public final fields : Procurements;
 }
 class DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareNominativeSchemaCls{
@@ -9,7 +9,10 @@ class DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareNo
     super(ident,validation,meta);
   }
   public final fields : Procurements;
-  public function get_validation(){ return this.validation; }
+  public var identity(get,null):Identity;
+  public function get_identity():Identity{
+    return identity;
+  }
 }
 @:transitive @:forward abstract DeclareRecordSchema(DeclareRecordSchemaApi) from DeclareRecordSchemaApi to DeclareRecordSchemaApi{
   public function new(self) this = self;

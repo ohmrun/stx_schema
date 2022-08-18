@@ -67,7 +67,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
     final meta  = __.option(self.meta).defv(PEmpty);
     return fromDeclareScalarSchema(
         DeclareScalarSchema.make(
-          Identity.fromIdent(ident),
+          ident,
           ctype,
           self.validation,
           meta
@@ -116,7 +116,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
 class SchemaLift{
   static public inline function fold<Z>(self:SchemaSum,scalar : DeclareScalarSchema -> Z, anon : DeclareAnonSchema -> Z, record : DeclareRecordSchema  -> Z, enm : DeclareEnumSchema -> Z, generic : DeclareGenericSchema -> Z, union : DeclareUnionSchema -> Z) : Z {
     return switch(self){
-      case SchLazy(f)       : fold(f(),scalar,record,enm,generic,union);
+      case SchLazy(f)       : fold(f(),scalar,anon,record,enm,generic,union);
       case SchScalar(def)   : scalar(def);
       case SchAnon(def)     : anon(def);
       case SchRecord(def)   : record(def);

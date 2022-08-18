@@ -9,7 +9,10 @@ class DeclareEnumSchemaCls implements DeclareEnumSchemaApi extends DeclareNomina
     super(ident,validation,meta);
     this.constructors = constructors;
   }
-  public function get_validation(){ return this.validation; } 
+  public var identity(get,null):Identity;
+  private function get_identity(){ 
+    return Identity.make(this.ident,[]);
+  }
 }
 @:using(stx.schema.declare.DeclareEnumSchema.DeclareEnumSchemaLift)
 @:forward abstract DeclareEnumSchema(DeclareEnumSchemaApi) from DeclareEnumSchemaApi to DeclareEnumSchemaApi{

@@ -4,9 +4,8 @@ package stx.schema.declare.term;
   static public var _(default,never) = SchemaArrayLift;
   @:noUsing static public function make(ref:SchemaRef){
     return new SchemaArray(
-      DeclareGenericSchema.make0(
-        'Array',
-        ['std'],
+      new DeclareGenericSchemaCls(
+        Ident.make('Array',['std']),
         ref,
         ValidationType(_.validate())
       )

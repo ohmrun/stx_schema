@@ -53,11 +53,8 @@ class RecordTypeCls extends NominativeTypeCls implements RecordTypeApi{
   private var self(get,never):RecordType;
   private function get_self():RecordType return lift(this);
 
-  @:noUsing static public function make(id,ident,fields,?validation,?meta){ 
-    return lift(new RecordTypeCls(id,ident,fields,validation,meta));
-  }
-  @:noUsing static public function make0(id,name,pack,fields,?validation,?meta){ 
-    return make(id,Ident.make(name,pack),fields,validation,meta);
+  @:noUsing static public function make(register,ident,fields,?validation,?meta){ 
+    return lift(new RecordTypeCls(register,ident,fields,validation,meta));
   }
 
 }

@@ -1,6 +1,6 @@
 package stx.schema.declare;
 
-interface DeclareGenericSchemaApi extends DeclareNominativeSchemaApi{
+interface DeclareGenericSchemaApi extends DeclareNominativeSchemaApi extends DeclareIdentifiableSchemaApi{
   final type  : SchemaRef;
   final ident : Ident;
 }
@@ -20,7 +20,6 @@ class DeclareGenericSchemaCls implements DeclareGenericSchemaApi extends Declare
       [Identity.lift(this.type)]
     );
   }
-  public function get_validation(){ return this.validation; }
 } 
 @:forward abstract DeclareGenericSchema(DeclareGenericSchemaApi) from DeclareGenericSchemaApi to DeclareGenericSchemaApi{
   static public var _(default,never) = DeclareGenericSchemaLift;

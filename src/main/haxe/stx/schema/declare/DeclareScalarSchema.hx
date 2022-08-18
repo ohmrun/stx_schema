@@ -7,19 +7,19 @@ interface DeclareScalarSchemaApi extends DeclareNominativeSchemaApi extends With
 class DeclareScalarSchemaCls implements DeclareScalarSchemaApi extends DeclareNominativeSchemaCls{
   public final ctype:GComplexType;
   public function new(ident,ctype,?validation,?meta){
-    super(validation,meta,ident);
+    super(ident,validation,meta);
     this.ctype = ctype;
   }
   public var identity(get,null):Identity;
   public function get_identity(){
-    return Identity.make(this.ident);
+    return Identity.make(this.ident,[]);
   }
 }
 @:forward abstract DeclareScalarSchema(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to DeclareScalarSchemaApi{
   public function new(self) this = self;
   static public function lift(self:DeclareScalarSchemaApi):DeclareScalarSchema return new DeclareScalarSchema(self);
-  @:noUsing static public function make(register,ctype,?validation,?meta){
-    return lift(new DeclareScalarSchemaCls(register,ctype,validation,meta));
+  @:noUsing static public function make(ident,ctype,?validation,?meta){
+    return lift(new DeclareScalarSchemaCls(ident,ctype,validation,meta));
   }
   public function toString(){
     return this.identity.toString();

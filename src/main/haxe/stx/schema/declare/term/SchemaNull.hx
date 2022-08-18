@@ -4,9 +4,8 @@ abstract SchemaNull(DeclareGenericSchemaApi) from DeclareGenericSchemaApi to Dec
   static public var _(default,never) = SchemaNullLift;
   @:noUsing static public function make(ref){
     return new SchemaNull(
-      __.schema().generic(
-        'Null',
-        ['std'],
+      new DeclareGenericSchemaCls(
+        Ident.make('Null',['std']),
         ref,
         ValidationType(_.validate())
       )

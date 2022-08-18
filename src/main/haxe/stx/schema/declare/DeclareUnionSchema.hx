@@ -21,7 +21,6 @@ class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareNomi
       __.option(this.rest).defv([]).map(Identity.lift)
     );
   }
-  public function get_validation(){ return this.validation; }  
 }
 @:forward abstract DeclareUnionSchema(DeclareUnionSchemaApi) from DeclareUnionSchemaApi to DeclareUnionSchemaApi{
   static public var _(default,never) = DeclareUnionSchemaLift;

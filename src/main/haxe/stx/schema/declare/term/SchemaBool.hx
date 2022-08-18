@@ -6,6 +6,7 @@ abstract SchemaBool(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Decla
     return new SchemaBool(
       __.schema().scalar(
         'Bool',['std'],
+        
         ValidationType(_.validate())
       )
     );

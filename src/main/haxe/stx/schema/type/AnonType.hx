@@ -50,10 +50,10 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     //put in order
     var fieldsI             = RedBlackMap.make(Comparable.String());
 
-    for(field in this.fields){
+    for(field in this.fields.pop()){
       fieldsI = fieldsI.set(field.name,field);
     }
-    final field_identities  = fieldsI.map(
+    final field_identities  = fieldsI.toIter().toCluster().map(
       kv -> Identity.make(Ident.make('${kv.val.name}'),[kv.val.type.identity])
     );
     return Identity.make(ident,field_identities);

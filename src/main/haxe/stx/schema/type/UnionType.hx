@@ -30,7 +30,7 @@ class UnionTypeCls extends NominativeTypeCls implements UnionTypeApi {
   //   return throw UNIMPLEMENTED;
   // }
   public function toSType():SType{
-    return STUnion(Ref.make(() -> this.identity, () -> (this:UnionType)));
+    return STUnion(Ref.wrap((this:UnionType)));
   }
   public function toString(){
     return this.identity.toString();
