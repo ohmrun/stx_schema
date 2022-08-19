@@ -20,9 +20,8 @@ class Test{
   }
   static public function main(){
     final log = __.log().global;
-          log.includes.push("**/*");
+          log.includes.push("stx/schema");
 
-    
     #if boot
       boot();
     #else

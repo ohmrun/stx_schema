@@ -7,8 +7,8 @@ interface RecordTypeApi extends DataTypeApi{
 }
 class RecordTypeCls extends NominativeTypeCls implements RecordTypeApi{
   public final fields  : Cell<Cluster<stx.schema.core.Field>>;
-  public function new(id,ident,fields,?validation,?meta){
-    super(id,ident,validation,meta);
+  public function new(register,ident,fields,?validation,?meta){
+    super(register,ident,validation,meta);
     this.fields   = fields;
   }
   override public function get_validation(){

@@ -4,8 +4,9 @@ abstract SchemaInt(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Declar
   static public var _(default,never) = SchemaIntLift;
   @:noUsing static public function make(){
     return new SchemaInt(
-      __.schema().scalar(
-        'Int',['std'],
+      new DeclareScalarSchemaCls(
+        Ident.make('Int',['std']),
+        null,
         ValidationType(_.validate())
       )
     );

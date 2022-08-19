@@ -4,8 +4,9 @@ abstract SchemaString(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Dec
   static public var _(default,never) = SchemaStringLift;
   @:noUsing static public function make(){
     return new SchemaString(
-      __.schema().scalar(
-        'String',['std'],
+      new DeclareScalarSchemaCls(
+        Ident.make('String',['std']),
+        null,
         ValidationType(_.validate()),
         PEmpty
       )

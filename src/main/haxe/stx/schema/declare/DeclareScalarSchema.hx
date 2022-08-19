@@ -6,9 +6,9 @@ interface DeclareScalarSchemaApi extends DeclareNominativeSchemaApi extends With
 }
 class DeclareScalarSchemaCls implements DeclareScalarSchemaApi extends DeclareNominativeSchemaCls{
   public final ctype:GComplexType;
-  public function new(ident,ctype,?validation,?meta){
+  public function new(ident,?ctype,?validation,?meta){
     super(ident,validation,meta);
-    this.ctype = ctype;
+    this.ctype = __.option(ctype).defv(__.g().ctype().Path(p -> p.fromIdent(ident)));
   }
   public var identity(get,null):Identity;
   public function get_identity(){

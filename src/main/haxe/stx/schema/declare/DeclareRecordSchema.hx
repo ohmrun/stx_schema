@@ -11,7 +11,7 @@ class DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareNo
   public final fields : Procurements;
   public var identity(get,null):Identity;
   public function get_identity():Identity{
-    return identity;
+    return Identity.make(ident,[]);
   }
 }
 @:transitive @:forward abstract DeclareRecordSchema(DeclareRecordSchemaApi) from DeclareRecordSchemaApi to DeclareRecordSchemaApi{
@@ -61,7 +61,7 @@ class DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareNo
     final thiz = this.identity.toString();
     final rest = @:privateAccess this.fields.toIter().map(
       procurement -> procurement.toString()      
-    ).lfold1((m,n) -> "$m,$n");
+    ).lfold1((m,n) -> '$m,$n');
 
     return '$thiz($rest)';
   }

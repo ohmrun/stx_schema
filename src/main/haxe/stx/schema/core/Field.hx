@@ -11,4 +11,7 @@ class Field extends WithIdentityCls{
   public function get_identity(){
     return type.identity;
   }
+  static public function make(name,type){
+    return new Field(name,type); 
+  }
 }

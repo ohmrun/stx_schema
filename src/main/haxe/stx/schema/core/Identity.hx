@@ -38,7 +38,7 @@ typedef IdentityDef = IdentDef & {
     return make(f(Ident.make(this.name,this.pack)),this.rest);
   }
   public function equals(that:Identity){
-    return new stx.assert.schema.eq.Identity().comply(this,that).is_equal();
+    return new stx.assert.schema.core.eq.Identity().comply(this,that).is_equal();
   }
 }
 class IdentityLift{

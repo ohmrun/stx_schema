@@ -5,8 +5,8 @@ interface UnionTypeApi extends DataTypeApi{
 }
 class UnionTypeCls extends NominativeTypeCls implements UnionTypeApi {
   public final rest : Cluster<SType>;
-  public function new(ident,rest,?validation,?meta){
-    super(ident,validation,meta);
+  public function new(register,ident,rest,?validation,?meta){
+    super(register,ident,validation,meta);
     this.rest = rest;
   }
   override public function get_identity(){
@@ -45,8 +45,8 @@ class UnionTypeCls extends NominativeTypeCls implements UnionTypeApi {
   private var self(get,never):UnionType;
   private function get_self():UnionType return lift(this);
 
-  @:noUsing static public function make(ident,rest,?validation,?meta){ 
-    return lift(new UnionTypeCls(ident,rest,validation,meta));
+  @:noUsing static public function make(register,ident,rest,?validation,?meta){ 
+    return lift(new UnionTypeCls(register,ident,rest,validation,meta));
   }
 }
 class UnionTypeLift{

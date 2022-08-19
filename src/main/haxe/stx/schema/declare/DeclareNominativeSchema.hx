@@ -9,4 +9,7 @@ abstract class DeclareNominativeSchemaCls extends DeclareSchemaCls implements De
     this.ident = ident;
   }
   public final ident : Ident;
+  public function toString(){
+    return this.ident.toIdentifier().toString();
+  }
 }

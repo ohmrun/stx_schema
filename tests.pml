@@ -1,7 +1,9 @@
 (indeces "stx.schema.Test")
 (
   "comparison"
-    include "stx.schema.test.ComparisonTest"
+  include "stx.schema.test.ComparisonTest"
+)
+(
   "register"
-    include "stx.schema.test.RegisterTest"
+  include "stx.schema.test.RegisterTest"
 )

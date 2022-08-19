@@ -3,7 +3,7 @@ package stx.schema.declare.term;
 class SchemaScalar extends DeclareScalarSchemaCls{
   public function new(ident:Ident,?validation,?meta){
     super(
-      Identity.fromIdent(ident),
+      ident,
       __.g().ctype().Path(p -> p.fromIdent(ident)),
       validation,
       meta

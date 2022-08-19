@@ -6,6 +6,7 @@ enum SchemaFailureSum{
   E_Schema_EnumValueError(should_be:Cluster<String>,actual:String);
   E_Schema_HaxeTypeError(should_be:ValueType,actual:ValueType);
   E_Schema_ValidationError(validation:Validation,caught:SchemaFailure);
+  E_Schema_Top;
   E_Schema_Dynamic(e:Dynamic);
   E_Schema_SchemaNotFound(identity:Identity);
   E_Schema_WrongSchemaType(type:Schema);
