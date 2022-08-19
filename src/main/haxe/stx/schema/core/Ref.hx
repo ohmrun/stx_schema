@@ -47,5 +47,12 @@ class RefWrap<T:WithIdentityApi> implements RefApi<T>{
   @:noUsing static public function wrap<T:WithIdentityApi>(self:T):Ref<T>{
     return lift(new RefWrap(self));
   }
+  // @:noUsing static public function wait<T,E>(identity:Identity,self:Pledge<T,E>):Pledge<Ref<T>>{
+  //   return self.map(
+  //     (x) -> {
+  //       return make(identity,() -> x);
+  //     }
+  //   );
+  // }
   public function toString():String return '@:[' + Std.string(this.identity)+']';
 }

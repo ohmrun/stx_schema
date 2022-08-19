@@ -20,26 +20,6 @@ class RecordTypeCls extends NominativeTypeCls implements RecordTypeApi{
   public function toString(){
     return this.identity.toString();
   }
-  // public function register(state:TypeContext){
-  //   var next : RecordType     = null;
-  //   var type                  = Ref.make(
-  //     () -> this.identity,
-  //     () -> next
-  //   );
-  //   state.put(STRecord(type));
-  //   final fs = (this.fields.pop().toIter()).lfold(
-  //     (next:stx.schema.core.Field,memo:Cluster<stx.schema.core.Field>) -> {
-  //       final id    = next.type.identity;
-  //       final type  = state.get(id).fudge(__.fault().of(E_Schema_IdentityUnresolved(id)));
-  //       return memo.snoc(stx.schema.core.Field.make(next.name,type));
-  //     },
-  //     Cluster.unit()
-  //   );
-    
-  //   next = new RecordTypeCls(this.id,this.ident,fs,validation,meta);
-   
-  //   return next.toSType();
-  // }
   public function toRecordTypeApi():RecordTypeApi{
     return this;
   }

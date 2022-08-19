@@ -29,7 +29,6 @@ class RegisterTest extends TestCase{
           "author" => {
             inverse   : "article",
             type      : __.way().into("User"),
-            relation  : HAS_MANY,
             meta      : PEmpty
           }
         ]
@@ -42,10 +41,7 @@ class RegisterTest extends TestCase{
     trace("start");
     try{
       final ts  = types();
-      trace(ts);
-      trace("a");
       final s   = new State(ts,new Context());
-      trace("b");
       s.reply().handle(
         x -> {
           for(ok in x){
@@ -56,7 +52,6 @@ class RegisterTest extends TestCase{
           async.done();
         }
       );
-    trace("c");
     }catch(e:haxe.Exception){
       trace(e.details());
       trace(e.stack);
