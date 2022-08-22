@@ -19,6 +19,7 @@ class Test{
   static public function main(){
     final log = __.log().global;
           log.includes.push("stx/schema");
+          log.level = TRACE;
 
     #if boot
       boot();

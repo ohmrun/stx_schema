@@ -1,5 +1,10 @@
 package stx;
 
+class SchemaLifts{
+  static public function toSchemaRef(self:Ident){
+    return SchemaRef.fromIdent(self);
+  }
+}
 class SchemaModuleCtr{
   static public function schema(wildcard:Wildcard){
     return new stx.schema.Module();

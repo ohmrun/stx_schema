@@ -23,7 +23,7 @@ using stx.Ds;
 using stx.Fp;
 using stx.Fn;
 using stx.om.Signature;
-
+using stx.Schema;
 
 using eu.ohmrun.Pml;
 using eu.ohmrun.Halva;

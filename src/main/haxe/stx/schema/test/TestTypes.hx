@@ -50,7 +50,7 @@ class TestTypes{
         ] 
       }
     });
-    final states       = _.enumeration('States',['human'],['awake','sleepy','asleep','hungry','horny','dead']);
+    final states       = _.enumeration(Ident.make('States',['human']),['awake','sleepy','asleep','hungry','horny','dead']);
     return [user,article,states,key];
   }
 }

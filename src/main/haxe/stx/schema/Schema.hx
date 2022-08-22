@@ -83,7 +83,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   @:from static public function fromDeclareGenericSchema(self:DeclareGenericSchema):Schema{
     return lift(SchGeneric(self));
   }
-  static public function Array(ref):Schema{
+  static public function Array(ref:SchemaRef):Schema{
     return lift(SchGeneric(stx.schema.declare.term.SchemaArray.make(ref)));
   }
   static public function Bool():Schema{
@@ -95,11 +95,14 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   static public function Int():Schema{
     return lift(SchScalar(stx.schema.declare.term.SchemaInt.make()));
   }
-  static public function Null(ref):Schema{
+  static public function Null(ref:SchemaRef):Schema{
     return lift(SchGeneric(stx.schema.declare.term.SchemaNull.make(ref)));
   }
   static public function String():Schema{
     return lift(SchScalar(stx.schema.declare.term.SchemaString.make()));
+  }
+  static public function Date():Schema{
+    return lift(SchScalar(stx.schema.declare.term.SchemaDate.make()));
   }
   public function toString(){
     return _.fold(

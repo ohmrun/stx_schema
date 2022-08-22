@@ -43,23 +43,24 @@ typedef IdentityDef = IdentDef & {
 }
 class IdentityLift{
   static public function denote(self:Identity):GExpr{
-    final e = __.g().expr();
-    return e.Call(
-      e.Path('stx.schema.core.Identity.make'),
-      [
-        e.Call(
-          e.Path('stx.schema.core.Ident.make'),
-          [
-            e.Const(c -> c.String(self.name) ),
-            e.ArrayDecl(
-              __.option(self.pack).defv([]).prj().map(
-                string -> e.Const(c -> c.String(string))
-              )
-            )
-          ]
-        ),
-        e.ArrayDecl(__.option(self.rest).defv([]).map(denote))
-      ]
-    );
+    // final e = __.g().expr();
+    // return e.Call(
+    //   e.Path('stx.schema.core.Identity.make'),
+    //   [
+    //     e.Call(
+    //       e.Path('stx.schema.core.Ident.make'),
+    //       [
+    //         e.Const(c -> c.String(self.name) ),
+    //         e.ArrayDecl(
+    //           __.option(self.pack).defv([]).prj().map(
+    //             string -> e.Const(c -> c.String(string))
+    //           )
+    //         )
+    //       ]
+    //     ),
+    //     e.ArrayDecl(__.option(self.rest).defv([]).map(denote))
+    //   ]
+    // );
+    return throw UNIMPLEMENTED;
   }
 }

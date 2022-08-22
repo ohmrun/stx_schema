@@ -10,6 +10,7 @@ class State{
       (SchScalar(stx.schema.declare.term.SchemaFloat.make())),
       (SchScalar(stx.schema.declare.term.SchemaInt.make())),
       (SchScalar(stx.schema.declare.term.SchemaString.make())),
+      (SchScalar(stx.schema.declare.term.SchemaDate.make())),
     ]);
     this.context = context;
   }
@@ -25,9 +26,13 @@ class State{
   public function put(v:SType):Bool{
     return context.bestow(v.identity.canonical(),v);
   }
-  public function schema(key:Identity){
+  public function search(key:Identity){
+    __.log().trace('search schema: $key');
     return sources.search(
-      (x) -> x.identity.equals(key)
+      (x) -> {
+        __.log().trace('$x');
+        return x.identity.equals(key);
+      }
     );
   }
   public function reply(){

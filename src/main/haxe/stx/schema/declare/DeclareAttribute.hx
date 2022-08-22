@@ -5,7 +5,7 @@ typedef DeclareAttributeDef = DeclarePropertyDef & {
   final relation    : RelationType; 
   final ?inverse    : String;
 }
-@:transitive @:forward abstract DeclareAttribute(DeclareAttributeDef) from DeclareAttributeDef to DeclareAttributeDef{
+@:transitive  @:forward abstract DeclareAttribute(DeclareAttributeDef) from DeclareAttributeDef to DeclareAttributeDef{
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclareAttributeDef):DeclareAttribute return new DeclareAttribute(self);
   @:noUsing static public function make(type,relation,?inverse,?validation,?meta){

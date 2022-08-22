@@ -24,13 +24,47 @@ class Registration extends Clazz{
     );
   }
   public function register_identity(data:Identity,state:State){
-    return state.schema(data).fold(
+    __.log().trace('register identity: $data');
+    return state.search(data).fold(
       ok -> register_schema(ok,state),
-      () -> Pledge.make(__.reject(__.fault().of(E_Schema_SchemaNotFound(data))))
+      () -> new stx.assert.eq.term.Ident().comply(
+        Ident.make(data.name,data.pack),
+        Ident.make('Null',['std'])
+      ).is_equal().if_else(
+        () -> {
+          state.search(data.rest[0]).fold(
+            (x:Schema) -> { 
+              return register_generic(
+                stx.schema.declare.term.SchemaNull.make(x),state
+              );
+            },
+            () -> Pledge.make(__.reject(__.fault().of(E_Schema_SchemaNotFound(data))))
+          );
+        },
+        () -> {
+          return new stx.assert.eq.term.Ident().comply(
+            Ident.make(data.name,data.pack),
+            Ident.make('Array',['std'])
+          ).is_equal().if_else(
+            ()  -> {
+              state.search(data.rest[0]).fold(
+                (x:Schema) -> { 
+                  return register_generic(
+                    stx.schema.declare.term.SchemaArray.make(x),
+                    state
+                  );
+                },
+                () -> Pledge.make(__.reject(__.fault().of(E_Schema_SchemaNotFound(data))))
+              );
+            },
+            () -> Pledge.make(__.reject(__.fault().of(E_Schema_SchemaNotFound(data))))
+          );
+        }
+      )
     );
   }
   public function register_schema(data:Schema,state:State):Pledge<SType,SchemaFailure>{
-    trace(data);
+    __.log().trace('register: $data');
     return request(data.identity,state).flat_map(
       opt -> __.tracer()(opt).fold(
         ok -> Pledge.pure(ok),
@@ -49,12 +83,14 @@ class Registration extends Clazz{
     );
   }
   public function register_scalar(data:DeclareScalarSchema,state:State):Pledge<SType,SchemaFailure>{
+    __.log().trace('register scalar $data');
     final register = state.context.create(); 
     final type     = ScalarType.make(register,data.ident,data.ctype,data.validation,data.meta).toSType();
     state.put(type);
     return Pledge.pure(type);
   }
   public function register_anon(data:DeclareAnonSchema,state:State):Pledge<SType,SchemaFailure>{
+    __.log().trace('register anon $data');
     final register = state.context.create(); 
     final fields   = get_fields(data.fields,state);
     final next = fields.map(
@@ -98,6 +134,7 @@ class Registration extends Clazz{
     );
   }
   public function register_record(data:DeclareRecordSchema,state:State):Pledge<SType,SchemaFailure>{
+    __.log().trace('register record $data');
     final register            = state.context.create(); 
     final fields              = get_fields(data.fields,state);
     var next : RecordType     = null;
@@ -121,37 +158,53 @@ class Registration extends Clazz{
     return update;
   }
   public function register_enum(data:DeclareEnumSchema,state:State):Pledge<SType,SchemaFailure>{
+    __.log().trace('register enum $data');
     final register = state.context.create(); 
     final type     = EnumType.make(register,data.ident,data.constructors,data.validation,data.meta).toSType();
     state.put(type);
     return Pledge.pure(type);
   }
   public function register_generic(data:DeclareGenericSchema,state:State):Pledge<SType,SchemaFailure>{
+    __.log().trace('register generic $data');
     final register  = state.context.create(); 
+    var next : GenericType     = null;
+    var type        = Ref.make(
+      data.identity,
+      () -> next
+    );
+    state.put(STGeneric(type));
+
     final type      = enquire(data.type.identity,state).map(
       x -> {
-        final next = GenericType.make(register,data.ident,x,data.validation,data.meta).toSType();
-        state.put(next);
-        return next;
+        next = GenericType.make(register,data.ident,x,data.validation,data.meta);
+        return next.toSType();
       }
     );
     return type;
   }
   public function register_union(data:DeclareUnionSchema,state:State):Pledge<SType,SchemaFailure>{
+    __.log().trace('register union $data');
     final register = state.context.create();
-    final type     = Pledge.bind_fold(
+    var next : UnionType     = null;
+    var type        = Ref.make(
+      data.identity,
+      () -> next
+    );
+    state.put(STUnion(type));
+
+    final result = Pledge.bind_fold(
       data.rest,
-      (n:SchemaRef,m:Cluster<SType>) -> {
-        return enquire(n.identity,state).map(m.snoc);
+      (next:SchemaRef,memo:Cluster<SType>) -> {
+        return enquire(next.identity,state).map(memo.snoc);
       },
       []
     ).map(
       (x) -> {
-        final next = UnionType.make(register,data.ident,x,data.validation,data.meta).toSType();
-        state.put(next);
-        return next;
+        next = UnionType.make(register,data.ident,x,data.validation,data.meta);
+        __.log().trace('register union completed');
+        return next.toSType();
       }
     );
-    return type;
+    return result;
   }
 }

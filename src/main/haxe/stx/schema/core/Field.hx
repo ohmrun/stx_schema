@@ -14,4 +14,7 @@ class Field extends WithIdentityCls{
   static public function make(name,type){
     return new Field(name,type); 
   }
+  public function toString(){
+    return 'Field($name $type)';
+  }
 }
