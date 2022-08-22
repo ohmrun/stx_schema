@@ -1,8 +1,5 @@
 package stx.schema;
 
-#if macro
-  import stx.schema.view.Leaf;
-#end
 import stx.schema.test.*;
 
 using stx.Log;
@@ -15,7 +12,8 @@ class Test{
     return [
       new SchemaTest(),
       new stx.schema.test.ComparisonTest(),
-      new stx.schema.test.RegisterTest()
+      new stx.schema.test.RegisterTest(),
+      new stx.schema.test.TemplateTest(),
     ];
   }
   static public function main(){

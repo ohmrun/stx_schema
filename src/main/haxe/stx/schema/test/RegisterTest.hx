@@ -29,6 +29,7 @@ class RegisterTest extends TestCase{
           "author" => {
             inverse   : "article",
             type      : __.way().into("User"),
+            relation  : HAS_MANY,
             meta      : PEmpty
           }
         ]

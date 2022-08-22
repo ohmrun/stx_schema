@@ -7,3 +7,7 @@
   "register"
   include "stx.schema.test.RegisterTest"
 )
+(
+  "template"
+  include "stx.schema.test.TemplateTest"
+)

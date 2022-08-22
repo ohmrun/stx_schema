@@ -23,6 +23,9 @@ class Module extends Clazz{
   public function attribute(type,relation,?inverse,?validation,?meta):DeclareAttribute{
     return DeclareAttribute.make(type,relation,inverse,validation,meta);
   }
+  public function procure(self:{ ?properties : Map<String,DeclareProperty>, ?attributes : Map<String,DeclareAttribute> }):Procurements{
+    return self;
+  }
 }
 private class Type{
 
