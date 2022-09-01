@@ -200,7 +200,7 @@ class Registration extends Clazz{
       []
     ).map(
       (x) -> {
-        next = UnionType.make(register,data.ident,x,data.validation,data.meta);
+        next = UnionType.make(register,x,data.validation,data.meta);
         __.log().trace('register union completed');
         return next.toSType();
       }

@@ -13,7 +13,7 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   }
   public function toString(){
     final arr = [];
-    for(field in fields.pop()){
+    for(field in fields.pop().toIter()){
       arr.push('${field.name} => ${field.type.toString()}');
     }
     return arr.join(",");
@@ -70,6 +70,14 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
 
   @:noUsing static public function make(register,fields,?validation,?meta){ 
     return new AnonTypeCls(register,fields,validation,meta);
+  }
+  public function copy(?register,?fields,?validation,?meta){
+    return make(
+      __.option(register).defv(this.register),
+      __.option(fields).defv(this.fields),
+      __.option(validation).defv(this.validation),
+      __.option(meta).defv(this.meta)
+    );
   }
 }
 class AnonTypeLift{

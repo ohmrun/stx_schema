@@ -31,6 +31,16 @@ class ScalarTypeCls extends NominativeTypeCls implements ScalarTypeApi{
   public function prj():ScalarTypeApi return this;
   private var self(get,never):ScalarType;
   private function get_self():ScalarType return lift(this);
+
+  public function copy(?register,?ident,?ctype,?validation,?meta){
+    return make(
+      __.option(register).defv(this.register),
+      __.option(ident).defv(this.ident),
+      __.option(ctype).defv(this.ctype),
+      __.option(validation).defv(this.validation),
+      __.option(meta).defv(this.meta)
+    );
+  }
 }
 class ScalarTypeLift{
   

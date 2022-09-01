@@ -9,5 +9,10 @@
 )
 (
   "template"
-  include "stx.schema.test.TemplateTest"
+    include (
+      (
+        "stx.schema.test.TemplateTest" 
+        include "test_select_union"
+      )
+  )
 )

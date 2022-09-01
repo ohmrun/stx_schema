@@ -36,7 +36,15 @@ class RecordTypeCls extends NominativeTypeCls implements RecordTypeApi{
   @:noUsing static public function make(register,ident,fields,?validation,?meta){ 
     return lift(new RecordTypeCls(register,ident,fields,validation,meta));
   }
-
+  public function copy(?register,?ident,?fields,?validation,?meta){
+    return make(
+      __.option(register).defv(this.register),
+      __.option(ident).defv(this.ident),
+      __.option(fields).defv(this.fields),
+      __.option(validation).defv(this.validation),
+      __.option(meta).defv(this.meta)
+    );
+  }
 }
 class RecordTypeLift{
   

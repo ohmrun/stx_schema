@@ -1,6 +1,6 @@
 package stx.schema.type;
 
-interface GenericTypeApi extends DataTypeApi{
+interface GenericTypeApi extends NominativeTypeApi{
   public final type : SType;
 }
 class GenericTypeCls extends NominativeTypeCls implements GenericTypeApi{
@@ -62,6 +62,15 @@ class GenericTypeCls extends NominativeTypeCls implements GenericTypeApi{
 
   @:noUsing static public function make(register,ident:Ident,inner,?validation,?meta){ 
     return lift(new GenericTypeCls(register,ident,inner,validation,meta));
+  }
+  public function copy(?register,?ident,?type,?validation,?meta){
+    return make(
+      __.option(register).defv(this.register),
+      __.option(ident).defv(this.ident),
+      __.option(type).defv(this.type),
+      __.option(validation).defv(this.validation),
+      __.option(meta).defv(this.meta)
+    );
   }
 }
 class GenericTypeLift{

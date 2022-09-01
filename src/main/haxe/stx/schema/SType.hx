@@ -6,8 +6,10 @@ enum STypeSum{
   STLazy(f:Ref<LazyType>);
   STScalar(t:Ref<ScalarType>);
   STEnum(t:Ref<EnumType>);
+  
   STAnon(t:Ref<AnonType>);
   STRecord(t:Ref<RecordType>);
+
   STGeneric(t:Ref<GenericType>);
   STUnion(t:Ref<UnionType>);
   STLink(t:Ref<LinkType>);
@@ -237,6 +239,78 @@ class STypeLift{
       )
     );
   }
+  static public function has_records(self:SType):Bool{
+    return switch(self.data){
+      case STScalar(_)      : false;
+      case STAnon(_)        : true; 
+      case STRecord(_)      : true;
+      case STGeneric(t)     : has_records(t.pop().type);
+      case STUnion(t)       : t.pop().rest.lfold(
+        (next:SType,memo:Bool) -> {
+          return memo.if_else(
+            () -> true,
+            () -> has_records(next)
+          );
+        },
+        false
+      );
+      case STLink(t)     : has_records(t.pop().into);
+      case STEnum(t)     : false;
+      case STLazy(f)     : has_records(f.pop().type);
+      case STMono        : false;
+      default            : false;
+    }
+  }
+  // static public function mod_else(self:SType,fn:SType->Res<SType,SchemaFailure>):Res<SType,SchemaFailure>{
+  //   final f = mod_else.bind(_,fn);
+  //   return switch(self.data){
+  //     case STScalar(t)      : fn(self);
+  //     case STAnon(t)        : 
+  //       final tI = t.pop();
+  //       final ts = Res.bind_fold(
+  //         tI.fields.pop(),
+  //         (next,memo:Cluster<Field>) -> {
+  //           return f(next.type).map(tII -> Field.make(next.name,tII)).map(memo.snoc);
+  //         },
+  //         []
+  //       );
+  //       ts.map(fields -> tI.copy(null,fields).toSType()).flat_map(f);
+  //     case STRecord(t)      :
+  //       final tI = t.pop();
+  //       final ts = Res.bind_fold(
+  //         tI.fields.pop(),
+  //         (next,memo:Cluster<Field>) -> {
+  //           return f(next.type).map(tII -> Field.make(next.name,tII)).map(memo.snoc);
+  //         },
+  //         []
+  //       );
+  //       ts.map(fields -> tI.copy(null,null,fields).toSType()).flat_map(f);
+  //     case STGeneric(t)     :
+  //       final tI    = t.pop();
+  //       final inner = f(tI.type);
+  //       return inner.map(type -> type.copy(null,null,type)).flat_map(f);
+  //     case STUnion(t)       :
+  //       final tI = t.pop();
+  //       final ts = Res.bind_fold(
+  //         tI.rest,
+  //         (next,memo:Cluster<SType>) -> {
+  //           return f(next).map(memo.snoc);
+  //         },
+  //         []
+  //       );
+  //       ts.map(fields -> tI.copy(null,fields).toSType()).flat_map(f);
+  //     case STLink(t)        :
+  //       final tI    = t.pop();
+  //       final inner = f(tI.type);
+  //       return inner.map(type -> type.copy(null,type)).flat_map(f);
+  //     case STEnum(t)        :
+  //       f(self);
+  //     case STLazy(fI)        :
+  //         f(fI.pop().type);
+  //     case STMono           :
+  //         f(self);
+  //   }
+  // }
 }
 /**
   switch(type){

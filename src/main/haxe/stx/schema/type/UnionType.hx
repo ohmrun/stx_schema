@@ -3,15 +3,15 @@ package stx.schema.type;
 interface UnionTypeApi extends DataTypeApi{
   final rest : Cluster<SType>;
 }
-class UnionTypeCls extends NominativeTypeCls implements UnionTypeApi {
+class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
   public final rest : Cluster<SType>;
-  public function new(register,ident,rest,?validation,?meta){
-    super(register,ident,validation,meta);
+  public function new(register,rest,?validation,?meta){
+    super(register,validation,meta);
     this.rest = rest;
   }
-  override public function get_identity(){
+  public function get_identity(){
     return Identity.make(
-      this.ident,
+      Ident.make('Union',['std']),
       __.option(this.rest).defv([]).map(x -> Identity.lift(x.identity))
     );
   }
@@ -45,8 +45,16 @@ class UnionTypeCls extends NominativeTypeCls implements UnionTypeApi {
   private var self(get,never):UnionType;
   private function get_self():UnionType return lift(this);
 
-  @:noUsing static public function make(register,ident,rest,?validation,?meta){ 
-    return lift(new UnionTypeCls(register,ident,rest,validation,meta));
+  @:noUsing static public function make(register,rest,?validation,?meta){ 
+    return lift(new UnionTypeCls(register,rest,validation,meta));
+  }
+  public function copy(?register,?rest,?validation,?meta){
+    return make(
+      __.option(register).defv(this.register),
+      __.option(rest).defv(this.rest),
+      __.option(validation).defv(this.validation),
+      __.option(meta).defv(this.meta)
+    );
   }
 }
 class UnionTypeLift{

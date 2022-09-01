@@ -145,6 +145,7 @@ typedef NominativeTypeCls                         = stx.schema.type.NominativeTy
 
 typedef Context                                   = stx.schema.Context;
 typedef State                                     = stx.schema.State;
+typedef Template                                  = stx.schema.Template;
 
 //typedef GTypeContext                              = stx.schema.GTypeContext;
 //typedef TypeContext                               = stx.schema.TypeContext;

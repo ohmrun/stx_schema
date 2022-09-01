@@ -47,7 +47,7 @@ class RegisterTest extends TestCase{
         x -> {
           for(ok in x){
             for(v in ok){
-              trace(v.fields);
+              trace(v);
             }
           }
           async.done();

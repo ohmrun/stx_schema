@@ -1,13 +1,13 @@
 package stx.schema.declare;
 
-interface DeclareUnionSchemaApi extends DeclareNominativeSchemaApi extends WithIdentityApi{
+interface DeclareUnionSchemaApi extends DeclareSchemaApi extends WithIdentityApi{
   final rest  : Cluster<SchemaRef>;
 }
-class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareNominativeSchemaCls{
+class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareSchemaCls{
   public final rest  : Cluster<SchemaRef>;
 
-  public function new(ident:Ident,rest,validation,meta){
-    super(ident,validation,meta); 
+  public function new(rest,validation,meta){
+    super(validation,meta); 
     this.rest       = rest;
     
   }
@@ -15,8 +15,8 @@ class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareNomi
   public function get_identity(){ 
     return Identity.make(
       Ident.make(
-        this.ident.name,
-        this.ident.pack
+        'Union',
+        ['std']
       ),
       __.option(this.rest).defv([]).map(Identity.lift)
     );
@@ -27,9 +27,8 @@ class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareNomi
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclareUnionSchemaApi):DeclareUnionSchema return new DeclareUnionSchema(self);
 
-  @:noUsing static public function make(ident:Ident,rest,?validation,?meta){
+  @:noUsing static public function make(rest,?validation,?meta){
     return lift(new DeclareUnionSchemaCls(
-      ident,
       rest,
       validation,
       meta

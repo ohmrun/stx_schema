@@ -67,6 +67,16 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   @:noUsing static public function make(register,into,relation,inverse,?validation,?meta){ 
     return lift(new LinkTypeCls(register,into,relation,inverse,validation,meta));
   }
+  public function copy(?register,?into,?relation,?inverse,?validation,?meta){
+    return make(
+      __.option(register).defv(this.register),
+      __.option(into).defv(this.into),
+      __.option(relation).defv(this.relation),
+      __.option(inverse).defv(this.inverse),
+      __.option(validation).defv(this.validation),
+      __.option(meta).defv(this.meta)
+    );
+  }
 }
 class LinkTypeLift{
   static public function lookup(self:LinkType):Option<SType>{

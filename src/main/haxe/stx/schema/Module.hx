@@ -14,8 +14,8 @@ class Module extends Clazz{
   public function generic(ident,type:SchemaRef,?validation,?meta):Schema{
     return SchGeneric(DeclareGenericSchema.make(ident,type,validation,meta));
   }
-  public function union(ident,rest,?validation,?meta):Schema{
-    return SchUnion(DeclareUnionSchema.make(ident,rest,validation,meta));
+  public function union(rest,?validation,?meta):Schema{
+    return SchUnion(DeclareUnionSchema.make(rest,validation,meta));
   }
   public function property(type,?meta):DeclareProperty{
     return DeclareProperty.make(type,__.option(meta).defv(PEmpty));
