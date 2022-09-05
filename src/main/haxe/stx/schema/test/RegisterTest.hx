@@ -42,7 +42,7 @@ class RegisterTest extends TestCase{
     trace("start");
     try{
       final ts  = types();
-      final s   = new State(ts,new Context());
+      final s   = State.make(ts,new Context());
       s.reply().handle(
         x -> {
           for(ok in x){

@@ -100,6 +100,9 @@ class STypeCls{
   static public function Int(register):SType{
     return new stx.schema.type.term.TypeInt(register).toSType();
   }
+  static public function ID(register):SType{
+    return new stx.schema.type.term.TypeID(register).toSType();
+  }
   static public function String(register):SType{
     return new stx.schema.type.term.TypeString(register).toSType();
   }
@@ -260,6 +263,12 @@ class STypeLift{
       case STMono        : false;
       default            : false;
     }
+  }
+  static public function eq(){
+    return new stx.assert.schema.type.eq.SType();
+  }
+  static public function equals(self:SType,that:SType):Bool{
+    return eq().comply(self,that).is_equal();
   }
   // static public function mod_else(self:SType,fn:SType->Res<SType,SchemaFailure>):Res<SType,SchemaFailure>{
   //   final f = mod_else.bind(_,fn);

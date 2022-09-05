@@ -18,6 +18,7 @@ using stx.Nano;
 using stx.Assert;
 using stx.Schema;
 using stx.Show;
+using stx.Assert;
 using stx.Log;
 using stx.Ds;
 using stx.Fp;

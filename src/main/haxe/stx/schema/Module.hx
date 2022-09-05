@@ -8,6 +8,7 @@ class Module extends Clazz{
   public function record(self:{ name : String, ?pack : Cluster<String>, fields : Procurements, ?meta : PExpr<Primitive> , ?validation : Validations }):Schema{
     return SchRecord(DeclareRecordSchema.make0(self.name,self.pack,self.fields,self.meta,self.validation));
   }
+  
   public function enumeration(ident,constructors,?validation,?meta):Schema{
     return SchEnum(DeclareEnumSchema.make(ident,constructors,validation,meta));
   }

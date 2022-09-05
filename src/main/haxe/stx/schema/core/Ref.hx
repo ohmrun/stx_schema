@@ -17,6 +17,9 @@ class RefCls<T> implements RefApi<T>{
     this.identity = identity;
     this.getter   = getter;  
   }
+  public function toString(){
+    return this.identity.toString();
+  }
 }
 class RefWrap<T:WithIdentityApi> implements RefApi<T>{
   final value : T;
