@@ -55,6 +55,7 @@ class TestTypes{
   }
   static public function two(){
     final artist_or_band = __.schema().union(
+      Ident.make('ArtistOrBand',[]),
       ['Artist','Band'].map(x -> SchemaRef.fromIdent(Ident.make(x)))
     );
     final track = __.schema().record({

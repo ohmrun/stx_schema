@@ -10,8 +10,8 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   public final relation  : RelationType;
   public final inverse   : Null<String>;
 
-  public function new(register,into,relation,?inverse,?validation,?meta){
-    super(register,validation,meta);
+  public function new(into,relation,?inverse,?validation,?meta){
+    super(validation,meta);
     this.into       = into;
     this.relation   = relation;
     this.inverse    = inverse;
@@ -64,12 +64,12 @@ class LinkTypeCls extends BaseTypeCls implements LinkTypeApi{
   private var self(get,never):LinkType;
   private function get_self():LinkType return lift(this);
 
-  @:noUsing static public function make(register,into,relation,inverse,?validation,?meta){ 
-    return lift(new LinkTypeCls(register,into,relation,inverse,validation,meta));
+  @:noUsing static public function make(into,relation,inverse,?validation,?meta){ 
+    return lift(new LinkTypeCls(into,relation,inverse,validation,meta));
   }
-  public function copy(?register,?into,?relation,?inverse,?validation,?meta){
+  public function copy(?into,?relation,?inverse,?validation,?meta){
     return make(
-      __.option(register).defv(this.register),
+      
       __.option(into).defv(this.into),
       __.option(relation).defv(this.relation),
       __.option(inverse).defv(this.inverse),

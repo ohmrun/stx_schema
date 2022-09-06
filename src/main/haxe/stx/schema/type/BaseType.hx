@@ -1,7 +1,6 @@
 package stx.schema.type;
 
 interface BaseTypeApi extends WithIdentityApi{
-  final register:Register;
 
   public var validation(get,null):Validations;
   private function get_validation():Validations;
@@ -15,12 +14,10 @@ interface BaseTypeApi extends WithIdentityApi{
 @:using(stx.schema.type.BaseType.BaseTypeLift)
 abstract class BaseTypeCls extends WithIdentityCls implements BaseTypeApi{
 
-  public function new(register,?validation,?meta){
-    this.register   = register;
+  public function new(?validation,?meta){
     this.validation = __.option(validation).defv(Validations.unit());
     this.meta       = __.option(meta).defv(PEmpty);
   }
-  public final register   : Register;
   public var meta         : PExpr<Primitive>;
   public var status       : TypeStatus;
   

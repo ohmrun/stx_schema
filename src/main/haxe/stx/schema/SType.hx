@@ -88,26 +88,26 @@ class STypeCls{
   private var self(get,never):SType;
   private function get_self():SType return lift(this);
 
-  static public function Array(register,self:SType):SType{
-    return stx.schema.type.term.TypeArray.make(register,self).toSType();
+  static public function Array(self:SType):SType{
+    return stx.schema.type.term.TypeArray.make(self).toSType();
   } 
-  static public function Bool(register):SType{
-    return new stx.schema.type.term.TypeBool(register).toSType();
+  static public function Bool():SType{
+    return new stx.schema.type.term.TypeBool().toSType();
   }
-  static public function Float(register):SType{
-    return new stx.schema.type.term.TypeFloat(register).toSType();
+  static public function Float():SType{
+    return new stx.schema.type.term.TypeFloat().toSType();
   }
-  static public function Int(register):SType{
-    return new stx.schema.type.term.TypeInt(register).toSType();
+  static public function Int():SType{
+    return new stx.schema.type.term.TypeInt().toSType();
   }
-  static public function ID(register):SType{
-    return new stx.schema.type.term.TypeID(register).toSType();
+  static public function ID():SType{
+    return new stx.schema.type.term.TypeID().toSType();
   }
-  static public function String(register):SType{
-    return new stx.schema.type.term.TypeString(register).toSType();
+  static public function String():SType{
+    return new stx.schema.type.term.TypeString().toSType();
   }
-  static public function Null(register,self:SType):SType{
-    return stx.schema.type.term.TypeNull.make(register,self).toSType();
+  static public function Null(self:SType):SType{
+    return stx.schema.type.term.TypeNull.make(self).toSType();
   }
   static public function Mono():SType{
     return STMono;
@@ -118,23 +118,23 @@ class STypeCls{
   @:from static public function fromSTypeSum(self:STypeSum):SType{
     return lift(new STypeCls(self));
   }
-  static public function LeafType(register,ident,ctype,?validation,?meta):SType{
-    return _.LeafType(register,ident,ctype,validation,meta).toSType();
+  static public function LeafType(ident,ctype,?validation,?meta):SType{
+    return _.LeafType(ident,ctype,validation,meta).toSType();
   }
-  static public function RecordType(register,name,pack,fields,?validation,?meta):SType{
-    return _.RecordType(register,name,pack,fields,validation,meta).toSType();
+  static public function RecordType(name,pack,fields,?validation,?meta):SType{
+    return _.RecordType(name,pack,fields,validation,meta).toSType();
   }
-  static public function AnonType(register,fields,?validation,?meta):SType{
-    return _.AnonType(register,fields,validation,meta).toSType();
+  static public function AnonType(fields,?validation,?meta):SType{
+    return _.AnonType(fields,validation,meta).toSType();
   }
-  static public function GenericType(register,name,pack,inner):SType{
-    return _.GenericType(register,name,pack,inner).toSType();
+  static public function GenericType(name,pack,inner):SType{
+    return _.GenericType(name,pack,inner).toSType();
   }
-  static public function LinkType(register,into,relation,from):SType{
-    return _.LinkType(register,into,relation,from).toSType();
+  static public function LinkType(into,relation,from):SType{
+    return _.LinkType(into,relation,from).toSType();
   }
-  static public function UnionType(register,name,pack,lhs,rhs):SType{
-    return _.UnionType(register,name,pack,lhs,rhs).toSType();
+  static public function UnionType(name,pack,lhs,rhs):SType{
+    return _.UnionType(name,pack,lhs,rhs).toSType();
   }
   public function get_enum_value_index(){
     return EnumValue.lift(this.data).index;
@@ -185,22 +185,22 @@ class STypeLift{
       default        : None;
     }
   }
-  static public function LeafType(register,ident,ctype,?validation,?meta){
+  static public function LeafType(ident,ctype,?validation,?meta){
     return stx.schema.type.LeafType.make(ident,ctype,validation,meta);
   }
-  static public function RecordType(register,name,pack,fields,?validation,?meta){
-    return stx.schema.type.RecordType.make(register,Ident.make(name,pack),fields,validation,meta);
+  static public function RecordType(name,pack,fields,?validation,?meta){
+    return stx.schema.type.RecordType.make(Ident.make(name,pack),fields,validation,meta);
   }
-  static public function AnonType(register,fields,?validation,?meta){
-    return stx.schema.type.AnonType.make(register,fields,validation,meta);
+  static public function AnonType(fields,?validation,?meta){
+    return stx.schema.type.AnonType.make(fields,validation,meta);
   }
-  static public function GenericType(register,ident,inner,?validation,?meta){
-    return stx.schema.type.GenericType.make(register,ident,inner,validation,meta);
+  static public function GenericType(ident,inner,?validation,?meta){
+    return stx.schema.type.GenericType.make(ident,inner,validation,meta);
   }
-  static public function LinkType(register,into,relation,from){
-    return stx.schema.type.LinkType.make(register,into,relation,from);
+  static public function LinkType(into,relation,from){
+    return stx.schema.type.LinkType.make(into,relation,from);
   }
-  static public function UnionType(register,name,pack,lhs,rhs){
+  static public function UnionType(name,pack,lhs,rhs){
     return stx.schema.type.UnionType.make(name,pack,lhs,rhs);
   }
   static public function getTypePath(self:SType){

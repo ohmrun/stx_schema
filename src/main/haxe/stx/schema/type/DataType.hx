@@ -4,8 +4,8 @@ interface DataTypeApi extends BaseTypeApi{
 
 }
 abstract class DataTypeCls extends BaseTypeCls implements DataTypeApi{
-  public function new(register,?validation,?meta){
-    super(register,validation,meta);
+  public function new(?validation,?meta){
+    super(validation,meta);
   }
 }
 

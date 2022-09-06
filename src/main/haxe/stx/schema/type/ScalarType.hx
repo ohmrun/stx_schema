@@ -5,11 +5,11 @@ interface ScalarTypeApi extends NominativeTypeApi{
 }
 class ScalarTypeCls extends NominativeTypeCls implements ScalarTypeApi{
   public final ctype : GComplexType;
-  static public function make(register,ident,ctype,?validation,?meta){
-    return new ScalarTypeCls(register,ident,ctype,validation,meta);
+  static public function make(ident,ctype,?validation,?meta){
+    return new ScalarTypeCls(ident,ctype,validation,meta);
   }
-  public function new(register,ident,ctype,?validation,?meta){
-    super(register,ident,validation,meta);
+  public function new(ident,ctype,?validation,?meta){
+    super(ident,validation,meta);
     this.ctype = ctype;
   }
   public function toSType(){
@@ -25,16 +25,16 @@ class ScalarTypeCls extends NominativeTypeCls implements ScalarTypeApi{
   public function new(self) this = self;
   @:noUsing static public function lift(self:ScalarTypeApi):ScalarType return new ScalarType(self);
 
-  @:noUsing static public function make(register,ident,ctype,?validation,?meta){
-    return lift(new ScalarTypeCls(register,ident,ctype,validation,meta));
+  @:noUsing static public function make(ident,ctype,?validation,?meta){
+    return lift(new ScalarTypeCls(ident,ctype,validation,meta));
   }
   public function prj():ScalarTypeApi return this;
   private var self(get,never):ScalarType;
   private function get_self():ScalarType return lift(this);
 
-  public function copy(?register,?ident,?ctype,?validation,?meta){
+  public function copy(?ident,?ctype,?validation,?meta){
     return make(
-      __.option(register).defv(this.register),
+      
       __.option(ident).defv(this.ident),
       __.option(ctype).defv(this.ctype),
       __.option(validation).defv(this.validation),

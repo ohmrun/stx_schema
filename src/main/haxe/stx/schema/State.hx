@@ -30,7 +30,7 @@ class State{
       __.option(namespace).defv(this.namespace)
     );
   }
-  public function with_source(source){
+  public function with_schema(source){
     return copy(sources.snoc(source));
   }
   public function with_namespace(namespace){
@@ -39,14 +39,14 @@ class State{
   public var threshold(get,null):ThresholdSet<SType>;
   private function get_threshold():ThresholdSet<SType>{
     return RedBlackSet.make(
-      context.satisfies.toComparable()
+      @:privateAccess context.accretion.satisfies.toComparable()
     );
   }
-  public function obtain(key:Identity,threshold:ThresholdSet<SType>){
-    return context.obtain(key.canonical(),threshold);
+  public function obtain(key:Identity){
+    return context.obtain(key.canonical());
   }
   public function put(v:SType):Bool{
-    return context.bestow(v.identity.canonical(),v);
+    return context.bestow(v.identity.canonical(),HAS(v,false));
   }
   public function search(key:Identity){
     __.log().trace('search schema: $key');

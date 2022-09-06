@@ -1,17 +1,17 @@
 package stx.schema.type;
 
-interface UnionTypeApi extends DataTypeApi{
+interface UnionTypeApi extends NominativeTypeApi{
   final rest : Cluster<SType>;
 }
-class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
+class UnionTypeCls extends NominativeTypeCls implements UnionTypeApi {
   public final rest : Cluster<SType>;
-  public function new(register,rest,?validation,?meta){
-    super(register,validation,meta);
+  public function new(ident,rest,?validation,?meta){
+    super(ident,validation,meta);
     this.rest = rest;
   }
-  public function get_identity(){
+  override public function get_identity(){
     return Identity.make(
-      Ident.make('Union',['std']),
+      ident,
       __.option(this.rest).defv([]).map(x -> Identity.lift(x.identity))
     );
   }
@@ -45,12 +45,12 @@ class UnionTypeCls extends DataTypeCls implements UnionTypeApi {
   private var self(get,never):UnionType;
   private function get_self():UnionType return lift(this);
 
-  @:noUsing static public function make(register,rest,?validation,?meta){ 
-    return lift(new UnionTypeCls(register,rest,validation,meta));
+  @:noUsing static public function make(ident,rest,?validation,?meta){ 
+    return lift(new UnionTypeCls(ident,rest,validation,meta));
   }
-  public function copy(?register,?rest,?validation,?meta){
+  public function copy(?ident,?rest,?validation,?meta){
     return make(
-      __.option(register).defv(this.register),
+      __.option(ident).defv(this.ident),
       __.option(rest).defv(this.rest),
       __.option(validation).defv(this.validation),
       __.option(meta).defv(this.meta)

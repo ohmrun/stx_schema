@@ -5,8 +5,8 @@ interface GenericTypeApi extends NominativeTypeApi{
 }
 class GenericTypeCls extends NominativeTypeCls implements GenericTypeApi{
   public final type : SType;
-  public function new(register,ident,type,?validation,?meta){
-    super(register,ident,validation,meta);
+  public function new(ident,type,?validation,?meta){
+    super(ident,validation,meta);
     this.type     = type;
   }
   public function toString(){
@@ -60,12 +60,11 @@ class GenericTypeCls extends NominativeTypeCls implements GenericTypeApi{
   private var self(get,never):GenericType;
   private function get_self():GenericType return lift(this);
 
-  @:noUsing static public function make(register,ident:Ident,inner,?validation,?meta){ 
-    return lift(new GenericTypeCls(register,ident,inner,validation,meta));
+  @:noUsing static public function make(ident:Ident,inner,?validation,?meta){ 
+    return lift(new GenericTypeCls(ident,inner,validation,meta));
   }
-  public function copy(?register,?ident,?type,?validation,?meta){
+  public function copy(?ident,?type,?validation,?meta){
     return make(
-      __.option(register).defv(this.register),
       __.option(ident).defv(this.ident),
       __.option(type).defv(this.type),
       __.option(validation).defv(this.validation),

@@ -51,8 +51,8 @@ class Templater{
                     case STLink(l) : 
                       final lI = l.pop();
                       __.accept(switch(lI.relation){
-                        case HAS_MANY : Field.make(field.name,SType.Array(state.context.create(),SType.ID(state.context.create())));
-                        default       : Field.make(field.name,SType.ID(state.context.create()));
+                        case HAS_MANY : Field.make(field.name,SType.Array(SType.ID()));
+                        default       : Field.make(field.name,SType.ID());
                       });
                     default : __.accept(field);
                   }
@@ -61,7 +61,7 @@ class Templater{
               (field) -> obj(rest,type,state).map(arr -> [field].imm().concat(arr))
             );
           case STLink(_) : 
-            __.accept([Field.make(s,SType.ID(state.context.create()))]);
+            __.accept([Field.make(s,SType.ID())]);
           default : __.reject(f -> f.of(e0(s,type)));
         }
       case Nil:
@@ -77,13 +77,13 @@ class Templater{
       case STScalar(_)                 : __.accept(Some(type));
       case STAnon(_) | STRecord(_)     : 
         obj(template,type,state).map(
-          fields -> Some(AnonType.make(state.context.create(),fields).toSType())
+          fields -> Some(AnonType.make(fields).toSType())
         );
       case STEnum(_) : 
         __.accept(Some(type));
       case STGeneric(t)     :
         apply(t.pop().type,template,state).map(
-          type -> Some(t.pop().copy(state.context.create(),null/** TODO name **/,type).toSType())
+          type -> Some(t.pop().copy(null/** TODO name **/,type).toSType())
         );
       case STUnion(t)       :
         Res.bind_fold(
@@ -99,7 +99,7 @@ class Templater{
           []
         ).adjust(
           (types) -> types.is_defined().if_else(
-            () -> __.accept(Some(t.pop().copy(state.context.create(),types).toSType())),
+            () -> __.accept(Some(t.pop().copy(types).toSType())),
             () -> __.reject(f -> f.of(E_Schema_Dynamic("no candidates")))
           )
         );
@@ -108,13 +108,13 @@ class Templater{
         apply(t.pop().into,template,state).flat_map(
           type -> {
             return __.accept(Some(switch(t.pop().relation){
-              case HAS_MANY : SType.Array(state.context.create(),type);
+              case HAS_MANY : SType.Array(type);
               default       : type;
             }));
           }
         );
         // switch(template){
-        //   case Nil | Cons(PLabel(_),_) : __.accept(Some(SType.ID(state.context.create())));
+        //   case Nil | Cons(PLabel(_),_) : __.accept(Some(SType.ID()));
         //   default : 
         // }
       case STLazy(f)        : step(template,f.pop().type,state);

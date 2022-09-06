@@ -6,8 +6,8 @@ interface EnumTypeApi extends DataTypeApi  {
 }
 class EnumTypeCls extends NominativeTypeCls implements EnumTypeApi{
   public final constructors : Cluster<String>;
-  public function new(register,ident,constructors,?validation,?meta){
-    super(register,ident,validation,meta);
+  public function new(ident,constructors,?validation,?meta){
+    super(ident,validation,meta);
     this.constructors = constructors;
   }
   // public function register(state:TypeContext){
@@ -29,8 +29,8 @@ class EnumTypeCls extends NominativeTypeCls implements EnumTypeApi{
   public function prj():EnumTypeApi return this;
   private var self(get,never):EnumType;
   private function get_self():EnumType return lift(this);
-  @:noUsing static public function make(register,ident,constructors,?validation,?meta){
-    return lift(new EnumTypeCls(register,ident,constructors,validation,meta));
+  @:noUsing static public function make(ident,constructors,?validation,?meta){
+    return lift(new EnumTypeCls(ident,constructors,validation,meta));
   }
 }
 class EnumTypeLift{

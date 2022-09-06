@@ -12,7 +12,7 @@ class LazyType extends BaseTypeCls{
   private final ctx : () -> Null<SType>;
   
   public function new(id,lookup,ctx,?validation,?metas){
-    super(id,validation,metas);
+    super(validation,metas);
     this.lookup = lookup;
     this.ctx    = ctx;
   }

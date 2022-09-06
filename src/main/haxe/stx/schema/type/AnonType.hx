@@ -7,8 +7,8 @@ interface AnonTypeApi extends BaseTypeApi{
 }
 class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   public final fields  : Cell<Cluster<Field>>;
-  public function new(register,fields,?validation,?meta){
-    super(register,validation,meta);
+  public function new(fields,?validation,?meta){
+    super(validation,meta);
     this.fields   = fields;
   }
   public function toString(){
@@ -68,12 +68,12 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   private var self(get,never):AnonType;
   private function get_self():AnonType return lift(this);
 
-  @:noUsing static public function make(register,fields,?validation,?meta){ 
-    return new AnonTypeCls(register,fields,validation,meta);
+  @:noUsing static public function make(fields,?validation,?meta){ 
+    return new AnonTypeCls(fields,validation,meta);
   }
-  public function copy(?register,?fields,?validation,?meta){
+  public function copy(?fields,?validation,?meta){
     return make(
-      __.option(register).defv(this.register),
+      
       __.option(fields).defv(this.fields),
       __.option(validation).defv(this.validation),
       __.option(meta).defv(this.meta)
