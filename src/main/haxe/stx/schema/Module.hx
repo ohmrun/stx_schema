@@ -1,14 +1,13 @@
 package stx.schema;
 
 class Module extends Clazz{
-  public function scalar(name,pack,?ctype,?validation,?meta){
+  public function native(name,pack,?ctype,?validation,?meta){
     final ident = Ident.make(name,pack);
-    return SchScalar(DeclareScalarSchema.make(ident,ctype,validation,meta));
+    return SchNative(DeclareNativeSchema.make(ident,ctype,validation,meta));
   }
   public function record(self:{ name : String, ?pack : Cluster<String>, fields : Procurements, ?meta : PExpr<Primitive> , ?validation : Validations }):Schema{
     return SchRecord(DeclareRecordSchema.make0(self.name,self.pack,self.fields,self.meta,self.validation));
   }
-  
   public function enumeration(ident,constructors,?validation,?meta):Schema{
     return SchEnum(DeclareEnumSchema.make(ident,constructors,validation,meta));
   }

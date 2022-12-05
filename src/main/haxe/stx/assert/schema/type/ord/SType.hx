@@ -8,7 +8,7 @@ class SType extends OrdCls<TSType>{
     return switch([thiz.data,that.data]){
         case [STMono,STMono]                : NotLessThan;
         case [STLazy(l),STLazy(r)]          : new stx.assert.schema.type.ord.LazyType().comply(l.pop(),r.pop());
-        case [STScalar(l),STScalar(r)]      : new stx.assert.schema.type.ord.ScalarType().comply(l.pop(),r.pop());
+        case [STNative(l),STNative(r)]      : new stx.assert.schema.type.ord.NativeType().comply(l.pop(),r.pop());
         case [STAnon(l),STAnon(r)]          : new stx.assert.schema.type.ord.AnonType().comply(l.pop(),r.pop());
         case [STRecord(l),STRecord(r)]      : 
           new stx.assert.schema.core.ord.Identity().comply(l.identity,r.identity);

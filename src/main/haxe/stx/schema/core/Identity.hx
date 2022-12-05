@@ -9,6 +9,18 @@ typedef IdentityDef = IdentDef & {
   public function new(self) this = self;
   @:noUsing static public function lift(self:IdentityDef):Identity return new Identity(self);
 
+  static public function identity(wildcard:Wildcard,name:String,?pack:Way,?rest:Cluster<Identity>){
+    return Identity.make(
+      Ident.make(
+        name,
+        __.option(pack).defv(Way.unit())
+      ),
+      __.option(rest).def(Cluster.unit)
+    );
+  }
+  static public function toIdentity(self:Ident){
+    return Identity.make(self,[]);
+  }
   public function prj():IdentityDef return this;
   private var self(get,never):Identity;
   private function get_self():Identity return lift(this);

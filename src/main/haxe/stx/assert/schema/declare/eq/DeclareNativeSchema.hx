@@ -1,10 +1,10 @@
 package stx.assert.schema.declare.eq;
 
-import stx.schema.declare.DeclareScalarSchema in TDeclareScalarSchema;
+import stx.schema.declare.DeclareNativeSchema in TDeclareNativeSchema;
 
-class DeclareScalarSchema extends EqCls<TDeclareScalarSchema> {
+class DeclareNativeSchema extends EqCls<TDeclareNativeSchema> {
   public function new(){}
-  public function comply(lhs:TDeclareScalarSchema,rhs:TDeclareScalarSchema){
+  public function comply(lhs:TDeclareNativeSchema,rhs:TDeclareNativeSchema){
     var ord = new stx.assert.schema.declare.eq.DeclareSchema().comply((lhs:DeclareSchemaApi),(rhs:DeclareSchemaApi));
     if(ord.is_equal()){
       ord = new stx.assert.g.eq.GComplexType().comply(lhs.ctype,rhs.ctype);

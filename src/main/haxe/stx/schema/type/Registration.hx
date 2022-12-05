@@ -25,14 +25,14 @@ class Registration extends Clazz{
   }
   public function register_identity(data:Identity,state:State){
     __.log().trace('register identity: $data');
-    return state.search(data).fold(
+    return state.schema.get(data).fold(
       ok -> register_schema(ok,state),
       () -> new stx.assert.eq.term.Ident().comply(
         Ident.make(data.name,data.pack),
         Ident.make('Null',['std'])
       ).is_equal().if_else(
         () -> {
-          state.search(data.rest[0]).fold(
+          state.schema.get(data.rest[0]).fold(
             (x:Schema) -> { 
               return register_generic(
                 stx.schema.declare.term.SchemaNull.make(x),state
@@ -47,7 +47,7 @@ class Registration extends Clazz{
             Ident.make('Array',['std'])
           ).is_equal().if_else(
             ()  -> {
-              state.search(data.rest[0]).fold(
+              state.schema.get(data.rest[0]).fold(
                 (x:Schema) -> { 
                   return register_generic(
                     stx.schema.declare.term.SchemaArray.make(x),
@@ -71,7 +71,7 @@ class Registration extends Clazz{
         () -> {
           return switch(data){
             case SchLazy(fn)      : register_schema(fn(),state);
-            case SchScalar(def)   : register_scalar(def,state);
+            case SchNative(def)   : register_scalar(def,state);
             case SchAnon(def)     : register_anon(def,state);
             case SchRecord(def)   : register_record(def,state);
             case SchEnum(def)     : register_enum(def,state);
@@ -82,9 +82,9 @@ class Registration extends Clazz{
       )
     );
   }
-  public function register_scalar(data:DeclareScalarSchema,state:State):Pledge<SType,SchemaFailure>{
+  public function register_scalar(data:DeclareNativeSchema,state:State):Pledge<SType,SchemaFailure>{
     __.log().trace('register scalar $data'); 
-    final type     = ScalarType.make(data.ident,data.ctype,data.validation,data.meta).toSType();
+    final type     = NativeType.make(data.ident,data.ctype,data.validation,data.meta).toSType();
     state.put(type);
     return Pledge.pure(type);
   }

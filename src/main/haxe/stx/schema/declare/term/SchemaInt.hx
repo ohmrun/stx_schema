@@ -1,10 +1,10 @@
 package stx.schema.declare.term;
 
-abstract SchemaInt(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to DeclareScalarSchemaApi{
+abstract SchemaInt(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to DeclareNativeSchemaApi{
   static public var _(default,never) = SchemaIntLift;
   @:noUsing static public function make(){
     return new SchemaInt(
-      new DeclareScalarSchemaCls(
+      new DeclareNativeSchemaCls(
         Ident.make('Int',['std']),
         null,
         ValidationType(_.validate())
@@ -14,8 +14,8 @@ abstract SchemaInt(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Declar
   private function new(self){
     this = self;
   }
-  @:to public function toDeclareScalarSchema(){
-    return DeclareScalarSchema.lift(this);
+  @:to public function toDeclareNativeSchema(){
+    return DeclareNativeSchema.lift(this);
   }
 }
 class SchemaIntLift{

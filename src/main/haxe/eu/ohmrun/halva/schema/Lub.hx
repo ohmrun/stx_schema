@@ -17,7 +17,7 @@ class Lub extends SemiGroupCls<LVar<SType>>{
         switch([lI,rI]){
           case [_.get_data() => STMono ,t]                               : HAS(t,b);
           case [_.get_data() => STLazy(_) ,tII]                          : HAS(tII,b);
-          case [_.get_enum_value_index() => iI,_.get_enum_value_index() => iII] if (iI == iII):
+          case [_.get_enum_value_index() => iI,_.get_enum_value_index() => iII] if (iI == iII) :
             this.comparable.is_greater_or_equal(l,r).if_else(
               () -> HAS(l,b),
               () -> HAS(r,b)

@@ -1,6 +1,6 @@
 package stx.schema.declare.term;
 
-class SchemaScalar extends DeclareScalarSchemaCls{
+class SchemaNative extends DeclareNativeSchemaCls{
   public function new(ident:Ident,?validation,?meta){
     super(
       ident,
@@ -10,6 +10,6 @@ class SchemaScalar extends DeclareScalarSchemaCls{
     );
   }
   static public function make(ident:Ident,?validation,?meta){
-    return new SchemaScalar(ident,validation,meta);
+    return new SchemaNative(ident,validation,meta);
   }
 }

@@ -1,6 +1,6 @@
 package stx.schema.type;
 
-class LeafType extends ScalarTypeCls{
+class LeafType extends NativeTypeCls{
   @:noUsing static public function make(ident,ctype,?validation,?meta){
     return new LeafType(ident,ctype,validation,meta);
   }

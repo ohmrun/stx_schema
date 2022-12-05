@@ -40,7 +40,7 @@ class Templater{
       case Cons(PLabel(s),rest)                 : 
         __.log().trace('${type.data} $rest');
         switch(type.data){
-          case STMono | STScalar(_) | STEnum(_) : 
+          case STMono | STNative(_) | STEnum(_) : 
             __.accept([Field.make(s,type)]);
           case STAnon(_) | STRecord(_) : 
             get_field(type,s,state).resolve(f -> f.of(e0(s,type)))
@@ -74,7 +74,7 @@ class Templater{
   static function step(template:Template,type:SType,state:State):Res<Option<SType>,SchemaFailure>{
     __.log().trace(('step $type $template'));
     return switch(type.data){
-      case STScalar(_)                 : __.accept(Some(type));
+      case STNative(_)                 : __.accept(Some(type));
       case STAnon(_) | STRecord(_)     : 
         obj(template,type,state).map(
           fields -> Some(AnonType.make(fields).toSType())

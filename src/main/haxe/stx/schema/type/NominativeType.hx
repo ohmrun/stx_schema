@@ -4,7 +4,7 @@ interface NominativeTypeApi extends BaseTypeApi{
   public final ident : Ident;
 }
 abstract class NominativeTypeCls extends BaseTypeCls implements NominativeTypeApi{
-  public final ident : Ident;
+public final ident : Ident;
   public function new(ident,?validation,?meta){
     super(validation,meta);
     this.ident = ident;

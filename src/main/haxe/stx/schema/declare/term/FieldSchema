@@ -1,0 +1,12 @@
+package stx.schema.declare.term;
+
+abstract FieldSchema(Schema) from Schema to Schema{
+  public function new(){
+    this = DeclareRecordSchema.make(
+      Ident.make('Field',['std','schema']),
+      {
+        properties : 
+      }
+    )
+  }
+}

@@ -2,7 +2,7 @@ package stx.schema;
 
 import eu.ohmrun.halva.Core;
 
-class Context extends Stock<String,SType>{
+class Context extends Aggregation<String,SType>{
   public function new(){
     final satisfies = new ContextSatisfies();
     super(

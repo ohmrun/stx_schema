@@ -44,10 +44,10 @@ class HalvaContextTest extends TestCase{
     // final accretion = Accretion.pure(
     //   new Lub().toSemiGroup()
     // );
-    // map_put(SchScalar(stx.schema.declare.term.SchemaBool.make()));
-    // map_put(SchScalar(stx.schema.declare.term.SchemaFloat.make()));
-    // map_put(SchScalar(stx.schema.declare.term.SchemaInt.make()));
-    // map_put(SchScalar(stx.schema.declare.term.SchemaString.make()));
+    // map_put(SchNative(stx.schema.declare.term.SchemaBool.make()));
+    // map_put(SchNative(stx.schema.declare.term.SchemaFloat.make()));
+    // map_put(SchNative(stx.schema.declare.term.SchemaInt.make()));
+    // map_put(SchNative(stx.schema.declare.term.SchemaString.make()));
         
     // for(decl in types() ){
     //   trace(decl);

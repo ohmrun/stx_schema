@@ -5,6 +5,8 @@
       "hscript",
       "tink_typecrawler",
       "stx_pico","stx_show","stx_nano","stx_om","stx_bake","stx_show","fletcher","stx_makro","stx_coroutine","stx_makro","pml","halva","stx_test","stx_fp"
+      ,"bonsai",
+      "kiss"
     ],
     "-cp"  : "src/main/haxe",
     "unit" : {
@@ -40,6 +42,17 @@
         "-main" : "stx.schema.test.MungeTest",
         "--interp" : true
       }
+    },
+    "kiss" : {
+      "-cp" : "src/dev/haxe",
+      "-main" : "Kiss",
+      "--interp" : true
+    },
+    "xsd" : {
+      "-D" : "debug=true",
+      "--resource" : "tests.pml@tests",
+      "-main" : "stx.schema.term.xsd.Test",
+      "--interp" : true
     }
   },
   "run" : {

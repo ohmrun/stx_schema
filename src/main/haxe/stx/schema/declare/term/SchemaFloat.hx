@@ -1,10 +1,10 @@
 package stx.schema.declare.term;
 
-abstract SchemaFloat(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to DeclareScalarSchemaApi{
+abstract SchemaFloat(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to DeclareNativeSchemaApi{
   static public var _(default,never) = SchemaFloatLift;
   @:noUsing static public function make(){
     return new SchemaFloat(
-      new DeclareScalarSchemaCls(
+      new DeclareNativeSchemaCls(
         Ident.make('Float',['std']),
         null,
         ValidationType(_.validate())
@@ -15,7 +15,7 @@ abstract SchemaFloat(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Decl
     this = self;
   }
   @:to public function toDeclareSchema(){
-    return DeclareScalarSchema.lift(this);
+    return DeclareNativeSchema.lift(this);
   }
 }
 class SchemaFloatLift{

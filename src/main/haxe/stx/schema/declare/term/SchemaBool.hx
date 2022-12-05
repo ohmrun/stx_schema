@@ -1,10 +1,10 @@
 package stx.schema.declare.term;
 
-abstract SchemaBool(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to DeclareScalarSchemaApi{
+abstract SchemaBool(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to DeclareNativeSchemaApi{
   static public var _(default,never) = SchemaBoolLift;
   @:noUsing static public function make(){
     return new SchemaBool(
-      new DeclareScalarSchemaCls(
+      new DeclareNativeSchemaCls(
         Ident.make('Bool',['std']),
         null,
         ValidationType(_.validate())
@@ -12,7 +12,7 @@ abstract SchemaBool(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Decla
     );
   }
   @:to public function toDeclareSchema(){
-    return DeclareScalarSchema.lift(this);
+    return DeclareNativeSchema.lift(this);
   }
   private function new(self){
     this = self;

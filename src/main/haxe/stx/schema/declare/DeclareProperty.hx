@@ -15,9 +15,9 @@ typedef DeclarePropertyDef = stx.schema.WithValidationDef & {
   private var self(get,never):DeclareProperty;
   private function get_self():DeclareProperty return lift(this);
 
-  @:from static public function fromDeclareScalarSchemaApi(self:DeclareScalarSchemaApi){
+  @:from static public function fromDeclareNativeSchemaApi(self:DeclareNativeSchemaApi){
     return make(
-      SchemaRef.fromDeclareScalarSchema(self),
+      SchemaRef.fromDeclareNativeSchema(self),
       PEmpty
     );
   }

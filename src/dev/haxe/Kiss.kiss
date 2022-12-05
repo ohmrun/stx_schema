@@ -1,0 +1,19 @@
+(var str "hello world")
+(trace (_.option str))
+(.debug  (_.log) -> [x] (x.thunk -> [] "hi"))
+(
+  var thing (.record
+    (_.schema)
+    (
+      object 
+        name "thing"
+        fields (object 
+          properties
+            [
+              => "name" (Schema.String)
+            ]
+        )
+    )
+  )
+)
+(trace thing)

@@ -45,7 +45,7 @@ typedef DeclareAttributeDef = DeclarePropertyDef & {
       type        : SchemaRef.fromIdent(self.type)
     });
   } 
-  @:from static public function fromObjectII(self:{ type : Ident, ?meta : PExprDef<Primitive>, ?validation : Validations, relation : RelationType, ?inverse : String }){
+  @:from static public function fromObjectII(self:{ type : Ident, ?meta : PExprSum<Primitive>, ?validation : Validations, relation : RelationType, ?inverse : String }){
     return return lift({
       validation  : self.validation,
       relation    : self.relation,
@@ -63,7 +63,7 @@ typedef DeclareAttributeDef = DeclarePropertyDef & {
       type        : self.type
     });
   } 
-  @:from static public function fromObjectIV(self:{ type : stx.Ident, relation : stx.schema.RelationType, ?meta : Null<eu.ohmrun.pml.PExpr.PExprDef<stx.PrimitiveDef>>, ?inverse : String }){
+  @:from static public function fromObjectIV(self:{ type : stx.Ident, relation : stx.schema.RelationType, ?meta : Null<eu.ohmrun.pml.PExpr.PExprSum<stx.PrimitiveDef>>, ?inverse : String }){
     return return fromObjectII({
       validation  : Validations.unit(),
       relation    : self.relation,

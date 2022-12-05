@@ -1,0 +1,13 @@
+package stx.schema.declare.stype;
+
+class SchemaIdent extends SchemaRecord{
+  public function new(){
+    this.ident  = Ident.make('Ident',"std");
+    this.fields = {
+      properties : [
+        "name" => Schema.String(),
+        "pack" => Schema.Cluster(Schema.String())
+      ]
+    }
+  }
+}

@@ -17,9 +17,9 @@ typedef DeclareSchema                             = stx.schema.declare.DeclareSc
 typedef DeclareSchemaApi                          = stx.schema.declare.DeclareSchema.DeclareSchemaApi;
 typedef DeclareSchemaCls                          = stx.schema.declare.DeclareSchema.DeclareSchemaCls;
 
-typedef DeclareScalarSchema                       = stx.schema.declare.DeclareScalarSchema;
-typedef DeclareScalarSchemaApi                    = stx.schema.declare.DeclareScalarSchema.DeclareScalarSchemaApi;
-typedef DeclareScalarSchemaCls                    = stx.schema.declare.DeclareScalarSchema.DeclareScalarSchemaCls;
+typedef DeclareNativeSchema                       = stx.schema.declare.DeclareNativeSchema;
+typedef DeclareNativeSchemaApi                    = stx.schema.declare.DeclareNativeSchema.DeclareNativeSchemaApi;
+typedef DeclareNativeSchemaCls                    = stx.schema.declare.DeclareNativeSchema.DeclareNativeSchemaCls;
 
 typedef DeclareNominativeSchemaApi                = stx.schema.declare.DeclareNominativeSchema.DeclareNominativeSchemaApi;
 typedef DeclareNominativeSchemaCls                = stx.schema.declare.DeclareNominativeSchema.DeclareNominativeSchemaCls;
@@ -103,9 +103,9 @@ typedef DataTypeApi                               = stx.schema.type.DataType.Dat
 typedef DataTypeCls                               = stx.schema.type.DataType.DataTypeCls;
 typedef DataType                                  = stx.schema.type.DataType;
 
-typedef ScalarTypeApi                             = stx.schema.type.ScalarType.ScalarTypeApi;
-typedef ScalarTypeCls                             = stx.schema.type.ScalarType.ScalarTypeCls;
-typedef ScalarType                                = stx.schema.type.ScalarType;
+typedef NativeTypeApi                             = stx.schema.type.NativeType.NativeTypeApi;
+typedef NativeTypeCls                             = stx.schema.type.NativeType.NativeTypeCls;
+typedef NativeType                                = stx.schema.type.NativeType;
 
 
 typedef AnonTypeApi                               = stx.schema.type.AnonType.AnonTypeApi;
@@ -161,7 +161,7 @@ typedef Template                                  = stx.schema.Template;
 class LiftSchema_register{
   // static public function register(self:Schema,state:TypeContext){
   //   return switch(self){
-  //     case SchScalar(def)   :
+  //     case SchNative(def)   :
   //       __.log().debug('register scalar'); 
   //       def.register(state); 
   //     case SchRecord(def)   : 
@@ -185,14 +185,14 @@ class LiftSchema_register{
   // }
 }
 class LiftDeclareSchema{
-  // static public function register(self:DeclareScalarSchema,state:TypeContext){
+  // static public function register(self:DeclareNativeSchema,state:TypeContext){
   //   // return state.get(self.identity).fold(
   //   //   ok -> ok,
   //   //   () -> {
   //   //     final ident = Ident.make(self.identity.name,self.identity.pack);
   //   //     final ref   = () -> Identity.fromIdent(ident);
   //   //     final inner = LeafType.make(ident,self.ctype,self.meta,self.validation);
-  //   //     final type  = STScalar(Ref.make(ref,() -> (inner:ScalarType)));
+  //   //     final type  = STNative(Ref.make(ref,() -> (inner:NativeType)));
   //   //     state.put(type);
   //   //     return type;
   //   //   }

@@ -46,8 +46,7 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
   // }
   
   public function get_identity():Identity{
-    final ident             = Ident.make('Anon');
-    //put in order
+    final ident             = Ident.make('Anon',['std']);
     var fieldsI             = RedBlackMap.make(Comparable.String());
 
     for(field in this.fields.pop()){

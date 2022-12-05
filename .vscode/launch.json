@@ -17,6 +17,12 @@
 			"type": "f5anything",
 			"request": "launch",
 			"command": "just test-interp"
+		},
+		{
+			"name": "kiss",
+			"type": "f5anything",
+			"request": "launch",
+			"command": "just kiss"
 		}
 	]
 }

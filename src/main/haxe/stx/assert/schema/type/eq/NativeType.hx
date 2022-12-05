@@ -1,10 +1,10 @@
 package stx.assert.schema.type.eq;
 
-import stx.schema.type.ScalarType as TScalarType;
+import stx.schema.type.NativeType as TNativeType;
 
-class ScalarType extends EqCls<TScalarType>{
+class NativeType extends EqCls<TNativeType>{
   public function new(){}
-  public function comply(thiz:TScalarType,that:TScalarType){
+  public function comply(thiz:TNativeType,that:TNativeType){
     var eq = new stx.assert.schema.type.eq.BaseType().comply(thiz,that);
     if(eq.is_equal()){
       eq = Eq.Ident().comply(thiz.ident,that.ident);

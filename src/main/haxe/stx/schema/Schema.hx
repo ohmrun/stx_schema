@@ -2,7 +2,7 @@ package stx.schema;
 
 enum SchemaSum{
   SchLazy(fn:Void->Schema);
-  SchScalar(def:DeclareScalarSchema);
+  SchNative(def:DeclareNativeSchema);
   SchAnon(def:DeclareAnonSchema);
   SchRecord(def:DeclareRecordSchema);
   SchEnum(def:DeclareEnumSchema);
@@ -61,12 +61,12 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
         self.validation
       ).toSchema();
   }
-  @:from static public function fromScalarObject(self:{ name : String, ?pack : Array<String>, ?meta : PExpr<Primitive>, ?ctype : GComplexType, ?validation : Validations}){
+  @:from static public function fromNativeObject(self:{ name : String, ?pack : Array<String>, ?meta : PExpr<Primitive>, ?ctype : GComplexType, ?validation : Validations}){
     final ident = Ident.make(self.name,self.pack);
     final ctype = __.option(self.ctype).def(() -> __.g().ctype().Path(p -> p.fromIdent(ident)));
     final meta  = __.option(self.meta).defv(PEmpty);
-    return fromDeclareScalarSchema(
-        DeclareScalarSchema.make(
+    return fromDeclareNativeSchema(
+        DeclareNativeSchema.make(
           ident,
           ctype,
           self.validation,
@@ -77,8 +77,8 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   @:from static public function fromGenericObject(self:{name : String, ?pack : Array<String>, ?validation : Validations, ?type : Schema }){
     return DeclareGenericSchema.make(Ident.make(self.name,self.pack),self.type,self.validation).toSchema();
   }
-  @:from static public function fromDeclareScalarSchema(self:DeclareScalarSchemaApi):Schema{
-    return lift(SchScalar(self));
+  @:from static public function fromDeclareNativeSchema(self:DeclareNativeSchemaApi):Schema{
+    return lift(SchNative(self));
   }
   @:from static public function fromDeclareGenericSchema(self:DeclareGenericSchema):Schema{
     return lift(SchGeneric(self));
@@ -87,22 +87,22 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
     return lift(SchGeneric(stx.schema.declare.term.SchemaArray.make(ref)));
   }
   static public function Bool():Schema{
-    return lift(SchScalar(stx.schema.declare.term.SchemaBool.make()));
+    return lift(SchNative(stx.schema.declare.term.SchemaBool.make()));
   }
   static public function Float():Schema{
-    return lift(SchScalar(stx.schema.declare.term.SchemaFloat.make()));
+    return lift(SchNative(stx.schema.declare.term.SchemaFloat.make()));
   }
   static public function Int():Schema{
-    return lift(SchScalar(stx.schema.declare.term.SchemaInt.make()));
+    return lift(SchNative(stx.schema.declare.term.SchemaInt.make()));
   }
   static public function Null(ref:SchemaRef):Schema{
     return lift(SchGeneric(stx.schema.declare.term.SchemaNull.make(ref)));
   }
   static public function String():Schema{
-    return lift(SchScalar(stx.schema.declare.term.SchemaString.make()));
+    return lift(SchNative(stx.schema.declare.term.SchemaString.make()));
   }
   static public function Date():Schema{
-    return lift(SchScalar(stx.schema.declare.term.SchemaDate.make()));
+    return lift(SchNative(stx.schema.declare.term.SchemaDate.make()));
   }
   public function toString(){
     return _.fold(
@@ -117,10 +117,10 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   }
 }
 class SchemaLift{
-  static public inline function fold<Z>(self:SchemaSum,scalar : DeclareScalarSchema -> Z, anon : DeclareAnonSchema -> Z, record : DeclareRecordSchema  -> Z, enm : DeclareEnumSchema -> Z, generic : DeclareGenericSchema -> Z, union : DeclareUnionSchema -> Z) : Z {
+  static public inline function fold<Z>(self:SchemaSum,scalar : DeclareNativeSchema -> Z, anon : DeclareAnonSchema -> Z, record : DeclareRecordSchema  -> Z, enm : DeclareEnumSchema -> Z, generic : DeclareGenericSchema -> Z, union : DeclareUnionSchema -> Z) : Z {
     return switch(self){
       case SchLazy(f)       : fold(f(),scalar,anon,record,enm,generic,union);
-      case SchScalar(def)   : scalar(def);
+      case SchNative(def)   : scalar(def);
       case SchAnon(def)     : anon(def);
       case SchRecord(def)   : record(def);
       case SchEnum(def)     : enm(def);
@@ -144,7 +144,7 @@ class SchemaLift{
           ),
           args -> [
             switch(v.ctr()){
-              case "SchScalar"  : DeclareSchema._.denote(v.params()[0]);
+              case "SchNative"  : DeclareSchema._.denote(v.params()[0]);
               case "SchRecord"  : DeclareRecordSchema._.denote(v.params()[0]);
               case "SchEnum"    : DeclareEnumSchema._.denote(v.params()[0]);
               case "SchGeneric" : DeclareGenericSchema._.denote(v.params()[0]);

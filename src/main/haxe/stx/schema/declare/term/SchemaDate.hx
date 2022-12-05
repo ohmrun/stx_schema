@@ -1,10 +1,10 @@
 package stx.schema.declare.term;
 
-abstract SchemaDate(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to DeclareScalarSchemaApi{
+abstract SchemaDate(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to DeclareNativeSchemaApi{
   static public var _(default,never) = SchemaDateLift;
   @:noUsing static public function make(){
     return new SchemaDate(
-      new DeclareScalarSchemaCls(
+      new DeclareNativeSchemaCls(
         Ident.make('Date',['std']),
         null,
         null
@@ -12,7 +12,7 @@ abstract SchemaDate(DeclareScalarSchemaApi) from DeclareScalarSchemaApi to Decla
     );
   }
   @:to public function toDeclareSchema(){
-    return DeclareScalarSchema.lift(this);
+    return DeclareNativeSchema.lift(this);
   }
   private function new(self){
     this = self;

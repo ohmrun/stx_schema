@@ -9,7 +9,7 @@ enum SchemaFailureSum{
   E_Schema_Top;
   E_Schema_Dynamic(e:Dynamic);
   E_Schema_SchemaNotFound(identity:Identity);
-  E_Schema_ScalarShouldBe(type:PrimitiveType);
+  E_Schema_NativeShouldBe(type:PrimitiveType);
   E_Schema_NoTemplateFieldInType(field:String,type:SType);
   E_Schema_TemplateTeminationOnObject(field:String,type:SType);
   E_Schema_LookingForTemplateInType(template:Template,type:SType);

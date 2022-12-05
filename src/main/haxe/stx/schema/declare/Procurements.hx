@@ -70,11 +70,18 @@ typedef ProcurementsDef = RedBlackSet<stx.schema.declare.Procure>;
       attributes  : __.option(self.attributes).defv(new Map()).map_into((x) -> DeclareAttribute.fromObjectIV(x),new Map())
     });
   }
-  @:from static public function fromObjectVI(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, ?attributes : haxe.ds.Map<String, { type : stx.Ident, relation : stx.schema.RelationType, ?meta : eu.ohmrun.pml.PExpr.PExprDef<PrimitiveDef>, ?inverse : String }> }):Procurements{
+  @:from static public function fromObjectVI(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, ?attributes : haxe.ds.Map<String, { type : stx.Ident, relation : stx.schema.RelationType, ?meta : eu.ohmrun.pml.PExpr.PExprSum<PrimitiveDef>, ?inverse : String }> }):Procurements{
     return fromObject({ 
       properties  : __.option(self.properties).defv(new Map()).map_into(DeclareProperty.fromSchema,new Map()), 
       attributes  : __.option(self.attributes).defv(new Map()).map_into((x) -> DeclareAttribute.fromObjectIV(x),new Map())
     });
+  }
+  @:from static public function fromCluster(self:Cluster<Procure>){
+    final set = RedBlackSet.make(new stx.assert.schema.declare.comparable.Procure());
+    for(x in self){
+      set.put(x);
+    }
+    return lift(set);
   }
   public function toString(){
     return this.toCluster().map(x -> x.toString()).join(",");
