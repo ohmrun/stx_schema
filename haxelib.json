@@ -13,12 +13,12 @@
     "version": "1.0.0",
     "url": "https://github.com/ohmrun/stx_nano",
     "dependencies": {
-        "tink_core"     : "git:https://github.com/haxetink/tink_core.git",
-        "stx_pico"      : "git:https://github.com/ohmrun/stx_pico.git",
-        "stx_nano"      : "git:https://github.com/ohmrun/stx_nano.git",
-        "stx_fn"        : "git:https://github.com/ohmrun/stx_fn.git",
-        "fletcher"      : "git:https://github.com/ohmrun/fletcher.git",
-        "hscript"        : "git:https://github.com/HaxeFoundation/hscript.git"
+        "tink_core"     : "",
+        "stx_pico"      : "",
+        "stx_nano"      : "",
+        "stx_fn"        : "",
+        "fletcher"      : "",
+        "hscript"        : ""
     },
     "classPath": "src/main/haxe"
 }
