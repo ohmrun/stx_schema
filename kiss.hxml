@@ -17,7 +17,6 @@
 -lib halva
 -lib stx_test
 -lib stx_fp
--lib bonsai
 -lib kiss
 -D no-deprecation-warnings
 -D STX_TEST__VERBOSE=true

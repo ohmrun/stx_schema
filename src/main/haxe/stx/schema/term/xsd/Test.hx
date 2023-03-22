@@ -1,7 +1,7 @@
 package stx.schema.term.xsd;
 
 import stx.schema.Test;
-import stx.schema.term.Dtd;
+//import stx.schema.term.Dtd;
 using stx.Log;
 using stx.Test;
 

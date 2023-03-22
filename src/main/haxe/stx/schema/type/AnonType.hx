@@ -52,7 +52,7 @@ class AnonTypeCls extends BaseTypeCls implements AnonTypeApi{
     for(field in this.fields.pop()){
       fieldsI = fieldsI.set(field.name,field);
     }
-    final field_identities  = fieldsI.toIter().toCluster().map(
+    final field_identities  = fieldsI.toIterKV().toIter().toCluster().map(
       kv -> Identity.make(Ident.make('${kv.val.name}'),[kv.val.type.identity])
     );
     return Identity.make(ident,field_identities);
