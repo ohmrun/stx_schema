@@ -1,5 +1,11 @@
 package stx;
 
+using stx.Pico;
+using stx.Fail;
+using stx.Nano;
+using stx.g.Lang;
+using stx.schema.Core;
+
 class SchemaLifts{
   static public function toSchemaRef(self:Ident){
     return SchemaRef.fromIdent(self);

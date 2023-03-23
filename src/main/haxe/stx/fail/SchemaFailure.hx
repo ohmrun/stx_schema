@@ -1,6 +1,12 @@
 package stx.fail;
 
-import stx.fail.*;
+import Type;
+using stx.Pico;
+using stx.Nano;
+using stx.Schema;
+using stx.schema.Core;
+
+
 
 enum SchemaFailureSum{
   E_Schema_EnumValueError(should_be:Cluster<String>,actual:String);
