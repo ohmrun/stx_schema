@@ -1,6 +1,6 @@
 using stx.Schema;
 using stx.Nano;
-using stx.Bake;
+using Bake;
 
 class Main {
 	static function main() {
