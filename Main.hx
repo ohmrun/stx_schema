@@ -4,7 +4,7 @@ using Bake;
 
 class Main {
 	static function main() {
-		trace(__.bake());
+		trace(Bake.pop());
 		stx.schema.Test.main();
 	}
 }
