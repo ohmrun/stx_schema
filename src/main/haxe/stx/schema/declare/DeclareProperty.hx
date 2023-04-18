@@ -1,6 +1,6 @@
 package stx.schema.declare;
 
-typedef DeclarePropertyDef = stx.schema.WithValidationDef & {
+typedef DeclarePropertyDef = {
   public final type         : SchemaRef;
   public final ?meta        : PExpr<Primitive>;
 }

@@ -1,11 +1,13 @@
 package stx.schema;
 
 enum SchemaSum{
-  SchLazy(fn:Void->Schema);
+  //SchHole(v:T)
+  //SchAlias(ident:Identity,def:Schema);
   SchNative(def:DeclareNativeSchema);
   SchAnon(def:DeclareAnonSchema);
   SchRecord(def:DeclareRecordSchema);
   SchEnum(def:DeclareEnumSchema);
+
   SchGeneric(def:DeclareGenericSchema);
   SchUnion(def:DeclareUnionSchema);
 }
@@ -119,7 +121,6 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
 class SchemaLift{
   static public inline function fold<Z>(self:SchemaSum,scalar : DeclareNativeSchema -> Z, anon : DeclareAnonSchema -> Z, record : DeclareRecordSchema  -> Z, enm : DeclareEnumSchema -> Z, generic : DeclareGenericSchema -> Z, union : DeclareUnionSchema -> Z) : Z {
     return switch(self){
-      case SchLazy(f)       : fold(f(),scalar,anon,record,enm,generic,union);
       case SchNative(def)   : scalar(def);
       case SchAnon(def)     : anon(def);
       case SchRecord(def)   : record(def);
@@ -128,33 +129,32 @@ class SchemaLift{
       case SchUnion(def)    : union(def);
     }
   }
-  /**
-    Creates a declaration that declares the Schema.
-  **/
-  static public inline function denote(self:SchemaSum):GExpr{
-    var v = self.lift();
+  // /**
+  //   Creates a declaration that declares the Schema.
+  // **/
+  // static public inline function denote(self:SchemaSum):GExpr{
+  //   var v = self.lift();
 
-    return __.g().expr().New(
-      _ -> 'stx.schema.Schema',
-      args  -> [
-        args.Call(
-          func -> func.Field(
-            expr -> expr.FieldPath('SchemaSum',['stx','schema','Schema']),
-            v.ctr()
-          ),
-          args -> [
-            switch(v.ctr()){
-              case "SchNative"  : DeclareSchema._.denote(v.params()[0]);
-              case "SchRecord"  : DeclareRecordSchema._.denote(v.params()[0]);
-              case "SchEnum"    : DeclareEnumSchema._.denote(v.params()[0]);
-              case "SchGeneric" : DeclareGenericSchema._.denote(v.params()[0]);
-              case "SchUnion"   : DeclareUnionSchema._.denote(v.params()[0]);
-              case "SchLazy"    : denote(v.params()[0]());
-              case x            : throw E_Makro_EnumConstructorNotFound(v,x);
-            }
-          ] 
-        )
-      ]
-    );
-  }
+  //   return __.g().expr().New(
+  //     _ -> 'stx.schema.Schema',
+  //     args  -> [
+  //       args.Call(
+  //         func -> func.Field(
+  //           expr -> expr.FieldPath('SchemaSum',['stx','schema','Schema']),
+  //           v.ctr()
+  //         ),
+  //         args -> [
+  //           switch(v.ctr()){
+  //             case "SchNative"  : DeclareSchema._.denote(v.params()[0]);
+  //             case "SchRecord"  : DeclareRecordSchema._.denote(v.params()[0]);
+  //             case "SchEnum"    : DeclareEnumSchema._.denote(v.params()[0]);
+  //             case "SchGeneric" : DeclareGenericSchema._.denote(v.params()[0]);
+  //             case "SchUnion"   : DeclareUnionSchema._.denote(v.params()[0]);
+  //             case x            : throw E_Makro_EnumConstructorNotFound(v,x);
+  //           }
+  //         ] 
+  //       )
+  //     ]
+  //   );
+  // }
 }

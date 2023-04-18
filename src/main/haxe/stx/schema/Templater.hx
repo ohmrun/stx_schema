@@ -1,9 +1,9 @@
 package stx.schema;
 
 class Templater{
-  static function e0(field,type) { return E_Schema_NoTemplateFieldInType(field,type); }
-
-  //Pledge.make(__.reject(f -> f.of(E_Schema_RequireFieldsDeclaration(template))));
+  static function e0(field,type) { 
+    return E_Schema_NoTemplateFieldInType(field,type); 
+  }
   static public function whittle(type:SType,template:Template,state:State):Res<SType,SchemaFailure>{  
     return apply(type,template,state);
   }

@@ -1,14 +1,18 @@
 package stx.schema.declare;
 
 interface DeclareRecordSchemaApi extends DeclareNominativeSchemaApi extends DeclareIdentifiableSchemaApi{
-  public final fields : Procurements;
+  public var fields(get,null) : Procurements;
+  public function get_fields():Procurements;
 }
 class DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareNominativeSchemaCls{
   public function new(ident,fields,validation,meta){
-    this.fields     = fields;
     super(ident,validation,meta);
+    this.fields     = fields;
   }
-  public final fields : Procurements;
+  public var fields(get,null) : Procurements;
+  public function get_fields(){
+    return this.fields;
+  }
   public var identity(get,null):Identity;
   public function get_identity():Identity{
     return Identity.make(ident,[]);

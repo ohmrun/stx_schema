@@ -1,6 +1,6 @@
 package stx.schema.declare;
 
-typedef ProcurePropertyDef = stx.schema.WithValidationDef & {
+typedef ProcurePropertyDef = {
   final name        : std.String;
   final type        : SchemaRef;
   final ?opt        : Bool;

@@ -1,8 +1,0 @@
-"filename", "language", "Haxe", "comment", "blank", "total"
-"/mnt/dat/prj/haxe/stx/stx_schema/src/main/haxe/stx/assert/schema/ord/AnonType.hx", "Haxe", 3, 0, 2, 5
-"/mnt/dat/prj/haxe/stx/stx_schema/src/main/haxe/stx/assert/schema/ord/BaseType.hx", "Haxe", 15, 0, 2, 17
-"/mnt/dat/prj/haxe/stx/stx_schema/src/main/haxe/stx/assert/schema/ord/Identity.hx", "Haxe", 15, 0, 2, 17
-"/mnt/dat/prj/haxe/stx/stx_schema/src/main/haxe/stx/assert/schema/ord/ScalarType.hx", "Haxe", 12, 0, 2, 14
-"/mnt/dat/prj/haxe/stx/stx_schema/src/main/haxe/stx/assert/schema/ord/Validation.hx", "Haxe", 17, 0, 3, 20
-"/mnt/dat/prj/haxe/stx/stx_schema/src/main/haxe/stx/assert/schema/ord/Validations.hx", "Haxe", 8, 0, 3, 11
-"Total", "-", 70, 0, 14, 84

@@ -1,10 +1,14 @@
 package stx.schema.declare;
 
 interface DeclareUnionSchemaApi extends DeclareNominativeSchemaApi extends WithIdentityApi{
-  final rest  : Cluster<SchemaRef>;
+  public var rest(get,null)  : Cluster<SchemaRef>;
+  public function get_rest():Cluster<SchemaRef>;
 }
 class DeclareUnionSchemaCls implements DeclareUnionSchemaApi extends DeclareNominativeSchemaCls{
-  public final rest  : Cluster<SchemaRef>;
+  public var rest(get,null)  : Cluster<SchemaRef>;
+  public function get_rest():Cluster<SchemaRef>{
+    return rest;
+  }
   public function new(ident,rest,validation,meta){
     super(ident,validation,meta); 
     this.rest       = rest;

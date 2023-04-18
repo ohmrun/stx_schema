@@ -86,68 +86,22 @@ typedef RelationType                              = stx.schema.RelationType;
 typedef SchemaRef                                 = stx.schema.SchemaRef;
 typedef SchemaRefDef                              = stx.schema.SchemaRef.SchemaRefDef;
 
-typedef ValidationSum                             = stx.schema.Validation.ValidationSum;
-typedef Validation                                = stx.schema.Validation;
-typedef Validations                               = stx.schema.Validations;
-typedef WithValidationDef                         = stx.schema.WithValidationDef;
+// typedef ValidationSum                             = stx.schema.Validation.ValidationSum;
+// typedef Validation                                = stx.schema.Validation;
+// typedef Validations                               = stx.schema.Validations;
+// typedef WithValidationDef                         = stx.schema.WithValidationDef;
 
 //typedef TyperContext                              = stx.schema.TyperContext;
 //typedef TyperContextCls                           = stx.schema.TyperContext.TyperContextCls;
-typedef ValidationComplyApi                       = ComplyApi<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
-typedef ValidationComplyCls                       = ComplyCls<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
-
-typedef TypeStatus                                = stx.schema.type.TypeStatus;
-
-typedef BaseTypeApi                               = stx.schema.type.BaseType.BaseTypeApi;
-typedef BaseTypeCls                               = stx.schema.type.BaseType.BaseTypeCls;
-//typedef BaseType                                  = stx.schema.type.BaseType.BaseType;
-
-typedef STypeSum                                  = stx.schema.SType.STypeSum;
-typedef SType                                     = stx.schema.SType;
-
-typedef DataTypeApi                               = stx.schema.type.DataType.DataTypeApi;
-typedef DataTypeCls                               = stx.schema.type.DataType.DataTypeCls;
-typedef DataType                                  = stx.schema.type.DataType;
-
-typedef NativeTypeApi                             = stx.schema.type.NativeType.NativeTypeApi;
-typedef NativeTypeCls                             = stx.schema.type.NativeType.NativeTypeCls;
-typedef NativeType                                = stx.schema.type.NativeType;
+// typedef ValidationComplyApi                       = ComplyApi<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
+// typedef ValidationComplyCls                       = ComplyCls<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
 
 
-typedef AnonTypeApi                               = stx.schema.type.AnonType.AnonTypeApi;
-typedef AnonTypeCls                               = stx.schema.type.AnonType.AnonTypeCls;
-typedef AnonType                                  = stx.schema.type.AnonType;
 
-typedef RecordTypeApi                             = stx.schema.type.RecordType.RecordTypeApi;
-typedef RecordTypeCls                             = stx.schema.type.RecordType.RecordTypeCls;
-typedef RecordType                                = stx.schema.type.RecordType;
-
-typedef GenericTypeApi                            = stx.schema.type.GenericType.GenericTypeApi;
-typedef GenericTypeCls                            = stx.schema.type.GenericType.GenericTypeCls;
-typedef GenericType                               = stx.schema.type.GenericType;
-
-typedef UnionTypeCls                              = stx.schema.type.UnionType.UnionTypeCls;
-typedef UnionTypeApi                              = stx.schema.type.UnionType.UnionTypeApi;
-typedef UnionType                                 = stx.schema.type.UnionType;
+// typedef WithValidationCls                         = stx.schema.WithValidation.WithValidationCls;
+// typedef WithValidationApi                         = stx.schema.WithValidation.WithValidationApi;
 
 
-typedef LinkTypeCls                               = stx.schema.type.LinkType.LinkTypeCls;
-typedef LinkTypeApi                               = stx.schema.type.LinkType.LinkTypeApi;
-typedef LinkType                                  = stx.schema.type.LinkType;
-
-typedef EnumTypeApi                               = stx.schema.type.EnumType.EnumTypeApi;
-typedef EnumTypeCls                               = stx.schema.type.EnumType.EnumTypeCls;
-typedef EnumType                                  = stx.schema.type.EnumType;
-
-typedef WithValidationCls                         = stx.schema.WithValidation.WithValidationCls;
-typedef WithValidationApi                         = stx.schema.WithValidation.WithValidationApi;
-
-typedef LeafType                                  = stx.schema.type.LeafType;
-typedef LazyType                                  = stx.schema.type.LazyType;
-
-typedef NominativeTypeApi                         = stx.schema.type.NominativeType.NominativeTypeApi;
-typedef NominativeTypeCls                         = stx.schema.type.NominativeType.NominativeTypeCls;
-//typedef NominativeType                            = stx.schema.type.NominativeType;
 
 typedef Context                                   = stx.schema.Context;
 typedef State                                     = stx.schema.State;
@@ -182,8 +136,6 @@ class LiftSchema_register{
   //     case SchUnion(def)    :
   //       __.log().debug('register union'); 
   //       def.register(state);
-  //     case SchLazy(fn)      : 
-  //       __.log().debug('register lazy');
   //       final schema = fn();
   //       __.log().debug('unlazy');
   //       fn().register(state);
