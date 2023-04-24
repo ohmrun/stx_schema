@@ -7,7 +7,7 @@ abstract SchemaInt(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to Declar
       new DeclareNativeSchemaCls(
         Ident.make('Int',['std']),
         null,
-        ValidationType(_.validate())
+        [].imm()
       )
     );
   }
@@ -20,6 +20,6 @@ abstract SchemaInt(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to Declar
 }
 class SchemaIntLift{
   static public function validate(){
-    return new stx.schema.validation.term.Int();
+  
   }
 }

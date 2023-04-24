@@ -4,13 +4,13 @@ class Templater{
   static function e0(field,type) { 
     return E_Schema_NoTemplateFieldInType(field,type); 
   }
-  static public function whittle(type:SType,template:Template,state:State):Res<SType,SchemaFailure>{  
+  static public function whittle(type:SType,template:Template,state:State):Upshot<SType,SchemaFailure>{  
     return apply(type,template,state);
   }
   static function get_field(type:SType,string:String,state:State):Option<Field>{
     return type.fields.search(x -> x.name == string);
   }
-  static function apply(type:SType,template:Template,state:State):Res<SType,SchemaFailure>{
+  static function apply(type:SType,template:Template,state:State):Upshot<SType,SchemaFailure>{
     __.log().trace('apply ${type}');
     return step(template,type,state).adjust(
       opt -> opt.fold(
@@ -19,7 +19,7 @@ class Templater{
       )
     );
   }
-  static function obj(template:Template,type:SType,state:State):Res<Cluster<Field>,SchemaFailure>{
+  static function obj(template:Template,type:SType,state:State):Upshot<Cluster<Field>,SchemaFailure>{
     __.log().trace('obj $type $template');
     return switch(template){
       case Cons(PLabel(s),Cons(PGroup(g),rest)) : 
@@ -71,7 +71,7 @@ class Templater{
         __.reject(f -> f.of(E_Schema_Dynamic("encountered error state")));
     }
   }
-  static function step(template:Template,type:SType,state:State):Res<Option<SType>,SchemaFailure>{
+  static function step(template:Template,type:SType,state:State):Upshot<Option<SType>,SchemaFailure>{
     __.log().trace(('step $type $template'));
     return switch(type.data){
       case STNative(_)                 : __.accept(Some(type));
@@ -86,7 +86,7 @@ class Templater{
           type -> Some(t.pop().copy(null/** TODO name **/,type).toSType())
         );
       case STUnion(t)       :
-        Res.bind_fold(
+        Upshot.bind_fold(
           t.pop().rest,
           (n:SType,m:Cluster<SType>) -> {
             return step(template,n,state).map(

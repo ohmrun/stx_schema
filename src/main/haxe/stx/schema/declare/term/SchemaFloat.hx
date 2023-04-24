@@ -7,7 +7,7 @@ abstract SchemaFloat(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to Decl
       new DeclareNativeSchemaCls(
         Ident.make('Float',['std']),
         null,
-        ValidationType(_.validate())
+        [].imm()
       )
     );
   }
@@ -19,7 +19,7 @@ abstract SchemaFloat(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to Decl
   }
 }
 class SchemaFloatLift{
-  static public function validate(){
-    return new stx.schema.validation.term.Float();
-  }
+  // static public function validate(){
+
+  // }
 }

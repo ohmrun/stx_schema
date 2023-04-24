@@ -4,6 +4,7 @@ typedef ProcurePropertyDef = {
   final name        : std.String;
   final type        : SchemaRef;
   final ?opt        : Bool;
+  final validation  : Validations;
   final meta        : PExpr<Primitive>;
 }
 @:using(stx.schema.declare.ProcureProperty.ProcurePropertyLift)
@@ -16,8 +17,8 @@ typedef ProcurePropertyDef = {
       name : name,
       type : type,
       opt  : opt,
-      meta : meta,
-      validation : __.option(validation).defv(Cluster.unit())
+      validation : __.option(validation).defv(Cluster.unit()),
+      meta : meta
     });
   }
   public function prj():ProcurePropertyDef return this;

@@ -2,14 +2,15 @@ package stx.schema.declare;
 
 typedef DeclarePropertyDef = {
   public final type         : SchemaRef;
+  public final validation   : Validations;
   public final ?meta        : PExpr<Primitive>;
 }
 @:transitive @:forward abstract DeclareProperty(DeclarePropertyDef) from DeclarePropertyDef to DeclarePropertyDef{
   //static public var _(default,never) = DeclarePropertyLift;
   public function new(self) this = self;
   @:noUsing static public function lift(self:DeclarePropertyDef):DeclareProperty return new DeclareProperty(self);
-  @:noUsing static public function make(type:SchemaRef,meta){
-    return lift({ type : type, meta : meta  });
+  @:noUsing static public function make(type:SchemaRef,validation, meta){
+    return lift({ type : type, validation : validation, meta : meta  });
   }
   public function prj():DeclarePropertyDef return this;
   private var self(get,never):DeclareProperty;
@@ -18,12 +19,14 @@ typedef DeclarePropertyDef = {
   @:from static public function fromDeclareNativeSchemaApi(self:DeclareNativeSchemaApi){
     return make(
       SchemaRef.fromDeclareNativeSchema(self),
+      [].imm(),
       PEmpty
     );
   }
   @:from static public function fromSchema(self:stx.schema.Schema){
     return make(
       SchemaRef.fromSchema(self),
+      [].imm(),
       PEmpty 
     );
   }

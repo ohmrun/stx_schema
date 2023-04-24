@@ -41,6 +41,14 @@ enum ProcureSum{
       r -> r.toString()
     );
   }
+  public var validation(get,never):Validations;
+  private function get_validation():Validations{
+    return _.fold(
+      this,
+      l -> l.validation,
+      r -> r.validation
+    );
+  }
 }
 class ProcureLift{
   static public function fold<Z>(self:Procure,property:ProcureProperty->Z,attribute:ProcureAttribute->Z):Z{

@@ -86,25 +86,25 @@ typedef RelationType                              = stx.schema.RelationType;
 typedef SchemaRef                                 = stx.schema.SchemaRef;
 typedef SchemaRefDef                              = stx.schema.SchemaRef.SchemaRefDef;
 
-// typedef ValidationSum                             = stx.schema.Validation.ValidationSum;
-// typedef Validation                                = stx.schema.Validation;
-// typedef Validations                               = stx.schema.Validations;
-// typedef WithValidationDef                         = stx.schema.WithValidationDef;
+typedef ValidationDef                             = stx.schema.Validation.ValidationDef;
+typedef Validation                                = stx.schema.Validation;
+typedef Validations                               = stx.schema.Validations;
+typedef WithValidationDef                         = stx.schema.WithValidationDef;
+typedef WithValidationApi                         = stx.schema.WithValidation.WithValidationApi;
+typedef WithValidationCls                         = stx.schema.WithValidation.WithValidationCls;
+// typedef ValidationComplyApi                       = ComplyApi<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
+// typedef ValidationComplyCls                       = ComplyCls<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
 
 //typedef TyperContext                              = stx.schema.TyperContext;
 //typedef TyperContextCls                           = stx.schema.TyperContext.TyperContextCls;
-// typedef ValidationComplyApi                       = ComplyApi<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
-// typedef ValidationComplyCls                       = ComplyCls<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
+
+
 
 
 
 // typedef WithValidationCls                         = stx.schema.WithValidation.WithValidationCls;
 // typedef WithValidationApi                         = stx.schema.WithValidation.WithValidationApi;
 
-
-
-typedef Context                                   = stx.schema.Context;
-typedef State                                     = stx.schema.State;
 typedef Template                                  = stx.schema.Template;
 
 //typedef GTypeContext                              = stx.schema.GTypeContext;

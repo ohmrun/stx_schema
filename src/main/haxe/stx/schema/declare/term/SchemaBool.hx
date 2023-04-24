@@ -7,7 +7,7 @@ abstract SchemaBool(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to Decla
       new DeclareNativeSchemaCls(
         Ident.make('Bool',['std']),
         null,
-        ValidationType(_.validate())
+        [].imm()
       )
     );
   }
@@ -20,6 +20,6 @@ abstract SchemaBool(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to Decla
 }
 class SchemaBoolLift{
   static public function validate(){
-    return new stx.schema.validation.term.Bool();
+    
   }
 }

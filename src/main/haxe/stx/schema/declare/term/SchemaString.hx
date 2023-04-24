@@ -7,7 +7,7 @@ abstract SchemaString(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to Dec
       new DeclareNativeSchemaCls(
         Ident.make('String',['std']),
         null,
-        ValidationType(_.validate()),
+        [],
         PEmpty
       )
     );
@@ -21,6 +21,5 @@ abstract SchemaString(DeclareNativeSchemaApi) from DeclareNativeSchemaApi to Dec
 }
 class SchemaStringLift{
   static public function validate(){
-    return new stx.schema.validation.term.String();
   }
 }

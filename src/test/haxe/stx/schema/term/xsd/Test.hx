@@ -1,5 +1,6 @@
 package stx.schema.term.xsd;
 
+using stx.Nano;
 import stx.schema.Test;
 //import stx.schema.term.Dtd;
 using stx.Log;

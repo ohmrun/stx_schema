@@ -7,7 +7,7 @@ package stx.schema.declare.term;
       new DeclareGenericSchemaCls(
         Ident.make('Array',['std']),
         ref,
-        ValidationType(_.validate())
+        [].imm()
       )
     );
   }
@@ -31,6 +31,6 @@ package stx.schema.declare.term;
 }
 class SchemaArrayLift{
   static public function validate(){
-    return new stx.schema.validation.term.Array();
+    //return new stx.schema.validation.term.Array();
   }
 }

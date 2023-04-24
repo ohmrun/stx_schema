@@ -16,6 +16,7 @@
         "tink_core"     : "",
         "stx_pico"      : "",
         "stx_nano"      : "",
+        "stx_query"     : "",
         "stx_fn"        : "",
         "fletcher"      : "",
         "hscript"        : ""

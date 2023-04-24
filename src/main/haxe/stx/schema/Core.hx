@@ -6,4 +6,3 @@ typedef RefWrap<T:WithIdentityApi>                      = stx.schema.core.Ref.Re
 typedef RefApi<T>                                       = stx.schema.core.Ref.RefApi<T>;
 
 typedef Identity                                        = stx.schema.core.Identity;
-typedef Field                                           = stx.schema.core.Field;

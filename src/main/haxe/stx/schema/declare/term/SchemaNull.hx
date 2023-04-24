@@ -6,8 +6,7 @@ abstract SchemaNull(DeclareGenericSchemaApi) from DeclareGenericSchemaApi to Dec
     return new SchemaNull(
       new DeclareGenericSchemaCls(
         Ident.make('Null',['std']),
-        ref,
-        ValidationType(_.validate())
+        ref
       )
     );
   }
@@ -19,7 +18,5 @@ abstract SchemaNull(DeclareGenericSchemaApi) from DeclareGenericSchemaApi to Dec
   }
 }
 class SchemaNullLift{
-  static public function validate(){
-    return new stx.schema.validation.term.Null();
-  }
+  
 }

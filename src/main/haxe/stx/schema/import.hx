@@ -34,6 +34,8 @@ using stx.Fn;
 using stx.Om;
 using stx.om.Signature;
 using stx.Schema;
+using stx.Query;
+using stx.om.Spine;
 
 using eu.ohmrun.Pml;
 using eu.ohmrun.Halva;

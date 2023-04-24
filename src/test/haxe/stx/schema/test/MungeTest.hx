@@ -1,5 +1,6 @@
 package stx.schema.test;
 
+
 import stx.schema.Munge;
 class MungeTest extends TestCase{
   static public function main(){

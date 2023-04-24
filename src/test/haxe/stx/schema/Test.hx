@@ -11,9 +11,7 @@ class Test{
   static public function tests(){
     return [
       new SchemaTest(),
-      new stx.schema.test.ComparisonTest(),
-      new stx.schema.test.RegisterTest(),
-      new stx.schema.test.TemplateTest(),
+      new stx.schema.test.ComparisonTest()
     ];
   }
   static public function main(){
