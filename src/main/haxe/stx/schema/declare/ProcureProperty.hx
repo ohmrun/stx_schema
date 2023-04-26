@@ -37,7 +37,7 @@ typedef ProcurePropertyDef = {
 }
 class ProcurePropertyLift{
   static public function denote(self:ProcureProperty){
-    // final e = __.g().expr();
+    // final e = __.glot().expr();
     // return e.Call(
     //   e.Path('stx.schema.ProcureProperty.make'),
     //   [

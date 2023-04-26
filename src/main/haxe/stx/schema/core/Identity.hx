@@ -55,7 +55,7 @@ typedef IdentityDef = IdentDef & {
 }
 class IdentityLift{
   static public function denote(self:Identity):GExpr{
-    // final e = __.g().expr();
+    // final e = __.glot().expr();
     // return e.Call(
     //   e.Path('stx.schema.core.Identity.make'),
     //   [

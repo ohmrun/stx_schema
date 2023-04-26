@@ -52,7 +52,7 @@ class DeclareEnumSchemaLift{
     return Cluster.lift([]);
   } 
   //TODO
-  // static private final check = __.g().expr().Function(
+  // static private final check = __.glot().expr().Function(
   //   farg -> [
   //     farg.Make('self',ctype -> ctype.fromString('Dynamic')),
   //     farg.Make('type',ctype -> ctype.fromString('stx.schema.Schema')),
@@ -92,8 +92,8 @@ class DeclareEnumSchemaLift{
     Creates a GTypeDeclaration that declares the structure of self:DeclareEnumSchema.
   **/
   static public inline function denote(self:DeclareEnumSchema){
-    final e = __.g().expr();
-    // return __.g().expr().Call(
+    final e = __.glot().expr();
+    // return __.glot().expr().Call(
     //   e.Path("stx.declare.schema.DeclareEnumSchema.make"),
     //   [
     //     e.Call(
@@ -123,7 +123,7 @@ class DeclareEnumSchemaLift{
   //     name          : self.name,
   //     pack          : self.pack,
   //     constructors  : self.constructors.map(
-  //       ctr -> __.g().const(
+  //       ctr -> __.glot().const(
   //         const -> { name : ctr, data : const.String(ctr) }
   //       )
   //     )

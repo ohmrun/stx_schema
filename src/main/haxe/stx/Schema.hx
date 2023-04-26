@@ -3,8 +3,8 @@ package stx;
 using stx.Pico;
 using stx.Fail;
 using stx.Nano;
-using stx.g.Lang;
 using stx.schema.Core;
+using eu.ohmrun.Glot;
 
 class SchemaLifts{
   static public function toSchemaRef(self:Ident){

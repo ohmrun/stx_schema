@@ -75,7 +75,7 @@ class DeclareRecordSchemaCls implements DeclareRecordSchemaApi extends DeclareNo
 }
 class DeclareRecordSchemaLift{
   static public function denote(self:DeclareRecordSchema){
-    // final e = __.g().expr();
+    // final e = __.glot().expr();
     // return e.Call(
     //   e.Path('stx.schema.declare.DeclareRecordSchema.make'),
     //   [

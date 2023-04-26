@@ -1,0 +1,31 @@
+{
+  "User" {
+    :fields {
+      :properties {
+        "username"  String
+        "age"       String }
+      :attributes {
+        "article" {
+            :inverse   "author"
+            :type      Article
+            :relation  HAS_MANY }
+        "key" {
+          :type        Key
+          :relation    HAS_ONE } } } }
+  "Article" {
+    :fields {
+      :properties {
+        "title" String }
+      :attributes {
+        "author" {
+          :inverse  "article"
+          :type     User
+          :relation HAS_ONE } } } }
+  "Key" {
+    :fields {
+      :properties {
+        "value" String } } } 
+  "States" {
+    :choose #{"awake","sleepy","asleep","hungry","horny","dead"}
+  }
+}

@@ -22,7 +22,10 @@ class Test{
     #if boot
       boot();
     #else
-      __.test().auto();
+      //__.test().auto();
+      __.test().run([
+        new PmlReaderTest()
+      ],[]);
     #end
   }  
   private static macro function boot(){

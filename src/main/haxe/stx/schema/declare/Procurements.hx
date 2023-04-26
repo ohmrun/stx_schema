@@ -89,7 +89,7 @@ typedef ProcurementsDef = RedBlackSet<stx.schema.declare.Procure>;
 }
 class ProcurementsLift{
   static public function denote(self:Procurements){
-    final e = __.g().expr();
+    final e = __.glot().expr();
     return e.ArrayDecl(
       self.toCluster().map( p -> p.denote() )
     );

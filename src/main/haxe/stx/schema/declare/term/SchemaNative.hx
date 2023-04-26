@@ -4,7 +4,7 @@ class SchemaNative extends DeclareNativeSchemaCls{
   public function new(ident:Ident,?validation,?meta){
     super(
       ident,
-      __.g().ctype().Path(p -> p.fromIdent(ident)),
+      __.glot().ctype().Path(p -> p.fromIdent(ident)),
       validation,
       meta
     );

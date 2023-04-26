@@ -65,7 +65,7 @@ abstract Schema(SchemaSum) from SchemaSum to SchemaSum{
   }
   @:from static public function fromNativeObject(self:{ name : String, ?pack : Array<String>, ?meta : PExpr<Primitive>, ?ctype : GComplexType, ?validation : Validations}){
     final ident = Ident.make(self.name,self.pack);
-    final ctype = __.option(self.ctype).def(() -> __.g().ctype().Path(p -> p.fromIdent(ident)));
+    final ctype = __.option(self.ctype).def(() -> __.glot().ctype().Path(p -> p.fromIdent(ident)));
     final meta  = __.option(self.meta).defv(PEmpty);
     return fromDeclareNativeSchema(
         DeclareNativeSchema.make(
@@ -135,7 +135,7 @@ class SchemaLift{
   // static public inline function denote(self:SchemaSum):GExpr{
   //   var v = self.lift();
 
-  //   return __.g().expr().New(
+  //   return __.glot().expr().New(
   //     _ -> 'stx.schema.Schema',
   //     args  -> [
   //       args.Call(

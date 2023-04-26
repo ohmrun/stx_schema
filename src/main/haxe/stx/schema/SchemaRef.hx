@@ -115,7 +115,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
 }
 class SchemaRefLift{
   static public function denote(self:SchemaRef):GExpr{
-    final e = __.g().expr();
+    final e = __.glot().expr();
     return e.Call(
       e.Path('stx.schema.SchemaRef.make'),
       [

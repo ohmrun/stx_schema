@@ -8,6 +8,7 @@
       "stx_nano","stx_om","bake",
       "stx_show","fletcher","stx_makro","stx_coroutine","stx_makro","pml","halva","stx_test","stx_fp",
       "stx_query",
+      "glot",
       "kiss"
     ],
     "-cp"  : "src/main/haxe",
@@ -23,7 +24,10 @@
     },
     "test" : {
       "-cp"        : "src/test/haxe",
-      "--resource" : "tests.pml@tests",
+      "--resource" : [
+        "tests.pml@tests",
+        "asset/journal.edn@journal"
+      ],
       "-main" : "stx.schema.Test",
       "--macro" : [
         "include('stx.schema',true)",

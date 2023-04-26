@@ -61,7 +61,7 @@ class DeclareUnionSchemaLift{
     return Cluster.unit();
   }
   static public inline function denote(self:DeclareUnionSchema){
-    // final e = __.g().expr();
+    // final e = __.glot().expr();
     // return e.Call(
     //   e.Path('stx.schema.declare.DeclareUnionSchema.make'),
     //   [

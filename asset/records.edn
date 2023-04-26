@@ -1,0 +1,72 @@
+{
+  "ArtistOrBand" {
+    :either (Artist Band)
+  }
+  "Track" {
+    :fields {
+      :properties {
+        "name" String }
+      :attributes {
+        "artist" {
+          :type ArtistOrBand
+          :relation HAS_MANY }
+        "album" {
+          :type (Null Album)
+          :relation HAS_MANY } } } }
+  "Artist" {
+    :fields {
+      :properties {
+        "name" String
+        "real_name" String }
+      :attributes {
+        "albums" {
+          :type Album 
+          :relation HAS_MANY }
+        "tracks" {
+          :type Track
+          :relation HAS_MANY } } } }
+  "Band" {
+    :fields {
+      :properties {
+        "name" String }
+      :attributes { 
+        "members" {
+          :type Artist
+          :relation HAS_MANY } } } }
+  "Album" {
+    :fields {
+      :properties {
+        "name" String 
+        "date" Date }
+      :attributes {
+        "artist" {
+          :type ArtistOrBand
+          :relation HAS_ONE }
+        "tracks" {
+          :type Track
+          :relation HAS_MANY }
+        "record_label" {
+          :type RecordLabel
+          :relation HAS_ONE } } } }
+  "RecordLabel" {
+    :fields { 
+      :properties {
+        "name" String }
+      :attributes {
+        "contracts" {
+          :type RecordContract
+          :relation HAS_MANY 
+          :reverse "record_label" } } } }
+  "RecordContract" {
+    :fields {
+      :properties {
+        "start" Date
+        "finish" Date }
+      :attributes {
+        "artist" {
+          :type Artist
+          :relation HAS_ONE }
+        "record_label" {
+          :type RecordLabel
+          :relation HAS_ONE } } } }
+}

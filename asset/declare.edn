@@ -1,0 +1,18 @@
+(map String 
+  ( alt 
+    ( obj ":either" (grp AnySym) )
+    ( obj ":fields" 
+      (obj
+        ":properties" (map AnySym)
+        ":attributes" (
+          map
+            ( obj 
+              ":type"     AnySym
+              ":relation" ("OWNED_BY" "HAS_ONE" "HAS_MANY")
+              "reverse"   (Null String)
+            )
+        )
+      )
+    )
+  )
+)

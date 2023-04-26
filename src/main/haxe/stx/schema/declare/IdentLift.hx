@@ -2,7 +2,7 @@ package stx.schema.declare;
 
 class IdentLift{
   static public function denote(self:Ident){
-    final e = __.g().expr();
+    final e = __.glot().expr();
     return e.Call(
       e.Path('stx.nano.Ident.make'),
       [

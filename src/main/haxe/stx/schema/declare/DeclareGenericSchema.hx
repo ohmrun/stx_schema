@@ -53,7 +53,7 @@ class DeclareGenericSchemaLift{
     return Cluster.unit();
   } 
   static public function denote(self:DeclareGenericSchema){
-    // final e = __.g().expr();
+    // final e = __.glot().expr();
     // return e.Call(
     //   e.Path('stx.schema.declare.DeclareGenericSchema.make'),
     //   [

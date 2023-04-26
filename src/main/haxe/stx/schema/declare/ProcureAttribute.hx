@@ -36,7 +36,7 @@ typedef ProcureAttributeDef = ProcurePropertyDef & {
 }
 class ProcureAttributeLift{
   static public function denote(self:ProcureAttribute){
-    // final e = __.g().expr();
+    // final e = __.glot().expr();
     // return e.Call(
     //   e.Path('stx.schema.ProcureAttribute.make'),
     //   [

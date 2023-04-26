@@ -61,7 +61,7 @@ class ProcureLift{
     return fold(self,t -> Property(t.with_type(type)),t -> Attribute(t.with_type(type)));
   }
   static public function denote(self:Procure){
-    final e     = __.g().expr();
+    final e     = __.glot().expr();
     final head  = 'stx.schema.Procure.ProcureSum'; 
     return e.Call(
       e.Path(
