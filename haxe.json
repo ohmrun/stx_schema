@@ -3,7 +3,6 @@
     "-D" : ["no-deprecation-warnings","STX_TEST__VERBOSE=true"],
     "-lib" : [
       "hscript",
-      "tink_typecrawler",
       "stx_pico","stx_show",
       "stx_nano","stx_om","bake",
       "stx_show","fletcher","stx_makro","stx_coroutine","stx_makro","pml","halva","stx_test","stx_fp",
