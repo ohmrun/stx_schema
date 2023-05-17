@@ -5,7 +5,14 @@
   "Track" {
     :fields {
       :properties {
-        "name" String }
+        "name" {
+          :type String 
+          :validations {
+            :message "Should be of a hoochy nature",
+            :method "_ == 'hoochycoo' ||  _.meta.length > 3 && album.name._.length > 0 || _ "
+          }
+        }
+      }
       :attributes {
         "artist" {
           :type ArtistOrBand

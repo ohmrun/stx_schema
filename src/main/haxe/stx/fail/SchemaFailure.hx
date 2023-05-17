@@ -16,24 +16,24 @@ enum SchemaFailureSum{
   E_Schema_Dynamic(e:Dynamic);
   E_Schema_SchemaNotFound(identity:Identity);
   E_Schema_NativeShouldBe(type:PrimitiveType);
-  //E_Schema_NoTemplateFieldInType(field:String,type:SType);
-  //E_Schema_TemplateTeminationOnObject(field:String,type:SType);
-  //E_Schema_LookingForTemplateInType(template:Template,type:SType);
+  //E_Schema_NoTemplateFieldInType(field:String,type:DatabaseType);
+  //E_Schema_TemplateTeminationOnObject(field:String,type:DatabaseType);
+  //E_Schema_LookingForTemplateInType(template:Template,type:DatabaseType);
   E_Schema_RequireFieldsDeclaration(template:Template);
-  //E_Schema_NoFieldInType(field_name:String,type:SType);
+  //E_Schema_NoFieldInType(field_name:String,type:DatabaseType);
   E_Schema_WrongSchemaType(type:Schema);
-  //E_Schema_WrongType(type:stx.schema.SType);
-  //E_Schema_TypeNotFound(type:stx.schema.SType);
+  //E_Schema_WrongType(type:stx.schema.DatabaseType);
+  //E_Schema_TypeNotFound(type:stx.schema.DatabaseType);
   E_Schema_UnexpectedGeneric;
   E_Schema_UnexpectedType;
   E_Schema_IdentityUnresolved(identity:stx.schema.core.Identity);
-  //E_Schema_AttemptingToDefineUnsupportedType(type:stx.schema.SType);
+  //E_Schema_AttemptingToDefineUnsupportedType(type:stx.schema.DatabaseType);
   E_Schema_UnexpectedMono;
   E_Schema_LazyTypeEmpty;
   E_Schema_SchemaTypeNotSupportedHere;
   //E_Schema_InverseNotFound(link:stx.schema.type.LinkType);
-  E_Schema_Makro(err:stx.fail.MakroFailure);
-  E_Schema_MakroTypeFailure(err:stx.fail.MakroTypeFailure);
+  //E_Schema_Makro(err:stx.fail.MakroFailure);
+  //E_Schema_MakroTypeFailure(err:stx.fail.MakroTypeFailure);
 }
 abstract SchemaFailure(SchemaFailureSum) from SchemaFailureSum to SchemaFailureSum{
   public function new(self) this = self;
@@ -43,7 +43,7 @@ abstract SchemaFailure(SchemaFailureSum) from SchemaFailureSum to SchemaFailureS
   private var self(get,never):SchemaFailure;
   private function get_self():SchemaFailure return lift(this);
 
-  @:from static public function fromMakroFailure(self:stx.fail.MakroFailure){
-    return lift(E_Schema_Makro(self));
-  }
+  // @:from static public function fromMakroFailure(self:stx.fail.MakroFailure){
+  //   return lift(E_Schema_Makro(self));
+  // }
 }

@@ -15,7 +15,7 @@ typedef SchemaRefDef = stx.schema.core.Identity.IdentityDef & {
   //   __.log().trace('resolve ref');
   // //  return state.get(Identity.lift(this)).fold(
   // //    x  -> fromSchema(x),
-  // //    () -> __.that().exists().apply(this.pop).is_ok().if_else(
+  // //    () -> __.assert().expect().exists().apply(this.pop).is_ok().if_else(
   // //      () -> {
   // //        final val  = this.pop();
   // //        final next = val.resolve(state);
