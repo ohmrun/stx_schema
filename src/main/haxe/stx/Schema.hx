@@ -246,6 +246,6 @@ class LiftDeclareRecordSchema_register{
 class LiftGComplexTypeCtrIdentityToGComplexType{
   static public function fromIdentity(ctr:GComplexTypeCtr,self:Identity){
     final rest = __.option(self.rest).defv([]).map(fromIdentity.bind(ctr)).map(GTPType);
-    return GTypePath.__.Make(self.name,self.pack,null,rest);
+    return __.glot().Expr.GTypePath.Make(self.name,self.pack,null,rest);
   }
 }

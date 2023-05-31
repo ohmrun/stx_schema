@@ -8,7 +8,7 @@ class DeclareNativeSchemaCls implements DeclareNativeSchemaApi extends DeclareNo
   public final ctype:GComplexType;
   public function new(ident,?ctype,?validation,?meta){
     super(ident,validation,meta);
-    this.ctype = __.option(ctype).defv(__.glot().ctype().Path(p -> p.fromIdent(ident)));
+    this.ctype = __.option(ctype).defv(__.glot().Expr.GComplexType.Path(p -> p.fromIdent(ident)));
   }
   public var identity(get,null):Identity;
   public function get_identity(){

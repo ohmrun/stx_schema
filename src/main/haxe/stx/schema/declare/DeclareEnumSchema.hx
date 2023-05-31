@@ -92,7 +92,7 @@ class DeclareEnumSchemaLift{
     Creates a GTypeDeclaration that declares the structure of self:DeclareEnumSchema.
   **/
   static public inline function denote(self:DeclareEnumSchema){
-    final e = __.glot().expr();
+    //final e = __.glot().expr();
     // return __.glot().expr().Call(
     //   e.Path("stx.declare.schema.DeclareEnumSchema.make"),
     //   [

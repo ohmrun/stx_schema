@@ -10,8 +10,8 @@
         "0b1kn00b"
     ],
     "releasenote": "Package change, Ord & Eq",
-    "version": "1.0.0",
-    "url": "https://github.com/ohmrun/stx_nano",
+    "version": "1.2.0",
+    "url": "https://github.com/ohmrun/stx_schema",
     "dependencies": {
         "tink_core"     : "",
         "stx_pico"      : "",

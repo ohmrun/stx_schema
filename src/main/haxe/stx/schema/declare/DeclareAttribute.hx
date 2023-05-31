@@ -63,7 +63,7 @@ typedef DeclareAttributeDef = DeclarePropertyDef & {
       type        : self.type
     });
   } 
-  @:from static public function fromObjectIV(self:{ type : stx.Ident, relation : stx.schema.RelationType, ?meta : Null<eu.ohmrun.pml.PExpr.PExprSum<stx.PrimitiveDef>>, ?inverse : String }){
+  @:from static public function fromObjectIV(self:{ type : stx.Ident, relation : stx.schema.RelationType, ?meta : Null<eu.ohmrun.pml.PExpr.PExprSum<PrimitiveSum>>, ?inverse : String }){
     return return fromObjectII({
       validation  : Validations.unit(),
       relation    : self.relation,

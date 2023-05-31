@@ -60,22 +60,22 @@ class ProcureLift{
   static public function with_type(self:Procure,type:SchemaRef){
     return fold(self,t -> Property(t.with_type(type)),t -> Attribute(t.with_type(type)));
   }
-  static public function denote(self:Procure){
-    final e     = __.glot().expr();
-    final head  = 'stx.schema.Procure.ProcureSum'; 
-    return e.Call(
-      e.Path(
-        switch(self){
-          case Property(_)   : '${head}.Property';
-          case Attribute(_)  : '${head}.Attribute';
-        }
-      ),
-      [
-        switch(self){
-          case Property(property)     : property.denote();
-          case Attribute(attribute)   : attribute.denote(); 
-        }
-      ]
-    );
-  }
+  // static public function denote(self:Procure){
+  //   final e     = __.glot().expr();
+  //   final head  = 'stx.schema.Procure.ProcureSum'; 
+  //   return e.Call(
+  //     e.Path(
+  //       switch(self){
+  //         case Property(_)   : '${head}.Property';
+  //         case Attribute(_)  : '${head}.Attribute';
+  //       }
+  //     ),
+  //     [
+  //       switch(self){
+  //         case Property(property)     : property.denote();
+  //         case Attribute(attribute)   : attribute.denote(); 
+  //       }
+  //     ]
+  //   );
+  // }
 }

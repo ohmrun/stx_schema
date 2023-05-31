@@ -70,7 +70,7 @@ typedef ProcurementsDef = RedBlackSet<stx.schema.declare.Procure>;
       attributes  : __.option(self.attributes).defv(new Map()).map_into((x) -> DeclareAttribute.fromObjectIV(x),new Map())
     });
   }
-  @:from static public function fromObjectVI(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, ?attributes : haxe.ds.Map<String, { type : stx.Ident, relation : stx.schema.RelationType, ?meta : eu.ohmrun.pml.PExpr.PExprSum<PrimitiveDef>, ?inverse : String }> }):Procurements{
+  @:from static public function fromObjectVI(self:{ properties : haxe.ds.Map<String, stx.schema.Schema>, ?attributes : haxe.ds.Map<String, { type : stx.Ident, relation : stx.schema.RelationType, ?meta : eu.ohmrun.pml.PExpr.PExprSum<PrimitiveSum>, ?inverse : String }> }):Procurements{
     return fromObject({ 
       properties  : __.option(self.properties).defv(new Map()).map_into(DeclareProperty.fromSchema,new Map()), 
       attributes  : __.option(self.attributes).defv(new Map()).map_into((x) -> DeclareAttribute.fromObjectIV(x),new Map())
@@ -88,10 +88,10 @@ typedef ProcurementsDef = RedBlackSet<stx.schema.declare.Procure>;
   }
 }
 class ProcurementsLift{
-  static public function denote(self:Procurements){
-    final e = __.glot().expr();
-    return e.ArrayDecl(
-      self.toCluster().map( p -> p.denote() )
-    );
-  }
+  // static public function denote(self:Procurements){
+  //   final e = __.glot().Expr.GExpr;
+  //   return e.ArrayDecl(
+  //     self.toCluster().map( p -> p.denote() )
+  //   );
+  // }
 }
