@@ -1,7 +1,7 @@
 package stx.schema;
 
 typedef ValidationDef = {
-  final method  : QExpr<PExpr<Atom>>;
+  final method  : Validator;
   final message : String;
 }
 @:forward abstract Validation(ValidationDef) from ValidationDef to ValidationDef{

@@ -6,6 +6,7 @@ using stx.Nano;
 using stx.schema.Core;
 using eu.ohmrun.Glot;
 
+
 class SchemaLifts{
   static public function toSchemaRef(self:Ident){
     return SchemaRef.fromIdent(self);
@@ -92,6 +93,8 @@ typedef Validations                               = stx.schema.Validations;
 typedef WithValidationDef                         = stx.schema.WithValidationDef;
 typedef WithValidationApi                         = stx.schema.WithValidation.WithValidationApi;
 typedef WithValidationCls                         = stx.schema.WithValidation.WithValidationCls;
+typedef Validator                                 = stx.schema.Validator;
+typedef ValidatorDef                              = stx.schema.Validator.ValidatorDef;
 // typedef ValidationComplyApi                       = ComplyApi<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
 // typedef ValidationComplyCls                       = ComplyCls<Dynamic,stx.schema.SType,Report<SchemaFailure>>;
 

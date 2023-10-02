@@ -28,6 +28,7 @@ using stx.Ds;
 using stx.Fp;
 using stx.Fn;
 using stx.Om;
+using stx.Lense;
 using stx.om.Signature;
 using stx.Schema;
 using stx.Query;

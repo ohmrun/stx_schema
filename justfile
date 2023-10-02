@@ -1,6 +1,6 @@
 unit:
-  clear && hx build unit
+  clear && hb build unit
 test-interp:
-  clear && hx build test/interp 
+  clear && hb build test/interp 
 kiss:
-  clear && hx build kiss
+  clear && hb build kiss
